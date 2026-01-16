@@ -25,8 +25,6 @@ class CreateRoleTable extends BaseMigration
 
         Schema::whenDriverIsNot('sqlite', function () {
             Schema::table('user', function (SchemaBuilder $table) {
-                // The role_id column is already defined in the CreateUserTable migration.
-                // We only add the foreign key constraint here.
                 $table->foreignIfNotExist('role_id')
                     ->references('id')
                     ->on('role')
