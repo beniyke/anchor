@@ -10,7 +10,7 @@ on:
 
 env:
   # 1. Create a new token at https://github.com/settings/tokens
-  # 2. Add it to Secrets in your repo: https://github.com/anchor/anchor/settings/secrets/actions/new
+  # 2. Add it to Secrets in your repo: https://github.com/beniyke/anchor/settings/secrets/actions/new
   # 3. Name it ACCESS_TOKEN
   GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
