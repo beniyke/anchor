@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - master
     tags:
       - "*"
 
@@ -125,7 +126,7 @@ jobs:
       - uses: "danharrin/monorepo-split-github-action@v2.3.0"
         with:
           package_directory: "${{ matrix.package.local_path }}"
-          repository_organization: "anchor"
+          repository_organization: "beniyke"
           repository_name: "${{ matrix.package.split_repository }}"
           user_name: "beniyke"
           user_email: "beniyke34@gmail.com"
