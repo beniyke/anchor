@@ -86,7 +86,7 @@ abstract class Helper implements HelperInterface
         $string ??= '';
 
         if (preg_match('//u', $string)) {
-            return (new UnicodeString($string))->slice($from, $length);
+            return (string) (new UnicodeString($string))->slice($from, $length);
         }
 
         if (false === $encoding = mb_detect_encoding($string, null, true)) {
@@ -126,7 +126,7 @@ abstract class Helper implements HelperInterface
             }
 
             $unitCount = ($milliSeconds / $format[0]);
-            $times[$index] = $unitCount.' '.$format[1];
+            $times[$index] = $unitCount . ' ' . $format[1];
 
             if ($ms === $milliSeconds) {
                 break;
