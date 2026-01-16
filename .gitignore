@@ -21,7 +21,6 @@ Thumbs.db
 /App/storage/database/backup
 /App/storage/database/seeds/TenantSeeder.php
 /App/storage/database/seeds/RolesSeeder.php
-/App/storage/database/migrations/2025_10_26_223140_create_queued_job_table.php
 
 # Public
 /public/sent-mail

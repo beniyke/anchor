@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Link\Services\Builders;
 
-use Carbon\Carbon;
 use Database\BaseModel;
 use Helpers\DateTimeHelper;
 use Link\Enums\LinkScope;
@@ -25,7 +24,7 @@ class LinkBuilder
 
     private ?int $linkableId = null;
 
-    private ?Carbon $expiresAt = null;
+    private ?DateTimeHelper $expiresAt = null;
 
     private ?int $validForHours = null;
 
@@ -82,7 +81,7 @@ class LinkBuilder
     public function validForMinutes(int $minutes): self
     {
         $this->validForHours = null;
-        $this->expiresAt = DateTimeHelper::now()->addMinutes($minutes);
+        $this->expiresAt = DateTimeHelper::instance(DateTimeHelper::now()->addMinutes($minutes));
 
         return $this;
     }
@@ -90,7 +89,7 @@ class LinkBuilder
     /**
      * Set specific expiration datetime.
      */
-    public function until(Carbon $datetime): self
+    public function until(DateTimeHelper $datetime): self
     {
         $this->expiresAt = $datetime;
         $this->validForHours = null;

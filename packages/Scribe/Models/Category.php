@@ -15,6 +15,7 @@ use Database\BaseModel;
 use Database\Collections\ModelCollection;
 use Database\Relations\BelongsTo;
 use Database\Relations\HasMany;
+use Database\Traits\HasRefid;
 use Helpers\DateTimeHelper;
 
 /**
@@ -32,7 +33,11 @@ use Helpers\DateTimeHelper;
  */
 class Category extends BaseModel
 {
+    use HasRefid;
+
     protected string $table = 'scribe_category';
+
+    protected string $refidPrefix = 'cat_';
 
     protected array $fillable = [
         'refid',

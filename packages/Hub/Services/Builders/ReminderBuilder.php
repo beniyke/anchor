@@ -82,7 +82,7 @@ class ReminderBuilder
      */
     public function inMinutes(int $minutes): self
     {
-        $this->remindAt = DateTimeHelper::now()->addMinutes($minutes);
+        $this->remindAt = DateTimeHelper::instance(DateTimeHelper::now()->addMinutes($minutes));
 
         return $this;
     }
@@ -92,7 +92,7 @@ class ReminderBuilder
      */
     public function inHours(int $hours): self
     {
-        $this->remindAt = DateTimeHelper::now()->addHours($hours);
+        $this->remindAt = DateTimeHelper::instance(DateTimeHelper::now()->addHours($hours));
 
         return $this;
     }
@@ -102,7 +102,7 @@ class ReminderBuilder
      */
     public function inDays(int $days): self
     {
-        $this->remindAt = DateTimeHelper::now()->addDays($days);
+        $this->remindAt = DateTimeHelper::instance(DateTimeHelper::now()->addDays($days));
 
         return $this;
     }
@@ -112,11 +112,13 @@ class ReminderBuilder
      */
     public function tomorrow(int $hour = 9, int $minute = 0): self
     {
-        $this->remindAt = DateTimeHelper::now()
-            ->addDay()
-            ->setHour($hour)
-            ->setMinute($minute)
-            ->setSecond(0);
+        $this->remindAt = DateTimeHelper::instance(
+            DateTimeHelper::now()
+                ->addDay()
+                ->setHour($hour)
+                ->setMinute($minute)
+                ->setSecond(0)
+        );
 
         return $this;
     }

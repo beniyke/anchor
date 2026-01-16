@@ -57,6 +57,7 @@
       "Package\\": "System/Package/",
       "Queue\\": "System/Queue/",
       "Security\\": "System/Security/",
+      "Guide\\": "packages/Guide/",
       "Ally\\": "packages/Ally/",
       "Audit\\": "packages/Audit/",
       "Blish\\": "packages/Blish/",

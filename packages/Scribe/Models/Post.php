@@ -16,6 +16,7 @@ use Database\Collections\ModelCollection;
 use Database\Relations\BelongsTo;
 use Database\Relations\BelongsToMany;
 use Database\Relations\HasMany;
+use Database\Traits\HasRefid;
 use Helpers\DateTimeHelper;
 
 /**
@@ -39,7 +40,11 @@ use Helpers\DateTimeHelper;
  */
 class Post extends BaseModel
 {
+    use HasRefid;
+
     protected string $table = 'scribe_post';
+
+    protected string $refidPrefix = 'pst_';
 
     protected array $fillable = [
         'refid',

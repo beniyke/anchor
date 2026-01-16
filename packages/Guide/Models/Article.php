@@ -17,6 +17,7 @@ use Database\Query\Builder;
 use Database\Relations\BelongsTo;
 use Database\Relations\BelongsToMany;
 use Database\Relations\HasMany;
+use Database\Traits\HasRefid;
 use Helpers\DateTimeHelper;
 
 /**
@@ -39,7 +40,11 @@ use Helpers\DateTimeHelper;
  */
 class Article extends BaseModel
 {
+    use HasRefid;
+
     protected string $table = 'guide_article';
+
+    protected string $refidPrefix = 'art_';
 
     protected array $fillable = [
         'refid',

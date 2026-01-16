@@ -39,20 +39,23 @@ git clone https://github.com/beniyke/anchor my-app
 cd my-app
 ```
 
-### Initial Setup
-
-Run the `dock` command to initialize your application:
-
-```bash
-php dock
-```
-
 ### Environment Configuration
 
 Copy the example environment file and configure your database credentials:
 
 ```bash
 cp .env.example .env
+```
+
+### Initial Setup
+
+Run the `dock` command to initialize your application:
+
+```bash
+php dock
+
+# Run database migrations
+php dock migration:run
 ```
 
 ## Documentation

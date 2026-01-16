@@ -213,7 +213,7 @@ class Period
 
     public static function fromDuration(DateTimeHelper $start, int $minutes): self
     {
-        return new self($start, (clone $start)->addMinutes($minutes));
+        return new self($start, DateTimeHelper::instance($start->addMinutes($minutes)));
     }
 
     public function overlaps(Period $other): bool
@@ -238,10 +238,10 @@ class Period
         }
 
         $slots = [];
-        $current = clone $this->start;
+        $current = $this->start;
 
         while ($current < $this->end) {
-            $slotEnd = (clone $current)->addMinutes($minutes);
+            $slotEnd = DateTimeHelper::instance($current->addMinutes($minutes));
 
             if ($slotEnd > $this->end) {
                 break;
@@ -249,7 +249,7 @@ class Period
 
             $slots[] = new self($current, $slotEnd);
 
-            $current = (clone $slotEnd)->addMinutes($gap);
+            $current = DateTimeHelper::instance($slotEnd->addMinutes($gap));
         }
 
         return $slots;
@@ -257,8 +257,8 @@ class Period
 
     public function addBuffer(int $beforeMinutes, int $afterMinutes): self
     {
-        $newStart = (clone $this->start)->subMinutes($beforeMinutes);
-        $newEnd = (clone $this->end)->addMinutes($afterMinutes);
+        $newStart = DateTimeHelper::instance($this->start->subMinutes($beforeMinutes));
+        $newEnd = DateTimeHelper::instance($this->end->addMinutes($afterMinutes));
 
         return new self($newStart, $newEnd);
     }
@@ -272,7 +272,7 @@ class Period
         $start = $this->start > $other->start ? $this->start : $other->start;
         $end = $this->end < $other->end ? $this->end : $other->end;
 
-        return new self(clone $start, clone $end);
+        return new self($start, $end);
     }
 
     public function encompasses(Period $other): bool
