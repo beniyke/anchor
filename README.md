@@ -35,7 +35,7 @@ In software development, we don't just _deploy_ code, we **ship** it. Anchor is 
 Clone the repository:
 
 ```bash
-git clone https://github.com/anchor/anchor my-app
+git clone https://github.com/beniyke/anchor my-app
 cd my-app
 ```
 
