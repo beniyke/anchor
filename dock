@@ -1,0 +1,174 @@
+#!/usr/bin/env php
+<?php
+/**
+ * This script serves as the entry point for the 
+ * command-line interface (CLI)application. 
+ * 
+ * @author BenIyke <beniyke34@gmail.com> | (twitter:@BigBeniyke)
+ */
+
+/**
+ * ⚓ Anchor Framework - CLI Bootstrapper
+ */
+$paths = [
+    __DIR__ . '/System/Core/init.php',                       // Standalone
+    __DIR__ . '/vendor/anchor/framework/System/Core/init.php' // Managed
+];
+
+foreach ($paths as $bootstrapper) {
+    if (file_exists($bootstrapper)) {
+        require_once $bootstrapper;
+        /** @var \Core\Ioc\ContainerInterface $container */
+        $container->get(\Core\Console::class)->run();
+        exit(0);
+    }
+}
+
+/**
+ * Framework Missing: Enter Emergency Hydration
+ */
+(new class {
+    private const REPO_ZIP = 'https://github.com/anchor/anchor/archive/refs/heads/main.zip';
+
+    public function run(): void
+    {
+        $this->header();
+
+        if (!$this->isInteractive()) {
+            echo "Error: Framework missing and terminal is not interactive. Cannot hydrate.\n";
+            exit(1);
+        }
+
+        if (!$this->confirm("Would you like to hydrate your Anchor skeleton now?")) {
+            echo "Aborted. Run 'composer install' or install the framework manually.\n";
+            exit(1);
+        }
+
+        $mode = $this->choice("Select Installation Mode:", [
+            '1' => 'Managed (Composer) - Best for development',
+            '2' => 'Standalone (Portable) - No dependencies'
+        ]);
+
+        try {
+            $mode === '2' ? $this->hydrateStandalone() : $this->hydrateManaged();
+        } catch (Throwable $e) {
+            echo "\n\033[1;31mHydration Failed:\033[0m " . $e->getMessage() . "\n";
+            exit(1);
+        }
+    }
+
+    private function header(): void
+    {
+        echo "\n\033[1;33m⚓ Anchor Framework Not Found!\033[0m\n";
+        echo "This directory appears to be an unhydrated skeleton.\n\n";
+    }
+
+    private function isInteractive(): bool
+    {
+        return function_exists('stream_isatty') ? stream_isatty(STDIN) : true;
+    }
+
+    private function confirm(string $question): bool
+    {
+        echo "{$question} [y/N]: ";
+        $input = fgets(STDIN);
+        return $input !== false && trim(strtolower($input)) === 'y';
+    }
+
+    private function choice(string $question, array $options): string
+    {
+        echo "\033[1;36m{$question}\033[0m\n";
+        foreach ($options as $key => $label) echo "  {$key}) {$label}\n";
+        echo "Choice [1]: ";
+        $choice = trim((string)fgets(STDIN));
+        return $choice === '' || !isset($options[$choice]) ? '1' : $choice;
+    }
+
+    private function hydrateManaged(): void
+    {
+        echo "\nRunning 'composer require anchor/framework'...\n";
+        if (passthru('composer require anchor/framework') === false) {
+            throw new RuntimeException("Composer command failed.");
+        }
+    }
+
+    private function hydrateStandalone(): void
+    {
+        echo "\nHydrating Standalone Framework...\n";
+
+        if (!extension_loaded('curl')) throw new RuntimeException("CURL extension is required.");
+        if (!class_exists('ZipArchive')) throw new RuntimeException("ZipArchive extension is required.");
+
+        $zipFile = 'framework_hydrate_' . bin2hex(random_bytes(4)) . '.zip';
+
+        try {
+            $this->download(self::REPO_ZIP, $zipFile);
+            $this->unpack($zipFile);
+            echo "\n\033[1;32mSUCCESS!\033[0m Framework core hydrated. Run 'php dock' again.\n";
+        } finally {
+            if (file_exists($zipFile)) @unlink($zipFile);
+        }
+    }
+
+    private function download(string $url, string $dest): void
+    {
+        echo "Downloading artifacts...";
+        $fp = fopen($dest, 'w+');
+        if (!$fp) throw new RuntimeException("Could not open {$dest} for writing.");
+
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_FILE => $fp,
+            CURLOPT_USERAGENT => 'Anchor-Hydrator',
+            CURLOPT_TIMEOUT => 300,
+            CURLOPT_FAILONERROR => true
+        ]);
+
+        $success = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        if (!$success || $httpCode !== 200) {
+            throw new RuntimeException("Download failed (HTTP {$httpCode}): {$error}");
+        }
+        echo " [OK]\n";
+    }
+
+    private function unpack(string $zipPath): void
+    {
+        echo "Unpacking core files...";
+        $zip = new ZipArchive();
+        if ($zip->open($zipPath) !== true) throw new RuntimeException("Could not open ZIP file.");
+
+        $rootInZip = $zip->getNameIndex(0);
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $name = $zip->getNameIndex($i);
+            $rel = str_replace($rootInZip, '', $name);
+
+            // Security: Prevent Directory Traversal (Zip Slip)
+            if (str_contains($rel, '..')) continue;
+
+            if (str_starts_with($rel, 'System/') || str_starts_with($rel, 'libs/')) {
+                $target = __DIR__ . DIRECTORY_SEPARATOR . str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $rel);
+
+                if (str_ends_with($name, '/')) {
+                    if (!is_dir($target) && @mkdir($target, 0755, true) === false) {
+                        throw new RuntimeException("Failed to create directory: {$target}");
+                    }
+                } else {
+                    if (!is_dir(dirname($target)) && @mkdir(dirname($target), 0755, true) === false) {
+                        throw new RuntimeException("Failed to create parent directory for: {$target}");
+                    }
+                    if (file_put_contents($target, $zip->getFromIndex($i)) === false) {
+                        throw new RuntimeException("Failed to write file: {$target}");
+                    }
+                }
+            }
+        }
+        $zip->close();
+        echo " [OK]\n";
+    }
+})->run();

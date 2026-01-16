@@ -1,0 +1,131 @@
+name: "Monorepo Split"
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+
+env:
+  # 1. Create a new token at https://github.com/settings/tokens
+  # 2. Add it to Secrets in your repo: https://github.com/anchor/anchor/settings/secrets/actions/new
+  # 3. Name it ACCESS_TOKEN
+  GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+jobs:
+  packages_split:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - local_path: "packages/Ally"
+            split_repository: "ally"
+          - local_path: "packages/Audit"
+            split_repository: "audit"
+          - local_path: "packages/Blish"
+            split_repository: "blish"
+          - local_path: "packages/Bridge"
+            split_repository: "bridge"
+          - local_path: "packages/Client"
+            split_repository: "client"
+          - local_path: "docs"
+            split_repository: "docs"
+          - local_path: "packages/Export"
+            split_repository: "export"
+          - local_path: "packages/Flow"
+            split_repository: "flow"
+          - local_path: "packages/Forge"
+            split_repository: "forge"
+          - local_path: "packages/Geo"
+            split_repository: "geo"
+          - local_path: "packages/Ghost"
+            split_repository: "ghost"
+          - local_path: "packages/Guide"
+            split_repository: "guide"
+          - local_path: "packages/Hub"
+            split_repository: "hub"
+          - local_path: "packages/Import"
+            split_repository: "import"
+          - local_path: "packages/Link"
+            split_repository: "link"
+          - local_path: "packages/Media"
+            split_repository: "media"
+          - local_path: "packages/Metric"
+            split_repository: "metric"
+          - local_path: "packages/Money"
+            split_repository: "money"
+          - local_path: "packages/Onboard"
+            split_repository: "onboard"
+          - local_path: "packages/Pay"
+            split_repository: "pay"
+          - local_path: "packages/Permit"
+            split_repository: "permit"
+          - local_path: "packages/Proof"
+            split_repository: "proof"
+          - local_path: "packages/Pulse"
+            split_repository: "pulse"
+          - local_path: "packages/Refer"
+            split_repository: "refer"
+          - local_path: "packages/Release"
+            split_repository: "release"
+          - local_path: "packages/Rollout"
+            split_repository: "rollout"
+          - local_path: "packages/Scout"
+            split_repository: "scout"
+          - local_path: "packages/Scribe"
+            split_repository: "scribe"
+          - local_path: "packages/Shield"
+            split_repository: "shield"
+          - local_path: "packages/Slot"
+            split_repository: "slot"
+          - local_path: "packages/Stack"
+            split_repository: "stack"
+          - local_path: "packages/Support"
+            split_repository: "support"
+          - local_path: "System"
+            split_repository: "framework"
+          - local_path: "packages/Tenancy"
+            split_repository: "tenancy"
+          - local_path: "packages/Tokit"
+            split_repository: "tokit"
+          - local_path: "packages/Vault"
+            split_repository: "vault"
+          - local_path: "packages/Verify"
+            split_repository: "verify"
+          - local_path: "packages/Wallet"
+            split_repository: "wallet"
+          - local_path: "packages/Watcher"
+            split_repository: "watcher"
+          - local_path: "packages/Wave"
+            split_repository: "wave"
+          - local_path: "packages/Workflow"
+            split_repository: "workflow"
+          - local_path: "tests"
+            split_repository: "tests"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+
+      - name: Install Dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Sync Framework Metadata
+        run: |
+          php dock docs:sync
+          php dock version:sync
+
+      - uses: "danharrin/monorepo-split-github-action@v2.3.0"
+        with:
+          package_directory: "${{ matrix.package.local_path }}"
+          repository_organization: "anchor"
+          repository_name: "${{ matrix.package.split_repository }}"
+          user_name: "beniyke"
+          user_email: "beniyke34@gmail.com"

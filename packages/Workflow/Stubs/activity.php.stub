@@ -1,0 +1,51 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {namespace};
+
+use Workflow\Contracts\Activity;
+use Throwable;
+
+class {classname} implements Activity
+{
+    /**
+     * The engine automatically passes constructor data to the handle method
+     */
+    public function __construct(protected array $payload) {}
+
+    /**
+     * Execute the activity logic.
+     * 
+     * @param array $payload
+     * @return array
+     */
+    public function handle(array $payload): array
+    {
+        // Implement activity logic here
+        
+        return ['status' => 'success'];
+    }
+
+    /**
+     * Handle activity failure after all retries are exhausted.
+     * 
+     * @param string $instanceId
+     * @param Throwable $e
+     */
+    public function onFailure(string $instanceId, Throwable $e): void
+    {
+        // Cleanup logic on permanent failure
+    }
+
+    /**
+     * Reverse the effects of the activity (Saga pattern).
+     * 
+     * @param string $instanceId
+     * @param array $originalPayload
+     */
+    public function compensate(string $instanceId, array $originalPayload): void
+    {
+        // Logic to "undo" this activity if the workflow fails later
+    }
+}

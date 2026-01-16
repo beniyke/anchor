@@ -1,0 +1,126 @@
+parameters:
+    # Rule Level:
+    # 0 (loosest) to 9 (strictest). 
+    # Level 5 catches important bugs without being overly strict about type hints.
+    level: 5
+
+    treatPhpDocTypesAsCertain: false
+
+    # Paths:
+    # Autoload
+    bootstrapFiles:
+        - System/Core/init.php
+
+    # A list of files and directories to analyse.
+    paths:
+        - App
+        - System
+        - packages
+        - index.php
+
+    # Exclude Paths:
+    # Exclude files or directories from the analysis.
+    # Typically used for generated files or specific third-party code.
+    excludePaths:
+        analyseAndScan:
+            - %currentWorkingDirectory%/App/storage/*
+            - App/src/Api/Controllers/AuthController.php (?)
+            - App/src/Api/Services/ApiGuardService.php (?)
+            - System/Database/BaseModel.php (?)
+            - System/Helpers/Format/FormatCollection.php (?)
+
+    ignoreErrors:
+        - '#Using nullsafe property access .* is unnecessary#'
+        - '#Access to an undefined property .*::\$.*#'
+        - '#Instanceof between .* will always evaluate to true#'
+        - '#Property .* is never assigned .* so it can be removed from the property type#'
+        - '#Property .* is never read, only written#'
+        - '#Trait .* is used zero times and is not analysed#'
+        - '#Argument of an invalid type .* supplied for foreach, only iterables are supported#'
+        - '#Cannot call method .* on array#'
+        - '#Parameter .* of method .* expects .* given#'
+        - '#Parameter .* of static method .* expects .* given#'
+        - '#Call to an undefined method .*#'
+        - '#Call to an undefined static method .*#'
+        - '#Class Wave\\Services\\Builders\\PlanBuilder constructor invoked with 1 parameter, 0 required#'
+        - '#Property .* does not accept string#'
+        - '#Expression on left side of \?\? .*#'
+        - '#Variable .* on left side of \?\? .*#'
+        - '#Method .* invoked with .* parameter.*, .* required#'
+        - '#Static method .* invoked with .* parameter.*, .* required#'
+        - '#Call to function .* with .* will always evaluate to true#'
+        - '#Match arm comparison between .* and .* is always true#'
+        - '#Property .* does not accept .*ConnectionInterface#'
+        - '#Class .* not found#'
+        - '#Parameter .* has invalid type .*#'
+        - '#Property .* has unknown class .*#'
+        - '#Call to method .* on an unknown class .*#'
+        - '#Method .* has invalid return type .*#'
+        - '#Function .* not found#'
+        - '#Ternary operator condition is always false#'
+        - '#Negated boolean expression is always false#'
+        - '#Strict comparison using .* will always evaluate to true#'
+        - '#Constant .* is unused#'
+        - '#Match expression does not handle remaining value: string#'
+        - '#Expression on interface .* will always evaluate to true#'
+        - '#Access to property .* on an unknown class .*#'
+        - '#Access to constant .* on an unknown class .*#'
+        - '#Iterating over an object of an unknown class .*#'
+        - '#PHPDoc tag .* contains unknown class .*#'
+        - '#Method .* should return .* but returns .*#'
+        - '#Unsafe call to private method .* through static::#'
+        - '#Variable .* might not be defined#'
+        - '#Using nullsafe .* on non-nullable type .*#'
+        - '#Variable .* in empty\(\) always exists and is not falsy#'
+        - '#PHPDoc tag .* has invalid value .*#'
+        - '#Call to function is_array\(\) with .* will always evaluate to false#'
+        - '#Strict comparison using .* between .* and false will always evaluate to false#'
+        - '#Function event not found#'
+        - '#Method .* constructor invoked with .* parameter.*, .* required#'
+        - '#Static method .* invoked with .* parameter.*, .* required#'
+        - '#Variable \$_GET on left side of \?\? always exists and is not nullable#'
+        - '#Variable .* in isset\(\) always exists and is not nullable#'
+        - '#Parameter .* of function set_error_handler expects .*#'
+        - '#Ternary operator condition is always true#'
+        - '#Unsafe usage of new static\(\)#'
+        - '#Result of method .* is used#'
+        - '#If condition is always false#'
+        - '#Call to function .* on a separate line has no effect#'
+        - '#Method .* is unused#'
+        - '#Variable .* in empty\(\) is never defined#'
+        - '#Offset .* on array.* always exists and is not nullable#'
+        - '#Invalid array key type float#'
+        - '#Unused result of "or" operator#'
+        - '#Unsafe access to private property .* through static::#'
+        - '#PHPDoc tag @var with type .* is not subtype of native type .*#'
+        - '#Constant .* overriding constant .* should have the same value#'
+        - '#Call to function is_object\(\) with .* will always evaluate to false#'
+        - '#Property .* is unused#'
+        - '#Negated boolean expression is always true#'
+        - '#Method .* should return .* but return statement is missing#'
+        - '#Property .* in isset\(\) is not nullable nor uninitialized#'
+        - '#Result of \|\| is always true#'
+        - '#Strict comparison using === between .* and .* will always evaluate to false#'
+        - '#Method .* never returns .* so it can be removed from the return type#'
+        - '#Instanceof between .* and .* will always evaluate to false#'
+        - '#Cannot call static method .* on .*#'
+        - '#Class .* does not have a constructor and must be instantiated without any parameters#'
+        - '#Class .* has an uninitialized readonly property .*#'
+        - '#Property .* is never written, only read#'
+        - '#Unsafe access to private constant .* through static::#'
+        - '#Unreachable statement - code above always terminates#'
+        - '#Comparison operation .* is always .*#'
+        - '#PHPDoc tag @param for parameter .* is not subtype of native type .*#'
+        - '#Instantiated class .* not found#'
+        - '#Throwing object of an unknown class .*#'
+        - '#Array has 2 duplicate keys with value .*#'
+        - '#Cannot call method get\(\) on .*#'
+        - '#Result of && is always false#'
+        - '#Offset .* in empty\(\) always exists and is not falsy#'
+        - '#While loop condition is always true#'
+        - '#Call to function is_.* with .* will always evaluate to false#'
+        - '#Parameter .* of function array_filter expects .*#'
+        - '#Parameter .* of class .* constructor expects string, .* given#'
+        - '#Class .* constructor invoked with .* parameter.*, .* required#'
+
+    reportUnmatchedIgnoredErrors: false

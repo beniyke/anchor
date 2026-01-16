@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
+         bootstrap="System/Core/init.php" 
+         colors="true"
+         cacheDirectory=".phpunit.cache">
+    <testsuites>
+        <testsuite name="App">
+            <directory>tests/App</directory>
+        </testsuite>
+        <testsuite name="System">
+            <directory>tests/System</directory>
+        </testsuite>
+        <testsuite name="Packages">
+            <directory>tests/Packages</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">App</directory>
+            <directory suffix=".php">System</directory>
+            <directory suffix=".php">packages</directory>
+        </include>
+    </source>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+    </php>
+</phpunit>

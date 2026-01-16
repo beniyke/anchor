@@ -1,0 +1,28 @@
+{
+    "name": "anchor/shield",
+    "description": "Anchor Shield Package - Captcha Integration",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "BenIyke",
+            "email": "beniyke34@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Shield\\": "src/"
+        },
+        "files": [
+            "src/Helpers/functions.php"
+        ]
+    },
+    "extra": {
+        "anchor": {
+            "setup": "setup.php"
+        }
+    }
+}

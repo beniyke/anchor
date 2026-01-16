@@ -1,0 +1,32 @@
+/vendor
+/.idea
+/.vscode
+.env
+.env.*
+!.env.example
+.phpunit.cache
+.php-cs-fixer.cache
+*.log
+.DS_Store
+Thumbs.db
+/_draft
+/_playground
+
+# Storage
+/App/storage/cache
+/App/storage/query
+/App/storage/**/*.sqlite
+/App/storage/**/*.sqlite-shm
+/App/storage/**/*.sqlite-wal
+/App/storage/database/backup
+/App/storage/database/seeds/TenantSeeder.php
+/App/storage/database/seeds/RolesSeeder.php
+/App/storage/database/migrations/2025_10_26_223140_create_queued_job_table.php
+
+# Public
+/public/sent-mail
+/public/assets/photo
+/memory
+.formatter.json
+/App/src/Api
+/App/src/Test

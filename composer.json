@@ -1,0 +1,122 @@
+{
+  "name": "anchor/anchor",
+  "type": "project",
+  "description": "Anchor is a modular, high-performance PHP framework built on a philosophy of self-reliance. It provides a full-featured, zero-bloat toolkit for modern applications, minimizing external dependencies in favor of integrated excellence.",
+  "keywords": [
+    "framework",
+    "anchor",
+    "php",
+    "money",
+    "database",
+    "queue",
+    "testing"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "BenIyke",
+      "email": "beniyke34@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/anchor/anchor/issues",
+    "source": "https://github.com/anchor/anchor"
+  },
+  "require": {
+    "php": "^8.1",
+    "ext-bcmath": "*",
+    "ext-mbstring": "*",
+    "psr/http-message": "^2.0",
+    "nesbot/carbon": "^3.10",
+    "psy/psysh": "0.12",
+    "erusev/parsedown": "^1.7"
+  },
+  "require-dev": {
+    "doctrine/dbal": "^4.4",
+    "friendsofphp/php-cs-fixer": "^3.92",
+    "laravel/pint": "^1.0",
+    "mockery/mockery": "^1.6",
+    "pestphp/pest": "3.0",
+    "phpstan/phpstan": "^2.1"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\": "App/",
+      "Tests\\": "tests/",
+      "Testing\\": "System/Testing/",
+      "Cli\\": "System/Cli/",
+      "Core\\": "System/Core/",
+      "Database\\": "System/Database/",
+      "Debugger\\": "System/Debugger/",
+      "Defer\\": "System/Defer/",
+      "Formatter\\": "System/Formatter/",
+      "Helpers\\": "System/Helpers/",
+      "Mail\\": "System/Mail/",
+      "Notify\\": "System/Notify/",
+      "Package\\": "System/Package/",
+      "Queue\\": "System/Queue/",
+      "Security\\": "System/Security/",
+      "Ally\\": "packages/Ally/",
+      "Audit\\": "packages/Audit/",
+      "Blish\\": "packages/Blish/",
+      "Bridge\\": "packages/Bridge/",
+      "Client\\": "packages/Client/",
+      "Export\\": "packages/Export/",
+      "Flow\\": "packages/Flow/",
+      "Forge\\": "packages/Forge/",
+      "Geo\\": "packages/Geo/",
+      "Ghost\\": "packages/Ghost/",
+      "Hub\\": "packages/Hub/",
+      "Import\\": "packages/Import/",
+      "Link\\": "packages/Link/",
+      "Media\\": "packages/Media/",
+      "Money\\": "packages/Money/",
+      "Pay\\": "packages/Pay/",
+      "Permit\\": "packages/Permit/",
+      "Refer\\": "packages/Refer/",
+      "Release\\": "packages/Release/",
+      "Rollout\\": "packages/Rollout/",
+      "Slot\\": "packages/Slot/",
+      "Stack\\": "packages/Stack/",
+      "Support\\": "packages/Support/",
+      "Scribe\\": "packages/Scribe/",
+      "Tenancy\\": "packages/Tenancy/",
+      "Tokit\\": "packages/Tokit/",
+      "Vault\\": "packages/Vault/",
+      "Verify\\": "packages/Verify/",
+      "Wallet\\": "packages/Wallet/",
+      "Watcher\\": "packages/Watcher/",
+      "Wave\\": "packages/Wave/",
+      "Workflow\\": "packages/Workflow/"
+    },
+    "files": [
+      "packages/Tenancy/Helper/tenant.php"
+    ]
+  },
+  "scripts": {
+    "test": "pest",
+    "test:coverage": "pest --coverage",
+    "analyse": "phpstan analyse",
+    "format": "pint",
+    "format:check": "pint --test",
+    "sail": [
+      "@format:check",
+      "@analyse",
+      "@test"
+    ]
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    },
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "platform": {
+      "php": "8.2"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

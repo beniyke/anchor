@@ -1,0 +1,15 @@
+{
+    "paths": ["App", "System", "packages"],
+    "backup": false,
+    "maxFileSize": 5,
+    "skipPint": false,
+    "exclude": ["storage", "cache"],
+    "remove_empty_comments": true,
+    "remove_todo_markers": true,
+    "remove_numbered_steps": true,
+    "remove_obvious_actions": true,
+    "remove_commented_code": true,
+    "remove_redundant_docblocks": true,
+    "clean_empty_lines": true,
+    "aggressive_mode": true
+}

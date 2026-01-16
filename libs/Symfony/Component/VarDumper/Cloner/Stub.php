@@ -1,0 +1,79 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Symfony\Component\VarDumper\Cloner;
+
+use ReflectionClass;
+
+/**
+ * Represents the main properties of a PHP variable.
+ *
+ * @author Nicolas Grekas <p@tchwork.com>
+ */
+class Stub
+{
+    public const TYPE_REF = 1;
+    public const TYPE_STRING = 2;
+    public const TYPE_ARRAY = 3;
+    public const TYPE_OBJECT = 4;
+    public const TYPE_RESOURCE = 5;
+    public const TYPE_SCALAR = 6;
+
+    public const STRING_BINARY = 1;
+    public const STRING_UTF8 = 2;
+
+    public const ARRAY_ASSOC = 1;
+    public const ARRAY_INDEXED = 2;
+
+    public $type = self::TYPE_REF;
+
+    public $class = '';
+
+    public $value;
+
+    public $cut = 0;
+
+    public $handle = 0;
+
+    public $refCount = 0;
+
+    public $position = 0;
+
+    public $attr = [];
+
+    private static array $defaultProperties = [];
+
+    /**
+     * @internal
+     */
+    public function __sleep(): array
+    {
+        $properties = [];
+
+        if (! isset(self::$defaultProperties[$c = static::class])) {
+            self::$defaultProperties[$c] = get_class_vars($c);
+
+            foreach ((new ReflectionClass($c))->getStaticProperties() as $k => $v) {
+                unset(self::$defaultProperties[$c][$k]);
+            }
+        }
+
+        foreach (self::$defaultProperties[$c] as $k => $v) {
+            if ($v !== $this->$k) {
+                $properties[] = $k;
+            }
+        }
+
+        return $properties;
+    }
+}

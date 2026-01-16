@@ -1,0 +1,25 @@
+{
+    "name": "anchor/release",
+    "description": "Anchor Release Package",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "BenIyke",
+            "email": "beniyke34@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Release\\": "src/"
+        }
+    },
+    "extra": {
+        "anchor": {
+            "setup": "setup.php"
+        }
+    }
+}

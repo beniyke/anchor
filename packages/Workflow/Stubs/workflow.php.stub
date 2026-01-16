@@ -1,0 +1,36 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {namespace};
+
+use Generator;
+use Workflow\Contracts\Workflow;
+
+class {classname} implements Workflow
+{
+    /**
+     * The main execution logic of the workflow.
+     * 
+     * @param array $input
+     * @return Generator
+     */
+    public function execute(array $input): Generator
+    {
+        // Add your workflow steps here using yield
+        // $result = yield new SomeActivity($input);
+        
+        return "Workflow {classname} completed";
+    }
+
+    /**
+     * Handle external signals sent to the workflow.
+     * 
+     * @param string $signalName
+     * @param array $payload
+     */
+    public function handleSignal(string $signalName, array $payload): void
+    {
+        // Handle signals like cancellation or approval
+    }
+}
