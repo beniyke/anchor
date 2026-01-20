@@ -1,0 +1,25 @@
+/vendor
+/.idea
+/.vscode
+.env
+.env.*
+!.env.example
+.phpunit.cache
+.php-cs-fixer.cache
+*.log
+.DS_Store
+Thumbs.db
+/_playground
+
+# Storage
+/App/storage/cache
+/App/storage/query
+/App/storage/**/*.sqlite
+/App/storage/**/*.sqlite-shm
+/App/storage/**/*.sqlite-wal
+/App/storage/database/backup
+
+# Public
+/public/sent-mail
+/public/assets/photo
+.formatter.json

@@ -523,8 +523,8 @@ final class ProgressBar
     private function setRealFormat(string $format): void
     {
         // try to use the _nomax variant if available
-        if (! $this->max && self::getFormatDefinition($format.'_nomax') !== null) {
-            $this->format = self::getFormatDefinition($format.'_nomax');
+        if (! $this->max && self::getFormatDefinition($format . '_nomax') !== null) {
+            $this->format = self::getFormatDefinition($format . '_nomax');
         } elseif (self::getFormatDefinition($format) !== null) {
             $this->format = self::getFormatDefinition($format);
         } else {
@@ -577,7 +577,7 @@ final class ProgressBar
                 }
             }
         } elseif ($this->step > 0) {
-            $message = PHP_EOL.$message;
+            $message = PHP_EOL . $message;
         }
 
         $this->previousMessage = $originalMessage;
@@ -603,10 +603,10 @@ final class ProgressBar
         return [
             'bar' => function (self $bar, OutputInterface $output) {
                 $completeBars = $bar->getBarOffset();
-                $display = str_repeat($bar->getBarCharacter(), $completeBars);
+                $display = str_repeat($bar->getBarCharacter(), (int) $completeBars);
                 if ($completeBars < $bar->getBarWidth()) {
                     $emptyBars = $bar->getBarWidth() - $completeBars - Helper::length(Helper::removeDecoration($output->getFormatter(), $bar->getProgressCharacter()));
-                    $display .= $bar->getProgressCharacter().str_repeat($bar->getEmptyBarCharacter(), $emptyBars);
+                    $display .= $bar->getProgressCharacter() . str_repeat($bar->getEmptyBarCharacter(), (int) $emptyBars);
                 }
 
                 return $display;
@@ -627,7 +627,7 @@ final class ProgressBar
                 return Helper::formatTime($bar->getEstimated(), 2);
             },
             'memory' => fn (self $bar) => Helper::formatMemory(memory_get_usage(true)),
-            'current' => fn (self $bar) => str_pad($bar->getProgress(), $bar->getStepWidth(), ' ', STR_PAD_LEFT),
+            'current' => fn (self $bar) => str_pad((string) $bar->getProgress(), $bar->getStepWidth(), ' ', STR_PAD_LEFT),
             'max' => fn (self $bar) => $bar->getMaxSteps(),
             'percent' => fn (self $bar) => floor($bar->getProgressPercent() * 100),
         ];
@@ -665,7 +665,7 @@ final class ProgressBar
             }
 
             if (isset($matches[2])) {
-                $text = sprintf('%'.$matches[2], $text);
+                $text = sprintf('%' . $matches[2], $text);
             }
 
             return $text;

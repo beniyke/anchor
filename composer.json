@@ -1,5 +1,5 @@
 {
-  "name": "anchor/anchor",
+  "name": "beniyke/anchor",
   "type": "project",
   "description": "Anchor is a modular, high-performance PHP framework built on a philosophy of self-reliance. It provides a full-featured, zero-bloat toolkit for modern applications, minimizing external dependencies in favor of integrated excellence.",
   "keywords": [
@@ -20,8 +20,8 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/anchor/anchor/issues",
-    "source": "https://github.com/anchor/anchor"
+    "issues": "https://github.com/beniyke/anchor/issues",
+    "source": "https://github.com/beniyke/anchor"
   },
   "require": {
     "php": "^8.1",
@@ -29,8 +29,7 @@
     "ext-mbstring": "*",
     "psr/http-message": "^2.0",
     "nesbot/carbon": "^3.10",
-    "psy/psysh": "0.12",
-    "erusev/parsedown": "^1.7"
+    "psy/psysh": "0.12"
   },
   "require-dev": {
     "doctrine/dbal": "^4.4",

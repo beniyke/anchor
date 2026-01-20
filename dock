@@ -8,18 +8,20 @@
  */
 
 /**
- * ⚓ Anchor Framework - CLI Bootstrapper
+ * Anchor Framework - CLI Bootstrapper
  */
+
+use Core\Console;
+
 $paths = [
     __DIR__ . '/System/Core/init.php',                       // Standalone
-    __DIR__ . '/vendor/anchor/framework/System/Core/init.php' // Managed
+    __DIR__ . '/vendor/beniyke/framework/System/Core/init.php' // Managed
 ];
 
 foreach ($paths as $bootstrapper) {
     if (file_exists($bootstrapper)) {
         require_once $bootstrapper;
-        /** @var \Core\Ioc\ContainerInterface $container */
-        $container->get(\Core\Console::class)->run();
+        $container->get(Console::class)->run();
         exit(0);
     }
 }
@@ -28,7 +30,7 @@ foreach ($paths as $bootstrapper) {
  * Framework Missing: Enter Emergency Hydration
  */
 (new class {
-    private const REPO_ZIP = 'https://github.com/anchor/anchor/archive/refs/heads/main.zip';
+    private const REPO_ZIP = 'https://github.com/beniyke/anchor/archive/refs/heads/main.zip';
 
     public function run(): void
     {
@@ -86,8 +88,8 @@ foreach ($paths as $bootstrapper) {
 
     private function hydrateManaged(): void
     {
-        echo "\nRunning 'composer require anchor/framework'...\n";
-        if (passthru('composer require anchor/framework') === false) {
+        echo "\nRunning 'composer require beniyke/framework'...\n";
+        if (passthru('composer require beniyke/framework') === false) {
             throw new RuntimeException("Composer command failed.");
         }
     }

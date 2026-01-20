@@ -26,6 +26,8 @@ Thumbs.db
 /public/sent-mail
 /public/assets/photo
 /memory
+/memory-shm
+/memory-wal
 .formatter.json
 /App/src/Api
 /App/src/Test

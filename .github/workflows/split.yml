@@ -106,6 +106,8 @@ jobs:
             split_repository: "workflow"
           - local_path: "tests"
             split_repository: "tests"
+          - local_path: "skeleton"
+            split_repository: "anchor-skeleton"
 
     steps:
       - uses: actions/checkout@v3

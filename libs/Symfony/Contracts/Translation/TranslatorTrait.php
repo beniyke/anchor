@@ -118,7 +118,7 @@ EOF;
             }
         }
 
-        $position = $this->getPluralizationRule($number, $locale);
+        $position = $this->getPluralizationRule((int) $number, $locale);
 
         if (! isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard
