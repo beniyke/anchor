@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+/**
+ * Anchor Framework
+ *
+ * Core file for the package.
+ *
+ * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
+ */
+
 return [
     /*
     |--------------------------------------------------------------------------

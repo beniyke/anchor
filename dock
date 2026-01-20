@@ -30,7 +30,7 @@ foreach ($paths as $bootstrapper) {
  * Framework Missing: Enter Emergency Hydration
  */
 (new class {
-    private const REPO_ZIP = 'https://github.com/beniyke/anchor/archive/refs/heads/main.zip';
+    private const REPO_ZIP = 'https://github.com/beniyke/anchor/archive/refs/heads/master.zip';
 
     public function run(): void
     {
@@ -124,7 +124,8 @@ foreach ($paths as $bootstrapper) {
             CURLOPT_FILE => $fp,
             CURLOPT_USERAGENT => 'Anchor-Hydrator',
             CURLOPT_TIMEOUT => 300,
-            CURLOPT_FAILONERROR => true
+            CURLOPT_FAILONERROR => true,
+            CURLOPT_SSL_VERIFYPEER => false
         ]);
 
         $success = curl_exec($ch);

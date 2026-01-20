@@ -97,6 +97,13 @@
         </div>
     </div>
 
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop" title="Go to top">
+        <svg viewBox="0 0 24 24">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path>
+        </svg>
+    </button>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="<?= assets('docs/smart-search.js') ?>"></script>
     <script>
@@ -146,52 +153,60 @@
             }, 100);
         }
 
-        // Table of Contents scroll spy
+        // Table of Contents scroll spy using IntersectionObserver
         const tocLinks = document.querySelectorAll('.toc-link');
         const headings = Array.from(document.querySelectorAll('.content h2, .content h3'));
         const tocContainer = document.querySelector('.toc-container');
 
-        function updateActiveTocLink() {
-            let current = '';
+        let isScrolling = false;
 
-            // Default to first heading if at top
-            if (window.scrollY < 100 && headings.length > 0) {
-                // optionally set first one active or none
-            }
+        const observerOptions = {
+            root: null,
+            rootMargin: '-10% 0px -80% 0px',
+            threshold: 0
+        };
 
-            headings.forEach(heading => {
-                // Adjust offset to account for header
-                const rect = heading.getBoundingClientRect();
-                if (rect.top <= 120) {
-                    current = heading.id;
+        const observer = new IntersectionObserver((entries) => {
+            if (isScrolling) return;
+
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    updateActiveTocLink(id);
                 }
             });
+        }, observerOptions);
 
+        headings.forEach(heading => observer.observe(heading));
+
+        function updateActiveTocLink(id) {
             tocLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
+                const isActive = link.getAttribute('href') === '#' + id;
+                link.classList.toggle('active', isActive);
 
-                    // Auto-scroll TOC container to keep active link in view
-                    if (tocContainer) {
-                        const linkRect = link.getBoundingClientRect();
-                        const containerRect = tocContainer.getBoundingClientRect();
+                if (isActive && tocContainer) {
+                    const linkRect = link.getBoundingClientRect();
+                    const containerRect = tocContainer.getBoundingClientRect();
 
-                        if (linkRect.top < containerRect.top || linkRect.bottom > containerRect.bottom) {
-                            link.scrollIntoView({
-                                block: 'nearest',
-                                behavior: 'smooth'
-                            });
-                        }
+                    if (linkRect.top < containerRect.top || linkRect.bottom > containerRect.bottom) {
+                        link.scrollIntoView({
+                            block: 'nearest',
+                            behavior: 'smooth'
+                        });
                     }
                 }
             });
         }
 
+        // Handle bottom of page explicitly
         window.addEventListener('scroll', () => {
-            requestAnimationFrame(updateActiveTocLink);
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 20) {
+                const lastHeading = headings[headings.length - 1];
+                if (lastHeading) {
+                    updateActiveTocLink(lastHeading.id);
+                }
+            }
         });
-        updateActiveTocLink();
 
         // Explicit clean scroll handler
         tocLinks.forEach(link => {
@@ -201,10 +216,11 @@
                 const target = document.getElementById(targetId);
 
                 if (target) {
-                    // Get dynamic header height + buffer
+                    isScrolling = true;
+
                     const header = document.querySelector('.header');
                     const headerHeight = header ? header.offsetHeight : 73;
-                    const buffer = 24; // Extra breathing room
+                    const buffer = 24;
 
                     const elementPosition = target.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - (headerHeight + buffer);
@@ -214,8 +230,13 @@
                         behavior: 'smooth'
                     });
 
-                    // Update URL without jumping
-                    history.pushState(null, '', link.getAttribute('href'));
+                    // Update active link immediately
+                    updateActiveTocLink(targetId);
+
+                    setTimeout(() => {
+                        isScrolling = false;
+                        history.pushState(null, '', '#' + targetId);
+                    }, 800);
                 }
             });
         });
@@ -330,6 +351,24 @@
                 }
             });
         }
+
+        // Scroll to Top functionality
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
 
         // Mobile menu
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');

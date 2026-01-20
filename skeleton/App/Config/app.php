@@ -7,7 +7,7 @@ return [
         'default' => 'img/logo.png',
     ],
     'icon' => 'img/favicon.ico',
-    'name' => 'anchorv2',
+    'name' => 'Annchor',
     'assets' => [
         'photo' => 'public/assets/photo/',
     ],

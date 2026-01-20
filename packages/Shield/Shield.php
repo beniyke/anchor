@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+/**
+ * Anchor Framework
+ *
+ * Shield static facade/main class.
+ *
+ * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
+ */
+
 namespace Shield;
 
 use Shield\Drivers\CaptchaDriverInterface;

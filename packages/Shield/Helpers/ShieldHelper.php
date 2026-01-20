@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+/**
+ * Anchor Framework
+ *
+ * ShieldHelper class.
+ *
+ * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
+ */
+
 namespace Shield\Helpers;
 
 use Shield\Services\ShieldManagerService;

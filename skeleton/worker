@@ -1,0 +1,52 @@
+#!/usr/bin/env php
+<?php
+// Refuse to run when called from php-cgi
+if (php_sapi_name() === 'cgi') {
+    die("The CLI tool is not supported when running php-cgi. It needs php-cli to function!\n");
+}
+
+require_once __DIR__ . '/System/Core/init.php';
+
+use Queue\Worker;
+use Core\Services\CliServiceInterface;
+use Core\Support\Adapters\Interfaces\OSCheckerInterface;
+use Helpers\File\Contracts\CacheInterface;
+
+try {
+    $cliService = $container->get(CliServiceInterface::class);
+    $command = $cliService->getCommandName();
+    $memory = $cliService->getOption('memory', 128);
+    $queueName = $cliService->getArgument(0, 'default');
+
+    $worker = new Worker(
+        $container->get(CacheInterface::class),
+        $container->get(OSCheckerInterface::class),
+        $queueName,
+        memoryLimit: $memory
+    );
+
+    switch ($command) {
+        case 'start':
+            echo "Starting worker for queue: '{$queueName}'..." . PHP_EOL;
+            $worker->start();
+            break;
+        case 'stop':
+            echo "Stopping worker for queue: '{$queueName}'..." . PHP_EOL;
+            $worker->stop();
+            break;
+        case 'restart':
+            echo "Restarting worker for queue: '{$queueName}'..." . PHP_EOL;
+            $worker->restart();
+            break;
+        case 'status':
+            echo $worker->status() . PHP_EOL;
+            break;
+        default:
+            echo "Unknown command: {$command}" . PHP_EOL;
+            echo "Usage: php worker [start|stop|restart|status] [queue_name]" . PHP_EOL;
+            break;
+    }
+} catch (\Throwable $e) {
+    error_log('Worker script fatal error: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());
+    exit('Error: ' . $e->getMessage());
+}

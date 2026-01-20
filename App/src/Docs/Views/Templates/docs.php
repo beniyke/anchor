@@ -38,7 +38,7 @@
             <div class="hero-content">
                 <div class="badge-pill">
                     <span class="badge-dot"></span>
-                    v2.0 is now available
+                    version 2.0
                 </div>
                 <h1 class="hero-title">
                     The <span class="text-gradient">Stable Foundation</span> for<br>
@@ -55,104 +55,13 @@
                             <path d="M5 12h10m-4-4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-                    <a href="https://github.com/beniyke/anchor" target="_blank" class="btn btn-secondary btn-lg">
+                    <a href="https://github.com/beniyke/anchor" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" />
                         </svg>
                         <span>GitHub</span>
                     </a>
                 </div>
-            </div>
-            <div class="hero-visual">
-                <div class="code-window glass-panel">
-                    <div class="window-header" style="padding-bottom: 0; border-bottom: none;">
-                        <div class="traffic-lights" style="margin-left: 1rem;">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
-                        </div>
-                        <!-- New Tabbed Interface -->
-                        <div class="code-tabs">
-                            <div class="code-tab active" onclick="switchTab('routes')">App/Config/route.php</div>
-                            <div class="code-tab" onclick="switchTab('controller')">TweetController.php</div>
-                            <div class="code-tab" onclick="switchTab('terminal')">Terminal</div>
-                        </div>
-                    </div>
-
-                    <!-- Routes Tab -->
-                    <div id="tab-routes" class="tab-content active">
-                        <pre><code class="language-php">return [
-    'default' => 'website/home',
-
-    'names' => [
-        'login' => 'auth/login',
-        'dashboard' => 'account/home',
-    ],
-
-    'redirect' => [
-        'signin' => 'auth/login',
-    ]
-];
-
-// Configuration-based routing. Simple.</code></pre>
-                    </div>
-
-                    <!-- Controller Tab -->
-                    <div id="tab-controller" class="tab-content">
-                        <pre><code class="language-php">namespace App\Account\Controllers;
-
-use App\Core\BaseController;
-use Helpers\Http\Response;
-use App\Models\Tweet;
-
-class TweetController extends BaseController
-{
-    public function index(): Response
-    {
-        return $this->asView('tweets', ['latest' => Tweet::all()]);
-    }
-}</code></pre>
-                    </div>
-
-                    <!-- Terminal Tab -->
-                    <div id="tab-terminal" class="tab-content">
-                        <pre><code class="language-bash"># Create a new controller in 'Account' module
-$ php dock controller:create Tweet Account
-
-# Run pending migrations
-$ php dock migration:run
-
-# Verify production readiness
-$ php dock sail
-
-[OK] Ready to ship! 🚀</code></pre>
-                    </div>
-                </div>
-
-                <!-- Simple Tab Switcher Script -->
-                <script>
-                    function switchTab(tabName) {
-                        // Update Tabs
-                        document.querySelectorAll('.code-tab').forEach(tab => {
-                            tab.classList.remove('active');
-                            if (tab.innerText.toLowerCase().includes(tabName === 'routes' ? 'route' : (tabName === 'controller' ? 'tweet' : 'terminal'))) {
-                                tab.classList.add('active');
-                            }
-                        });
-
-                        // Update Content
-                        document.querySelectorAll('.tab-content').forEach(content => {
-                            content.classList.remove('active');
-                        });
-                        document.getElementById('tab-' + tabName).classList.add('active');
-
-                        // Re-highlight syntax if needed
-                        if (window.hljs) hljs.highlightAll();
-                    }
-                </script>
-                <!-- Abstract blobs for decoration -->
-                <div class="glow-blob blob-1"></div>
-                <div class="glow-blob blob-2"></div>
             </div>
         </section>
 

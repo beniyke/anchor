@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+/**
+ * Anchor Framework
+ *
+ * ShieldManagerService class.
+ *
+ * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
+ */
+
 namespace Shield\Services;
 
 use Audit\Audit;

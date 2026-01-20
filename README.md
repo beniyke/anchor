@@ -23,48 +23,67 @@ In software development, we don't just _deploy_ code, we **ship** it. Anchor is 
 
 ## Requirements
 
+Anchor is designed for modern PHP environments. Ensure your system meets these requirements:
+
 - **PHP**: >= 8.2
-- **Composer**: Dependency Manager
-- **Database**: MySQL, PostgreSQL, or SQLite
-- **Extensions**: PDO, Mbstring, OpenSSL, Ctype, JSON
+- **Database**: SQLite (default), MySQL 8.0+, or PostgreSQL 15+
+- **Extensions**: PDO, Mbstring, OpenSSL, Ctype, JSON, **BCMath**, **cURL**, **ZipArchive**, **Tokenizer**, **fileinfo**
+- **Composer**: Dependency Manager (for Managed Mode)
 
 ## Installation
 
-### Create a New Project
+Anchor provides two ways to build your application: **Managed** (via Composer) and **Standalone** (Portable).
 
-Clone the repository:
+### Create a New Project (Managed Mode)
+
+The recommended way to start is with the **[Anchor Skeleton](https://github.com/beniyke/anchor-skeleton)**:
 
 ```bash
-git clone https://github.com/beniyke/anchor my-app
+# Create project from skeleton
+composer create-project beniyke/anchor-skeleton my-app
+
+# Initialize the framework
 cd my-app
+php dock
 ```
+
+Choosing the "Managed" option in the `dock` tool will provision the latest version of the framework.
 
 ### Environment Configuration
 
-Copy the example environment file and configure your database credentials:
+Copy the example environment file and configure your settings:
 
 ```bash
 cp .env.example .env
 ```
 
-### Initial Setup
+### Database Initialization
 
-Run the `dock` command to initialize your application:
+Run the migrations to create your core application tables:
 
 ```bash
-php dock
-
 # Run database migrations
 php dock migration:run
 ```
 
+## Maintenance
+
+Keep your framework core up to date with a single command:
+
+```bash
+php dock anchor:update
+```
+
+It intelligently handles both Managed (Composer) and Standalone (Hydrated) installations.
+
 ## Documentation
 
-Comprehensive documentation is available in the [docs](docs/) directory.
+Full documentation is available in the [docs/](docs/) directory.
 
-- [Introduction](docs/introduction.md)
-- [Architecture](docs/architecture.md)
-- [Getting Started](docs/onboard.md)
+- **[Installation](docs/installation.md)** - Managed vs Standalone setups
+- **[Introduction](docs/introduction.md)** - Core philosophy and metaphors
+- **[Architecture](docs/architecture.md)** - How Anchor works under the hood
+- **[Package Management](docs/package-management.md)** - Extending the framework
 
 ## License
 

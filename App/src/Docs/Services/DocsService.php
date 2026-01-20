@@ -194,7 +194,7 @@ class DocsService
             }
 
             $groups = [
-                'Getting Started' => ['README', 'introduction', 'configuration', 'directory-structure', 'lifecycle'],
+                'Getting Started' => ['README', 'introduction', 'installation', 'configuration', 'directory-structure', 'lifecycle'],
                 'Core Concepts' => ['architecture', 'kernel', 'container', 'providers', 'services', 'events'],
                 'Basics' => ['routing', 'controllers', 'middleware', 'requests', 'responses', 'views', 'view-models'],
                 'Database' => ['database', 'query-builder', 'models', 'migrations', 'seeding'],

@@ -78,7 +78,7 @@
                     <a href="/docs/learn" class="btn btn-primary btn-lg">
                         Start Building
                     </a>
-                    <a href="https://github.com/beniyke/anchor" class="btn btn-secondary btn-lg">
+                    <a href="https://github.com/beniyke/anchor" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
                         View Source
                     </a>
                 </div>
