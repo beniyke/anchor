@@ -6,7 +6,7 @@
     "type": "project",
     "require": {
         "php": "^8.2",
-        "beniyke/framework": "dev-main"
+        "beniyke/framework": "dev-master"
     },
     "autoload": {
         "psr-4": {
