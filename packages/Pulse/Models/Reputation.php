@@ -26,7 +26,9 @@ use Helpers\DateTimeHelper;
  */
 class Reputation extends BaseModel
 {
-    protected string $table = 'pulse_reputation';
+    public const TABLE = 'pulse_reputation';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'user_id',

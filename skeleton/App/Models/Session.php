@@ -11,7 +11,9 @@ use Helpers\DateTimeHelper;
 
 class Session extends BaseModel
 {
-    protected string $table = 'session';
+    public const TABLE = 'session';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = ['user_id', 'token', 'browser', 'device', 'ip', 'os', 'expire_at'];
 

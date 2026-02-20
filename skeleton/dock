@@ -1,21 +1,21 @@
 #!/usr/bin/env php
 <?php
 /**
+ * Anchor Framework
+ * 
+ * CLI Bootstrapper
+ * 
  * This script serves as the entry point for the 
  * command-line interface (CLI)application. 
  * 
  * @author BenIyke <beniyke34@gmail.com> | (twitter:@BigBeniyke)
  */
 
-/**
- * Anchor Framework - CLI Bootstrapper
- */
-
 use Core\Console;
 
 $paths = [
-    __DIR__ . '/System/Core/init.php',                       // Standalone
-    __DIR__ . '/vendor/beniyke/framework/System/Core/init.php' // Managed
+    __DIR__ . '/System/Core/init.php',
+    __DIR__ . '/vendor/beniyke/framework/System/Core/init.php'
 ];
 
 foreach ($paths as $bootstrapper) {
@@ -98,8 +98,13 @@ foreach ($paths as $bootstrapper) {
     {
         echo "\nHydrating Standalone Framework...\n";
 
-        if (!extension_loaded('curl')) throw new RuntimeException("CURL extension is required.");
-        if (!class_exists('ZipArchive')) throw new RuntimeException("ZipArchive extension is required.");
+        if (!extension_loaded('curl')) {
+            throw new RuntimeException("CURL extension is required.");
+        }
+
+        if (!class_exists('ZipArchive')) {
+            throw new RuntimeException("ZipArchive extension is required.");
+        }
 
         $zipFile = 'framework_hydrate_' . bin2hex(random_bytes(4)) . '.zip';
 
@@ -125,7 +130,7 @@ foreach ($paths as $bootstrapper) {
             CURLOPT_USERAGENT => 'Anchor-Hydrator',
             CURLOPT_TIMEOUT => 300,
             CURLOPT_FAILONERROR => true,
-            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYPEER => false
         ]);
 
         $success = curl_exec($ch);

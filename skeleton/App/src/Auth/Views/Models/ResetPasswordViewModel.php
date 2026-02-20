@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Auth\Views\Models;
 
+use App\Auth\Services\IdentityService;
 use App\Models\User;
-use App\Services\UserService;
 use Helpers\Http\Flash;
 
 readonly class ResetPasswordViewModel
@@ -18,11 +18,11 @@ readonly class ResetPasswordViewModel
 
     private string $token;
 
-    private UserService $service;
+    private IdentityService $service;
 
     private Flash $flash;
 
-    public function __construct(UserService $service, Flash $flash, ?string $token = null)
+    public function __construct(IdentityService $service, Flash $flash, ?string $token = null)
     {
         $this->flash = $flash;
         $this->token = $token;
@@ -44,7 +44,7 @@ readonly class ResetPasswordViewModel
 
     public function getFormActionUrl(): string
     {
-        return url(route('store/'.$this->token));
+        return url(route('store/' . $this->token));
     }
 
     public function getErrorClass(string $field): string

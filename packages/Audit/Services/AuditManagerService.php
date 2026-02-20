@@ -20,8 +20,11 @@ use Audit\Services\Builders\LogBuilder;
 use Core\Services\ConfigServiceInterface;
 use Database\BaseModel;
 use Database\Collections\ModelCollection;
+use Database\DB;
+use Database\Query\Builder;
 use Helpers\DateTimeHelper;
 use Helpers\String\Str;
+use Throwable;
 
 class AuditManagerService
 {
@@ -63,6 +66,20 @@ class AuditManagerService
 
         if ($this->config->get('audit.checksum.enabled', true)) {
             $logData['checksum'] = $this->generateChecksum($logData);
+        }
+
+        static $hasTable = null;
+
+        if ($hasTable === null) {
+            try {
+                $hasTable = DB::connection()->tableExists(AuditLog::TABLE);
+            } catch (Throwable $e) {
+                $hasTable = false;
+            }
+        }
+
+        if (!$hasTable) {
+            return new AuditLog();
         }
 
         return AuditLog::create($logData);
@@ -151,7 +168,7 @@ class AuditManagerService
     /**
      * Alias for queryBuilder.
      */
-    public function history(array $filters = []): \Database\Query\Builder
+    public function history(array $filters = []): Builder
     {
         return $this->queryBuilder($filters);
     }
@@ -161,7 +178,7 @@ class AuditManagerService
         return new AuditAnalyticsService();
     }
 
-    public function queryBuilder(array $filters = []): \Database\Query\Builder
+    public function queryBuilder(array $filters = []): Builder
     {
         $query = AuditLog::query();
 

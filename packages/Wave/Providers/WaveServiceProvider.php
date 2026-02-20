@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace Wave\Providers;
 
 use Core\Event;
-use Core\Services\ConfigServiceInterface;
 use Core\Services\ServiceProvider;
+use Helpers\File\Paths;
 use Pay\Events\PaymentSuccessfulEvent;
 use Wave\Listeners\ProcessPaymentSuccessListener;
 use Wave\Models\Affiliate;
@@ -45,15 +45,7 @@ class WaveServiceProvider extends ServiceProvider
         $this->container->singleton(AffiliateManagerService::class);
         $this->container->singleton(WaveManagerService::class);
 
-        // Load config
-        $config = $this->container->get(ConfigServiceInterface::class);
-        $configPath = __DIR__ . '/../Config/wave.php';
-        if (file_exists($configPath)) {
-            $waveConfig = include $configPath;
-            foreach ($waveConfig as $key => $value) {
-                $config->set("wave.{$key}", $value);
-            }
-        }
+        $this->loadHelpers(Paths::packagePath('Wave/Helpers/wave.php'));
     }
 
     public function boot(): void

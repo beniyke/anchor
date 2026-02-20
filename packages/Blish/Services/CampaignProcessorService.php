@@ -14,7 +14,7 @@ namespace Blish\Services;
 use Blish\Models\Campaign;
 use Blish\Models\Subscriber;
 use Blish\Notifications\CampaignEmailNotification;
-use Helpers\Data;
+use Helpers\Data\Data;
 use Helpers\DateTimeHelper;
 use Link\Link;
 use Mail\Mail;

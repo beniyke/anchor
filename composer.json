@@ -29,19 +29,22 @@
     "ext-mbstring": "*",
     "psr/http-message": "^2.0",
     "nesbot/carbon": "^3.10",
-    "psy/psysh": "0.12"
+    "psy/psysh": "^0.12.19"
   },
   "require-dev": {
     "doctrine/dbal": "^4.4",
     "friendsofphp/php-cs-fixer": "^3.92",
     "laravel/pint": "^1.0",
     "mockery/mockery": "^1.6",
-    "pestphp/pest": "3.0",
+    "pestphp/pest": "^3.0",
     "phpstan/phpstan": "^2.1"
   },
   "autoload-dev": {
     "psr-4": {
-      "App\\": "App/",
+      "App\\": [
+        "App/",
+        "App/src/"
+      ],
       "Tests\\": "tests/",
       "Testing\\": "System/Testing/",
       "Cli\\": "System/Cli/",
@@ -56,8 +59,9 @@
       "Package\\": "System/Package/",
       "Queue\\": "System/Queue/",
       "Security\\": "System/Security/",
-      "Guide\\": "packages/Guide/",
+      "Exceptions\\": "System/Exceptions/",
       "Ally\\": "packages/Ally/",
+      "Activity\\": "packages/Activity/",
       "Audit\\": "packages/Audit/",
       "Blish\\": "packages/Blish/",
       "Bridge\\": "packages/Bridge/",
@@ -67,20 +71,28 @@
       "Forge\\": "packages/Forge/",
       "Geo\\": "packages/Geo/",
       "Ghost\\": "packages/Ghost/",
+      "Guide\\": "packages/Guide/",
       "Hub\\": "packages/Hub/",
       "Import\\": "packages/Import/",
       "Link\\": "packages/Link/",
       "Media\\": "packages/Media/",
+      "Metric\\": "packages/Metric/",
       "Money\\": "packages/Money/",
+      "Notification\\": "packages/Notification/",
+      "Onboard\\": "packages/Onboard/",
       "Pay\\": "packages/Pay/",
       "Permit\\": "packages/Permit/",
+      "Proof\\": "packages/Proof/",
+      "Pulse\\": "packages/Pulse/",
       "Refer\\": "packages/Refer/",
       "Release\\": "packages/Release/",
       "Rollout\\": "packages/Rollout/",
+      "Scout\\": "packages/Scout/",
       "Slot\\": "packages/Slot/",
       "Stack\\": "packages/Stack/",
       "Support\\": "packages/Support/",
       "Scribe\\": "packages/Scribe/",
+      "Shield\\": "packages/Shield/",
       "Tenancy\\": "packages/Tenancy/",
       "Tokit\\": "packages/Tokit/",
       "Vault\\": "packages/Vault/",
@@ -90,9 +102,7 @@
       "Wave\\": "packages/Wave/",
       "Workflow\\": "packages/Workflow/"
     },
-    "files": [
-      "packages/Tenancy/Helper/tenant.php"
-    ]
+    "files": []
   },
   "scripts": {
     "test": "pest",

@@ -14,7 +14,7 @@ namespace Wave\Services;
 
 use Database\DB;
 use DateTimeInterface;
-use Helpers\Data;
+use Helpers\Data\Data;
 use Helpers\DateTimeHelper;
 use Helpers\String\Str;
 use Mail\Mail;

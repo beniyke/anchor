@@ -11,14 +11,7 @@ class LogoutController extends BaseController
 {
     public function index(): Response
     {
-        $user = $this->auth->user();
-        $user_id = $user->id;
-
-        if (! $this->auth->logout()) {
-            return $this->response->redirect($this->request->fullRouteByName('home'));
-        }
-
-        activity('logged out.', user_id: $user_id);
+        $this->auth->logout();
 
         return $this->response->redirect($this->request->fullRouteByName('login'));
     }

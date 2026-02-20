@@ -13,8 +13,5 @@ return [
     'providers' => [
         Metric\Providers\MetricServiceProvider::class,
     ],
-    'middleware' => [
-        'web' => [],
-        'api' => [],
-    ],
+    'middleware' => [],
 ];

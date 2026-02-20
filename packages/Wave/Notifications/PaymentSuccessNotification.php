@@ -32,7 +32,13 @@ class PaymentSuccessNotification extends WaveNotification
         return EmailComponent::make()
             ->status("Payment Successful", 'success')
             ->greeting("Hello {$name},")
-            ->line("Thank you for your payment! Your transaction for invoice #{$invoiceNumber} was successful.")
+            ->markdown("Thank you for your payment! Your transaction was successful.")
+            ->divider()
+            ->attributes([
+                'Invoice' => "#{$invoiceNumber}",
+                'Status' => 'Paid',
+            ])
+            ->divider()
             ->line("Your subscription is now active and up to date.")
             ->action('View Invoice', url($viewUrl))
             ->render();

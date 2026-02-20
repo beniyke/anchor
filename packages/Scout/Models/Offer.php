@@ -30,7 +30,9 @@ use DateTimeInterface;
  */
 class Offer extends BaseModel
 {
-    protected string $table = 'scout_offer';
+    public const TABLE = 'scout_offer';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'scout_application_id',

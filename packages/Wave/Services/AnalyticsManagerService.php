@@ -16,11 +16,14 @@ use DateTimeInterface;
 use Helpers\Array\Collections;
 use Helpers\DateTimeHelper;
 use Money\Money;
+use Wave\Enums\AnalyticsMetric;
 use Wave\Enums\InvoiceStatus;
+use Wave\Enums\PlanInterval;
 use Wave\Enums\SubscriptionStatus;
 use Wave\Models\Affiliate;
 use Wave\Models\Coupon;
 use Wave\Models\Invoice;
+use Wave\Models\Plan;
 use Wave\Models\Referral;
 use Wave\Models\Subscription;
 
@@ -37,10 +40,10 @@ class AnalyticsManagerService
         // Get active subscriptions grouped by plan with quantity sum
         // Use DB join to ensure we get plan details for aggregation
         $plans = Subscription::query()
-            ->join('wave_plan', 'wave_subscription.plan_id', '=', 'wave_plan.id')
-            ->selectRaw('wave_subscription.plan_id, sum(wave_subscription.quantity) as total_quantity, wave_plan.price, wave_plan.interval, wave_plan.interval_count')
-            ->where('wave_subscription.status', SubscriptionStatus::ACTIVE->value)
-            ->groupBy('wave_subscription.plan_id', 'wave_plan.price', 'wave_plan.interval', 'wave_plan.interval_count')
+            ->join(Plan::TABLE, Subscription::TABLE . '.plan_id', '=', Plan::TABLE . '.id')
+            ->selectRaw(Subscription::TABLE . '.plan_id, sum(' . Subscription::TABLE . '.quantity) as total_quantity, ' . Plan::TABLE . '.price, ' . Plan::TABLE . '.interval, ' . Plan::TABLE . '.interval_count')
+            ->where(Subscription::TABLE . '.status', SubscriptionStatus::ACTIVE->value)
+            ->groupBy(Subscription::TABLE . '.plan_id', Plan::TABLE . '.price', Plan::TABLE . '.interval', Plan::TABLE . '.interval_count')
             ->get();
 
         $mrr = 0;
@@ -53,19 +56,14 @@ class AnalyticsManagerService
                 $count = 1;
             }
 
-            // Normalize to monthly
-            // Interval comes from DB join, so it might be string or Enum depending on cast.
-            // Since we use join, it's likely raw string unless we hydrate Plan model?
-            // query() on Subscription returns Subscription models (or partials).
-            // But 'interval' is on Plan table. Subscription model doesn't cast plain joined fields unless configured.
-            // So assume string.
+            // Normalize price to monthly base for MRR calculation
             $intervalValue = is_object($interval) ? $interval->value : $interval;
 
             $monthlyPrice = match ($intervalValue) {
-                'year' => $price / 12,
-                'month' => $price,
-                'week' => $price * 52 / 12,
-                'day' => $price * 365 / 12,
+                PlanInterval::YEAR->value => $price / 12,
+                PlanInterval::MONTH->value => $price,
+                PlanInterval::WEEK->value => $price * 52 / 12,
+                PlanInterval::DAY->value => $price * 365 / 12,
                 default => $price,
             };
 
@@ -125,7 +123,7 @@ class AnalyticsManagerService
 
         $queryData = [];
 
-        if ($metric === 'revenue') {
+        if ($metric === AnalyticsMetric::REVENUE->value) {
             $groups = Invoice::query()
                 ->where('status', InvoiceStatus::PAID->value)
                 ->whereBetween('paid_at', [$startStr, $endStr])
@@ -135,7 +133,7 @@ class AnalyticsManagerService
             foreach ($groups as $key => $group) {
                 $queryData[$key] = Collections::make($group)->pluck('total')->sum();
             }
-        } elseif ($metric === 'new_subscriptions') {
+        } elseif ($metric === AnalyticsMetric::NEW_SUBSCRIPTIONS->value) {
             $groups = Subscription::query()
                 ->whereBetween('created_at', [$startStr, $endStr])
                 ->get()
@@ -145,7 +143,7 @@ class AnalyticsManagerService
                 // arr() handles count too (via Countable interface on Collections)
                 $queryData[$key] = arr($group)->count();
             }
-        } elseif ($metric === 'cancellations') {
+        } elseif ($metric === AnalyticsMetric::CANCELLATIONS->value) {
             $groups = Subscription::query()
                 ->whereBetween('canceled_at', [$startStr, $endStr])
                 ->get()
@@ -218,7 +216,7 @@ class AnalyticsManagerService
             ->where('owner_type', $ownerType)
             ->sum('total');
 
-        $activeSubs = Subscription::isActive()
+        $activeSubs = Subscription::active()
             ->owner($ownerId)
             ->where('owner_type', $ownerType)
             ->count();

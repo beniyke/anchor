@@ -1,0 +1,11 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g_rust" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF8C00" /><stop offset="50%" stop-color="#B7410E" /><stop offset="100%" stop-color="#7B3F00" />
+    </linearGradient>
+  </defs>
+  <!-- Framework: Hexagonal Core / Engine Metaphor -->
+  <path d="M12 2l8.66 5v10L12 22l-8.66-5V7L12 2z" stroke="url(#g_rust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 8l3.46 2v4L12 16l-3.46-2v-4L12 8z" stroke="url(#g_rust)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 2v6m0 8v6M3.34 7l5.2 3m6.92 4l5.2 3M20.66 7l-5.2 3m-6.92 4l-5.2 3" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

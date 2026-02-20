@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ *
  * This abstract class serves as a foundation for request in the application.
  * It defines a structure for validating any request data (form | api) data, including expected fields,
  * validation rules, and human-readable labels. Subclasses must implement specific
@@ -14,7 +16,7 @@ declare(strict_types=1);
 namespace App\Core;
 
 use App\Services\Auth\Interfaces\AuthServiceInterface;
-use Helpers\Data;
+use Helpers\Data\Data;
 use Helpers\Validation\Validator;
 
 abstract class BaseRequestValidation

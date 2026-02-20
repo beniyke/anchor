@@ -20,7 +20,7 @@ class CreateClientTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('client', function ($table) {
+        Schema::createIfNotExists('client', function ($table) {
             $table->id();
             $table->string('refid', 16)->unique();
             $table->string('name', 255);

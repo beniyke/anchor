@@ -64,7 +64,7 @@ class ImportManagerService
             'importer_class' => $importerClass,
             'filename' => $filename,
             'original_filename' => $options['original_filename'] ?? $filename,
-            'disk' => $this->config->get('import.disk', 'local'),
+            'disk' => $options['disk'] ?? $this->config->get('import.disk', 'local'),
             'path' => $filePath,
             'status' => ImportStatus::PENDING,
         ]);

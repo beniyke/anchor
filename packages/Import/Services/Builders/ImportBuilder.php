@@ -23,6 +23,8 @@ class ImportBuilder
 
     private ?string $originalFilename = null;
 
+    private ?string $disk = null;
+
     private bool $queue = false;
 
     private bool $skipDuplicates = true;
@@ -48,6 +50,13 @@ class ImportBuilder
     public function originalFilename(string $filename): self
     {
         $this->originalFilename = $filename;
+
+        return $this;
+    }
+
+    public function disk(string $disk): self
+    {
+        $this->disk = $disk;
 
         return $this;
     }
@@ -90,6 +99,7 @@ class ImportBuilder
 
         return $this->manager->queue($this->importer, $this->filePath, [
             'original_filename' => $this->originalFilename,
+            'disk' => $this->disk,
             'skip_duplicates' => $this->skipDuplicates,
             'stop_on_error' => $this->stopOnError,
             'queue' => $this->queue,

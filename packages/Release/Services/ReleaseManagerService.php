@@ -18,6 +18,7 @@ use Helpers\File\FileSystem;
 use Helpers\File\Paths;
 use Helpers\File\Zipper\Zipper;
 use Helpers\Http\Client\Curl;
+use Helpers\Log;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -74,7 +75,7 @@ class ReleaseManagerService
 
             return null;
         } catch (Exception $e) {
-            logger('release.log')->error("Release check failed: " . $e->getMessage());
+            Log::channel('release')->error("Release check failed: " . $e->getMessage());
 
             return null;
         }

@@ -31,7 +31,9 @@ use Helpers\DateTimeHelper;
  */
 class Training extends BaseModel
 {
-    protected string $table = 'onboard_training';
+    public const TABLE = 'onboard_training';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'onboard_template_id',

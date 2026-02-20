@@ -18,7 +18,7 @@ class CreateWavePlanTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::createIfNotExist('wave_plan', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('wave_plan', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique()->index();
             $table->string('name');

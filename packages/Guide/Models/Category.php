@@ -36,7 +36,9 @@ class Category extends BaseModel
 {
     use HasRefid;
 
-    protected string $table = 'guide_category';
+    public const TABLE = 'guide_category';
+
+    protected string $table = self::TABLE;
 
     protected string $refidPrefix = 'cat_';
 

@@ -6,7 +6,6 @@ namespace App\Auth\Controllers;
 
 use App\Auth\Views\Models\LoginViewModel;
 use App\Core\BaseController;
-use App\Validations\Form\LoginFormRequestValidation;
 use Helpers\Http\Response;
 
 class LoginController extends BaseController
@@ -16,21 +15,13 @@ class LoginController extends BaseController
         return $this->asView('login', compact('login_view_model'));
     }
 
-    public function attempt(LoginFormRequestValidation $validator): Response
+    public function attempt(): Response
     {
         if (! $this->request->isPost()) {
             return $this->response->redirect($this->request->fullRoute());
         }
 
-        $validator->validate($this->request->post());
-
-        if ($validator->has_error()) {
-            $this->flash->error($validator->errors());
-
-            return $this->response->redirect($this->request->fullRoute());
-        }
-
-        if (! $this->auth->login($validator->getRequest())) {
+        if (! $this->auth->login($this->request->validated())) {
             return $this->response->redirect($this->request->fullRoute());
         }
 
@@ -41,7 +32,7 @@ class LoginController extends BaseController
     {
         $redirect_to = $this->request->fullRouteByName('home');
 
-        if (! empty($callback_url) && ! $this->request->isLoginRoute()) {
+        if (! $this->request->isLoginRoute()) {
             $redirect_to = $this->request->callback();
         }
 

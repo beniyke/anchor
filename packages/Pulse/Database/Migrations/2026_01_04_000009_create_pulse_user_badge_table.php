@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000009_create_pulse_user_badge_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -19,7 +17,7 @@ class CreatePulseUserBadgeTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('pulse_user_badge', function ($table) {
+        Schema::createIfNotExists('pulse_user_badge', function ($table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('pulse_badge_id');
             $table->dateTimestamps();

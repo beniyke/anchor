@@ -47,8 +47,9 @@ use Helpers\DateTimeHelper;
 class Client extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'client';
 
-    protected string $table = 'client';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

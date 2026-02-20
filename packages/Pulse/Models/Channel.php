@@ -33,7 +33,9 @@ use Helpers\DateTimeHelper;
  */
 class Channel extends BaseModel
 {
-    protected string $table = 'pulse_channel';
+    public const TABLE = 'pulse_channel';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

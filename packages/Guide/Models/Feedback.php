@@ -28,7 +28,9 @@ use Helpers\DateTimeHelper;
  */
 class Feedback extends BaseModel
 {
-    protected string $table = 'guide_feedback';
+    public const TABLE = 'guide_feedback';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'guide_article_id',

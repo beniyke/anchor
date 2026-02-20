@@ -37,7 +37,7 @@ class ModerationManagerService
     {
         $thread->update(['is_pinned' => true]);
 
-        if (class_exists('Audit\Audit')) {
+        if (class_exists(Audit::class)) {
             Audit::log('pulse.thread.pinned', ['id' => $thread->id], $thread);
         }
     }
@@ -46,7 +46,7 @@ class ModerationManagerService
     {
         $thread->update(['is_locked' => true]);
 
-        if (class_exists('Audit\Audit')) {
+        if (class_exists(Audit::class)) {
             Audit::log('pulse.thread.locked', ['id' => $thread->id], $thread);
         }
     }
@@ -57,5 +57,31 @@ class ModerationManagerService
     public function resolveReport(Report $report, string $status = 'resolved'): void
     {
         $report->update(['status' => $status]);
+    }
+
+    /**
+     * Block a thread or post.
+     */
+    public function block(Thread|Post $model): void
+    {
+        $model->update(['status' => 'blocked']);
+
+        if (class_exists(Audit::class)) {
+            $type = $model instanceof Thread ? 'thread' : 'post';
+            Audit::log("pulse.{$type}.blocked", ['id' => $model->id], $model);
+        }
+    }
+
+    /**
+     * Unblock a thread or post.
+     */
+    public function unblock(Thread|Post $model): void
+    {
+        $model->update(['status' => 'active']);
+
+        if (class_exists('Audit\Audit')) {
+            $type = $model instanceof Thread ? 'thread' : 'post';
+            Audit::log("pulse.{$type}.unblocked", ['id' => $model->id], $model);
+        }
     }
 }

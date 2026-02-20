@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000005_create_pulse_subscription_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -19,7 +17,7 @@ class CreatePulseSubscriptionTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('pulse_subscription', function ($table) {
+        Schema::createIfNotExists('pulse_subscription', function ($table) {
             $table->id();
             $table->unsignedBigInteger('pulse_thread_id');
             $table->unsignedBigInteger('user_id');

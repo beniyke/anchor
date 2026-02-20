@@ -30,7 +30,13 @@ class RenewalReminderNotification extends WaveNotification
 
         return EmailComponent::make()
             ->greeting("Hello {$name},")
-            ->line("This is a reminder that your subscription to **{$planName}** is scheduled to renew on **{$renewalDate}**.")
+            ->markdown("This is a reminder that your subscription is scheduled to renew soon.")
+            ->divider()
+            ->attributes([
+                'Plan' => $planName,
+                'Renewal Date' => $renewalDate,
+            ])
+            ->divider()
             ->line("No action is required if you wish to continue your service.")
             ->action('Manage Subscription', url($manageUrl))
             ->render();

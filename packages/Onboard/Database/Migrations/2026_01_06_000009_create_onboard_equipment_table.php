@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_06_000009_create_onboard_equipment_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateOnboardEquipmentTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('onboard_equipment', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('onboard_equipment', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->string('request_type'); // Laptop, Phone, Access Badge, etc.

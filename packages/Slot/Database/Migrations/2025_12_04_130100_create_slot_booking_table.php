@@ -21,7 +21,7 @@ class CreateSlotBookingTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('slot_booking', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('slot_booking', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique();
             $table->bigInteger('schedule_id')->unsigned();

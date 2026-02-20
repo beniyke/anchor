@@ -18,7 +18,7 @@ class CreateAuditLogTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('audit_log', function ($table) {
+        Schema::createIfNotExists('audit_log', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique();
             $table->unsignedBigInteger('user_id')->nullable()->index();

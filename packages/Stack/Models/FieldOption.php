@@ -28,7 +28,9 @@ use Helpers\DateTimeHelper;
  */
 class FieldOption extends BaseModel
 {
-    protected string $table = 'stack_field_option';
+    public const TABLE = 'stack_field_option';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'stack_field_id',

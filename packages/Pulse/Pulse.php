@@ -32,6 +32,9 @@ use Pulse\Services\PulseManagerService;
  * @method static Post                  createPost(User $user, Thread $thread, string $content, ?int $parentId = null)
  * @method static void                  pin(Thread $thread)
  * @method static void                  lock(Thread $thread)
+ * @method static void                  block(Thread|Post $model)
+ * @method static void                  unblock(Thread|Post $model)
+ * @method static array                 getSubscribedThreads(User $user)
  * @method static void                  awardPoints(User $user, int $points)
  * @method static PulseAnalyticsService analytics()
  */

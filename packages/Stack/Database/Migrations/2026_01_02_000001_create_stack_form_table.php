@@ -17,7 +17,7 @@ class CreateStackFormTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('stack_form', function ($table) {
+        Schema::createIfNotExists('stack_form', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique();
             $table->string('title', 255);

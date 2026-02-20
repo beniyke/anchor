@@ -33,7 +33,9 @@ use Helpers\DateTimeHelper;
  */
 class Testimonial extends BaseModel
 {
-    protected string $table = 'proof_testimonial';
+    public const TABLE = 'proof_testimonial';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'proof_source_id',

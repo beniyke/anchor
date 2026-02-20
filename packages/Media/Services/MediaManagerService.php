@@ -17,8 +17,13 @@ use Helpers\File\Adapters\Interfaces\FileManipulationInterface;
 use Helpers\File\Adapters\Interfaces\FileMetaInterface;
 use Helpers\File\Adapters\Interfaces\FileReadWriteInterface;
 use Helpers\File\Adapters\Interfaces\PathResolverInterface;
+use Helpers\File\FileSystem;
+use Helpers\File\Paths;
+use Helpers\File\Storage\Storage;
 use Helpers\String\Str;
 use InvalidArgumentException;
+use Media\Exceptions\FileSizeExceededException;
+use Media\Exceptions\FileTypeNotAllowedException;
 use Media\Models\Media;
 use RuntimeException;
 
@@ -40,10 +45,10 @@ class MediaManagerService
             $tmpPath = $file['tmp_name'];
             $originalName = $file['name'];
             $mimeType = $file['type'];
-            $size = $file['size'];
+            $size = (int) $file['size'];
         } elseif (is_string($file)) {
             $tmpPath = $file;
-            $originalName = $options['filename'] ?? basename($file);
+            $originalName = $options['filename'] ?? Paths::basename($file);
             $mimeType = $this->getMimeType($file);
             $size = $this->fileMeta->size($file);
         } else {
@@ -58,27 +63,22 @@ class MediaManagerService
         $filename = Str::random('secure') . '.' . $extension;
 
         // Determine storage path
-        $basePath = $this->getBasePath();
+        $basePath = $this->config->get('media.path', 'media'); // Relative to storage root
         $datePath = date('Y/m');
-        $storagePath = $basePath . DIRECTORY_SEPARATOR . $datePath;
+        $storageDir = $basePath . '/' . $datePath;
+        $storagePath = $storageDir . '/' . $filename;
 
-        // Ensure directory exists
-        if (!$this->fileMeta->isDir($storagePath)) {
-            $this->fileManipulation->mkdir($storagePath, 0755, true);
-        }
-
-        $fullPath = $storagePath . DIRECTORY_SEPARATOR . $filename;
-
-        // Move/copy file
-        if (is_array($file)) {
-            move_uploaded_file($tmpPath, $fullPath);
-        } else {
-            $this->fileManipulation->copy($tmpPath, $fullPath);
+        // Upload to Storage
+        $disk = $this->config->get('media.disk', 'local');
+        $stream = fopen($tmpPath, 'r');
+        Storage::disk($disk)->writeStream($storagePath, $stream);
+        if (is_resource($stream)) {
+            fclose($stream);
         }
 
         $media = Media::create([
             'uuid' => Str::random('secure'),
-            'disk' => $this->config->get('media.disk', 'local'),
+            'disk' => $disk,
             'path' => $datePath,
             'filename' => $filename,
             'original_filename' => $originalName,
@@ -106,15 +106,19 @@ class MediaManagerService
         }
 
         // Save to temp file
-        $tmpFile = tempnam(sys_get_temp_dir(), 'media_');
-        file_put_contents($tmpFile, $content);
+        $tempDir = Paths::storagePath('temp');
+        if (!FileSystem::isDir($tempDir)) {
+            FileSystem::mkdir($tempDir);
+        }
+        $tmpFile = $tempDir . DIRECTORY_SEPARATOR . 'url_' . Str::random() . '.tmp';
+        $this->fileReadWrite->put($tmpFile, $content);
 
-        $options['filename'] = $options['filename'] ?? basename(parse_url($url, PHP_URL_PATH));
+        $options['filename'] = $options['filename'] ?? Paths::basename(parse_url($url, PHP_URL_PATH));
 
         try {
             $media = $this->upload($tmpFile, $options);
         } finally {
-            @unlink($tmpFile);
+            $this->fileManipulation->delete($tmpFile);
         }
 
         return $media;
@@ -137,8 +141,9 @@ class MediaManagerService
             : $media->getFullPath();
 
         $basePath = $this->config->get('media.path', 'media');
+        $storagePath = $basePath . '/' . str_replace(DIRECTORY_SEPARATOR, '/', $path);
 
-        return '/' . $basePath . '/' . $path;
+        return Storage::disk($media->disk)->url($storagePath);
     }
 
     public function getPath(Media $media, ?string $conversion = null): string
@@ -152,20 +157,22 @@ class MediaManagerService
 
     public function delete(Media $media): bool
     {
+        $disk = Storage::disk($media->disk);
+
         // Delete conversions
         foreach ($media->conversions ?? [] as $conversion) {
-            $conversionPath = $this->getBasePath() . DIRECTORY_SEPARATOR . $conversion['path'];
+            $conversionPath = $conversion['path'];
 
-            if ($this->fileMeta->exists($conversionPath)) {
-                $this->fileManipulation->delete($conversionPath);
+            if ($disk->exists($conversionPath)) {
+                $disk->delete($conversionPath);
             }
         }
 
         // Delete original
-        $originalPath = $this->getPath($media);
+        $originalPath = $media->getFullPath();
 
-        if ($this->fileMeta->exists($originalPath)) {
-            $this->fileManipulation->delete($originalPath);
+        if ($disk->exists($originalPath)) {
+            $disk->delete($originalPath);
         }
 
         return $media->delete();
@@ -177,29 +184,59 @@ class MediaManagerService
             return;
         }
 
+        $disk = Storage::disk($media->disk);
+        if (!$disk->exists($media->getFullPath())) {
+            return;
+        }
+
+        // Download source to temp file
+        $tempDir = Paths::storagePath('temp');
+        if (!FileSystem::isDir($tempDir)) {
+            FileSystem::mkdir($tempDir);
+        }
+        $tempSource = $tempDir . DIRECTORY_SEPARATOR . 'media_src_' . Str::random() . '.tmp';
+
+        $stream = $disk->readStream($media->getFullPath());
+        $this->fileReadWrite->put($tempSource, stream_get_contents($stream));
+        if (is_resource($stream)) {
+            fclose($stream);
+        }
+
         $conversions = $this->config->get('media.conversions', []);
         $generatedConversions = [];
 
         foreach ($conversions as $name => $settings) {
-            $conversionFilename = pathinfo($media->filename, PATHINFO_FILENAME) . "_{$name}." . pathinfo($media->filename, PATHINFO_EXTENSION);
-            $conversionPath = $media->path . DIRECTORY_SEPARATOR . $conversionFilename;
-            $fullPath = $this->getBasePath() . DIRECTORY_SEPARATOR . $conversionPath;
+            $extension = FileSystem::extension($media->filename);
+            $conversionFilename = Paths::basename($media->filename, '.' . $extension) . "_{$name}." . $extension;
+            $conversionPath = $media->path . '/' . $conversionFilename; // Relative storage path
+
+            $tempDest = $tempDir . DIRECTORY_SEPARATOR . 'media_dest_' . Str::random() . '.tmp';
 
             // Simple image resize using GD
             if ($this->resizeImage(
-                $this->getPath($media),
-                $fullPath,
+                $tempSource,
+                $tempDest,
                 $settings['width'] ?? null,
                 $settings['height'] ?? null
             )) {
+                // Upload conversion
+
+                $destStream = fopen($tempDest, 'r');
+                $disk->writeStream($conversionPath, $destStream);
+                if (is_resource($destStream)) {
+                    fclose($destStream);
+                }
+
                 $generatedConversions[$name] = [
                     'path' => $conversionPath,
                     'width' => $settings['width'],
                     'height' => $settings['height'],
                 ];
             }
+            $this->fileManipulation->delete($tempDest);
         }
 
+        $this->fileManipulation->delete($tempSource);
         $media->update(['conversions' => $generatedConversions]);
     }
 
@@ -271,17 +308,17 @@ class MediaManagerService
         $allowedTypes = $this->config->get('media.allowed_types', []);
 
         if ($size > $maxSize) {
-            throw new RuntimeException('File size exceeds maximum allowed.');
+            throw new FileSizeExceededException('File size exceeds maximum allowed.');
         }
 
         if (!empty($allowedTypes) && !in_array($mimeType, $allowedTypes)) {
-            throw new RuntimeException('File type not allowed.');
+            throw new FileTypeNotAllowedException('File type not allowed.');
         }
     }
 
     private function getMimeType(string $path): string
     {
-        return mime_content_type($path) ?: 'application/octet-stream';
+        return $this->fileMeta->mimeType($path) ?: 'application/octet-stream';
     }
 
     private function getBasePath(): string

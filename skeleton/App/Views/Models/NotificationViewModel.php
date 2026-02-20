@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Views\Models;
 
-use App\Models\Notification;
 use Helpers\DateTimeHelper;
+use Notification\Models\Notification;
 
 readonly class NotificationViewModel
 {

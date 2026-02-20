@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Auth\Controllers;
 
+use App\Auth\Services\IdentityService;
 use App\Auth\Views\Models\ResetPasswordViewModel;
 use App\Core\BaseController;
-use App\Services\UserService;
-use App\Validations\Form\ResetPasswordFormRequestValidation;
 use Helpers\Http\Response;
 
 class ResetpasswordController extends BaseController
@@ -19,13 +18,13 @@ class ResetpasswordController extends BaseController
         if (! $resetpassword_view_model->resetTokenIsValid()) {
             $this->flash->error('Password reset link has expired.');
 
-            return $this->resposne->redirect($this->request->fullRouteByName('forgot-password'));
+            return $this->response->redirect($this->request->fullRouteByName('forgot-password'));
         }
 
         return $this->asView('reset-password', compact('resetpassword_view_model'));
     }
 
-    public function store(ResetPasswordFormRequestValidation $validator, UserService $service, ?string $token = null): Response
+    public function store(IdentityService $service, ?string $token = null): Response
     {
         $user = $service->getUserByValidResetToken($token);
 
@@ -33,16 +32,7 @@ class ResetpasswordController extends BaseController
             return $this->response->redirect($this->request->fullRoute());
         }
 
-        $formdata = $this->request->post();
-        $validator->validate($formdata);
-
-        if ($validator->has_error()) {
-            $this->flash->withInput($formdata, $validator->errors());
-
-            return $this->response->redirect($this->request->callback());
-        }
-
-        $password_changed = $service->setNewUserPassword($user, $validator->getRequest());
+        $password_changed = $service->setNewUserPassword($user, $this->request->validated());
 
         if (! $password_changed) {
             $this->flash->error('Password reset failed.');

@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * Anchor Framework
  *
@@ -14,21 +15,19 @@ namespace Onboard\Services;
 use App\Models\User;
 use Audit\Audit;
 use Helpers\DateTimeHelper;
+use Onboard\Enums\TrainingStatus;
 use Onboard\Models\Training;
 use Onboard\Models\TrainingProgress;
 
 class TrainingManagerService
 {
-    /**
-     * Update training progress status.
-     */
     public function updateProgress(User $user, Training $training, string $status): TrainingProgress
     {
         $data = [
             'status' => $status,
         ];
 
-        if ($status === 'completed') {
+        if ($status === TrainingStatus::COMPLETED->value || $status === TrainingStatus::COMPLETED) {
             $data['completed_at'] = DateTimeHelper::now();
         }
 
@@ -37,7 +36,7 @@ class TrainingManagerService
             $data
         );
 
-        if (class_exists('Audit\Audit')) {
+        if (class_exists(Audit::class)) {
             Audit::log('onboard.training.updated', [
                 'user' => $user->email,
                 'training' => $training->name,

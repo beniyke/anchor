@@ -31,7 +31,9 @@ use Helpers\DateTimeHelper;
  */
 class Column extends BaseModel
 {
-    protected string $table = 'flow_column';
+    public const TABLE = 'flow_column';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'project_id',

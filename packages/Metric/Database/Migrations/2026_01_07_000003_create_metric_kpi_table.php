@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_07_000003_create_metric_kpi_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateMetricKpiTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('metric_kpi', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('metric_kpi', function (SchemaBuilder $table) {
             $table->id();
             $table->string('name')->unique();
             $table->string('slug')->unique();

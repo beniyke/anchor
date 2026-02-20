@@ -27,6 +27,8 @@ use Slot\Services\SlotAnalyticsService;
  * @method static SlotBooking          book(SlotSchedule $schedule, object $bookable, Period $period, array $options = [])
  * @method static bool                 updateSchedule(SlotSchedule $schedule, Period|array $data)
  * @method static bool                 deleteSchedule(SlotSchedule $schedule)
+ * @method static bool                 deleteSchedule(SlotSchedule $schedule)
+ * @method static SlotBooking|null     getBooking(int $id)
  * @method static SlotAnalyticsService analytics()
  */
 class Slot

@@ -16,6 +16,7 @@ namespace Wallet\Services;
 
 use Database\DB;
 use Exception;
+use Helpers\Log;
 use Money\Money;
 use Wallet\Exceptions\WalletNotFoundException;
 use Wallet\Models\Wallet;
@@ -63,7 +64,7 @@ class BalanceManagerService
             $ledgerBalance = $this->calculateBalanceFromLedger($walletId);
 
             if (! $cachedBalance->equals($ledgerBalance)) {
-                logger('wallet.log')->error('Balance reconciliation mismatch', [
+                Log::channel('wallet')->error('Balance reconciliation mismatch', [
                     'wallet_id' => $walletId,
                     'cached_balance' => $cachedBalance->getAmount(),
                     'ledger_balance' => $ledgerBalance->getAmount(),

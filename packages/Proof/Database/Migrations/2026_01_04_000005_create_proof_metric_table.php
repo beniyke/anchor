@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000005_create_proof_metric_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateProofMetricTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('proof_metric', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('proof_metric', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('proof_case_study_id');
             $table->string('label');

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Verify\Services;
 
 use Database\DB;
+use Helpers\DateTimeHelper;
 
 class VerifyAnalyticsService
 {
@@ -122,5 +123,49 @@ class VerifyAnalyticsService
         }
 
         return $result;
+    }
+
+    public function getOverviewStats(): array
+    {
+        $now = DateTimeHelper::now()->toDateTimeString();
+        $today = DateTimeHelper::now()->startOfDay()->toDateTimeString();
+
+        $activeCount = DB::table(self::CODE_TABLE)
+            ->where('expires_at', '>', $now)
+            ->whereNull('verified_at')
+            ->count();
+
+        $todayCount = DB::table(self::CODE_TABLE)
+            ->where('created_at', '>=', $today)
+            ->count();
+
+        $verifiedTodayCount = DB::table(self::CODE_TABLE)
+            ->where('created_at', '>=', $today)
+            ->whereNotNull('verified_at')
+            ->count();
+
+        $expiredCount = DB::table(self::CODE_TABLE)
+            ->where('expires_at', '<', $now)
+            ->count();
+
+        $rateLimitViolations = DB::table(self::ATTEMPT_TABLE)
+            ->where('count', '>=', 5)
+            ->count();
+
+        $channelStats = DB::table(self::CODE_TABLE)
+            ->where('created_at', '>=', $today)
+            ->select('channel', DB::raw('COUNT(*) as count'))
+            ->groupBy('channel')
+            ->get();
+
+        return [
+            'active_count' => $activeCount,
+            'today_count' => $todayCount,
+            'verified_today_count' => $verifiedTodayCount,
+            'success_rate_today' => $todayCount > 0 ? round(($verifiedTodayCount / $todayCount) * 100, 2) : 0,
+            'expired_count' => $expiredCount,
+            'rate_limit_violations' => $rateLimitViolations,
+            'channel_stats' => array_map(fn ($s) => ['channel' => $s->channel, 'count' => (int)$s->count], $channelStats)
+        ];
     }
 }

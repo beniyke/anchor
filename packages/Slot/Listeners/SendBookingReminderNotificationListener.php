@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Slot\Listeners;
 
-use Helpers\Data;
+use Helpers\Data\Data;
 use Mail\Mail;
 use Slot\Events\BookingReminderEvent;
 use Slot\Notifications\BookingReminderNotification;

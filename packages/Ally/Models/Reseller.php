@@ -41,8 +41,9 @@ use Helpers\DateTimeHelper;
 class Reseller extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'ally_reseller';
 
-    protected string $table = 'ally_reseller';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

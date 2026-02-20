@@ -17,7 +17,7 @@ class CreateHubReactionTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('hub_reaction', function ($table) {
+        Schema::createIfNotExists('hub_reaction', function ($table) {
             $table->id();
             $table->unsignedBigInteger('message_id')->index();
             $table->unsignedBigInteger('user_id')->index();

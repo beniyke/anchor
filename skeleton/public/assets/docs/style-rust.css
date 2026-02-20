@@ -78,7 +78,7 @@
 /* Base Styles */
 html {
   scroll-behavior: smooth;
-  /* fallback scroll padding for browser search/refresh */
+  /* Adjust scroll-padding-top to match header height (73px) + buffer */
   scroll-padding-top: 100px;
 }
 
@@ -115,7 +115,11 @@ body::before {
     linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
   background-size: 40px 40px;
   mask-image: radial-gradient(circle at 10% 10%, black, transparent 90%);
-  -webkit-mask-image: radial-gradient(circle at 10% 10%, black, transparent 90%);
+  -webkit-mask-image: radial-gradient(
+    circle at 10% 10%,
+    black,
+    transparent 90%
+  );
   opacity: 0.15;
   z-index: -1;
   pointer-events: none;
@@ -231,7 +235,6 @@ body::before {
   -webkit-text-fill-color: transparent;
   display: inline-block;
 }
-
 
 .glass-panel {
   background: var(--glass-bg);
@@ -841,7 +844,7 @@ body::before {
   text-decoration: none;
   font-size: 0.875rem;
   padding: 0.25rem 0;
-  transition: color 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border-left: 2px solid transparent;
   padding-left: 0.75rem;
 }
@@ -1633,4 +1636,152 @@ body::before {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Scroll to Top Button */
+.scroll-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+  color: white;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.scroll-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+  transform: scale(1.1) translateY(-5px);
+  box-shadow: 0 8px 20px rgba(234, 88, 12, 0.4);
+}
+
+.scroll-to-top svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  transition: transform 0.3s ease;
+}
+
+.scroll-to-top:hover svg {
+  transform: translateY(-2px);
+}
+
+/* Page Search Bar */
+.page-search-bar {
+  position: fixed;
+  top: 100px;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-search-bar.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.page-search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#pageSearchInput {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  padding: 0.375rem 4rem 0.375rem 0.75rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  width: 250px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#pageSearchInput:focus {
+  border-color: var(--accent-color);
+}
+
+.page-search-count {
+  position: absolute;
+  right: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-family: monospace;
+  pointer-events: none;
+}
+
+.page-search-nav {
+  display: flex;
+  gap: 2px;
+}
+
+.page-search-nav button,
+.page-search-close {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.page-search-nav button:hover,
+.page-search-close:hover {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+/* Highlights */
+.search-match {
+  background-color: rgba(234, 88, 12, 0.3);
+  border-bottom: 2px solid var(--accent-color);
+  border-radius: 2px;
+  transition: background-color 0.2s;
+}
+
+.search-match-active {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+  box-shadow: 0 0 10px var(--accent-color);
 }

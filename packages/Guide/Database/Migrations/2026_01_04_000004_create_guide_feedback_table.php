@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000004_create_guide_feedback_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateGuideFeedbackTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('guide_feedback', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('guide_feedback', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('guide_article_id');
             $table->integer('rating'); // 1-5 or 0/1 for helpfulness
@@ -24,6 +22,11 @@ class CreateGuideFeedbackTable extends BaseMigration
             $table->string('ip_address', 45)->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->dateTimestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->onDelete('set null');
 
             $table->foreign('guide_article_id')
                 ->references('id')

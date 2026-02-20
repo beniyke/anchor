@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000006_create_proof_request_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateProofRequestTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('proof_request', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('proof_request', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('proof_source_id');
             $table->string('token')->unique();

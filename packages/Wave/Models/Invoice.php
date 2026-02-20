@@ -52,8 +52,9 @@ use Wave\Enums\InvoiceStatus;
 class Invoice extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wave_invoice';
 
-    protected string $table = 'wave_invoice';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

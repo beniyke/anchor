@@ -30,7 +30,9 @@ use DateTimeInterface;
  */
 class TicketCategory extends BaseModel
 {
-    protected string $table = 'support_category';
+    public const TABLE = 'support_category';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

@@ -32,7 +32,7 @@ readonly class NotificationLogViewModel
 
     public function getNotificationsItems(): array
     {
-        return $this->notifications->items();
+        return NotificationViewModel::collection($this->notifications->items());
     }
 
     public function hasNotifications(): bool

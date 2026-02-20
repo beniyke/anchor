@@ -29,7 +29,9 @@ use Helpers\DateTimeHelper;
  */
 class TaskCompletion extends BaseModel
 {
-    protected string $table = 'onboard_task_completion';
+    public const TABLE = 'onboard_task_completion';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'user_id',

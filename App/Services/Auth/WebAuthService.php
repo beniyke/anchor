@@ -5,117 +5,91 @@ declare(strict_types=1);
 namespace App\Services\Auth;
 
 use App\Models\User;
-use App\Notifications\InApp\LoginInAppNotification;
-use App\Requests\LoginRequest;
 use App\Services\Auth\Interfaces\AuthServiceInterface;
 use App\Services\MenuService;
-use App\Services\SessionService;
-use App\Services\UserService;
+use Core\Event;
 use Core\Services\ConfigServiceInterface;
-use Helpers\Data;
-use Helpers\DateTimeHelper;
+use Helpers\Data\Contracts\DataTransferObject;
 use Helpers\Http\Flash;
-use Helpers\Http\Session;
-use Helpers\Http\UserAgent;
-use Notify\Notify;
-use Security\Firewall\Drivers\AuthFirewall;
+use Security\Auth\Events\LoginEvent;
+use Security\Auth\Events\LoginFailedEvent;
+use Security\Auth\Events\LogoutEvent;
+use Security\Auth\Interfaces\AuthManagerInterface;
 
 class WebAuthService implements AuthServiceInterface
 {
-    private ?User $user = null;
+    private string $guard = 'web';
 
-    private ?string $session_token = null;
+    public function __construct(
+        private readonly Flash $flash,
+        private readonly MenuService $menu_service,
+        private readonly AuthManagerInterface $auth,
+        private readonly ConfigServiceInterface $config
+    ) {
+    }
 
-    public function __construct(private readonly SessionService $session_service, private readonly UserService $user_service, private readonly Flash $flash, private readonly AuthFirewall $firewall, private readonly MenuService $menu_service, private readonly ConfigServiceInterface $config, private readonly Session $session, private readonly UserAgent $agent)
+    public function viaGuard(string $guard): self
     {
+        $this->guard = $guard;
+
+        return $this;
     }
 
     public function user(): ?User
     {
-        if (empty($this->user)) {
-            $this->session_token = $this->session->get($this->config->get('session.name'));
-
-            if (empty($this->session_token)) {
-                return null;
-            }
-
-            $session = $this->session_service->getSessionByToken($this->session_token);
-
-            if ($session && $this->session_service->isSessionValid($session)) {
-                $this->session_service->refreshSession($session);
-                $this->user = $session->user;
-            }
-        }
-
-        return $this->user;
+        return $this->auth->guard($this->guard)->user();
     }
 
-    public function login(LoginRequest $request): bool
+    public function login(DataTransferObject $request): bool
     {
         if (! $request->isValid()) {
-            $this->firewall->fail()->capture();
-
-            return false;
-        }
-
-        $user = $this->user_service->confirmUser($request->getData());
-
-        if (! $user) {
             $this->flash->error('Invalid login credentials.');
-            $this->firewall->fail()->capture();
+            Event::dispatch(new LoginFailedEvent($request->toArray(), $this->guard));
 
             return false;
         }
 
-        $should_remember = $request->hasRememberMe();
-        $long_lifetime = $this->config->get('session.cookie.remember_me_lifetime', 0);
-
-        $db_lifetime = $should_remember
-        ? $long_lifetime
-        : $this->config->get('session.timeout');
-
-        $session = $this->session_service->createNewSession($user, $db_lifetime);
-
-        if (! $session) {
-            $this->flash->error('Login failed. Please try again.');
-            $this->firewall->fail()->capture();
+        if (! $this->auth->guard($this->guard)->attempt($request->toArray())) {
+            $this->flash->error('Invalid login credentials.');
+            Event::dispatch(new LoginFailedEvent($request->toArray(), $this->guard));
 
             return false;
         }
 
-        if ($should_remember) {
-            $this->session->set('session.long_lived', true);
-        } else {
-            $this->session->delete('session.long_lived');
-        }
+        $user = $this->user();
 
-        $this->session->regenerateId();
-        $this->session->set($this->config->get('session.name'), $session->token);
-
-        $this->firewall->clear()->capture();
-        $this->flash->success('Welcome '.$user->name);
-
-        $this->notifyLoginActivity($user);
+        $remember = method_exists($request, 'hasRememberMe') && $request->hasRememberMe();
+        Event::dispatch(new LoginEvent($user, $remember, $this->guard));
 
         return true;
     }
 
-    public function logout(?string $session_token = null): bool
+    public function logout(): bool
     {
-        $token = $session_token ?? $this->session->get($this->config->get('session.name'));
-        $this->session->delete($this->config->get('session.name'));
-        $this->session->destroy();
+        $user = $this->user();
 
-        if (empty($token)) {
-            return true;
+        if ($user) {
+            $this->auth->guard($this->guard)->logout();
+            Event::dispatch(new LogoutEvent($user, $this->guard));
         }
 
-        return $this->session_service->terminateSession($token);
+        return true;
+    }
+
+    public function logoutAll(): bool
+    {
+        $guards = $this->config->get('auth.guards', []);
+
+        foreach (array_keys($guards) as $guardName) {
+            $this->viaGuard($guardName)->logout();
+        }
+
+        return true;
     }
 
     public function isAuthenticated(): bool
     {
-        return $this->user() !== null;
+        return $this->auth->guard($this->guard)->check();
     }
 
     public function isAuthorized(string $route): bool
@@ -134,16 +108,8 @@ class WebAuthService implements AuthServiceInterface
         return in_array($route, $this->menu_service->getAccessibleRoutes($user));
     }
 
-    private function notifyLoginActivity(User $user): void
+    public function getSessionKey(): ?string
     {
-        $payload = Data::make($user->only(['id', 'name', 'email']));
-        $data['browser'] = $this->agent->browser();
-        $data['period'] = DateTimeHelper::now()->format('D, M d Y h:i A');
-
-        Notify::inapp(LoginInAppNotification::class, $payload->add($data));
-
-        defer(function () use ($data, $user) {
-            activity('logged in to your account from a {browser} Browser as at {period}', $data, $user->id);
-        });
+        return $this->auth->guard($this->guard)->getSessionKey();
     }
 }

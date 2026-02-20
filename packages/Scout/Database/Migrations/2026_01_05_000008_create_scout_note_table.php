@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_05_000008_create_scout_note_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateScoutNoteTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scout_note', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('scout_note', function (SchemaBuilder $table) {
             $table->id();
             $table->string('noteable_type');
             $table->unsignedBigInteger('noteable_id');

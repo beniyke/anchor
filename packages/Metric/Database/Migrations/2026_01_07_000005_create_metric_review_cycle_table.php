@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_07_000005_create_metric_review_cycle_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateMetricReviewCycleTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('metric_review_cycle', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('metric_review_cycle', function (SchemaBuilder $table) {
             $table->id();
             $table->string('name');
             $table->dateTime('start_at');

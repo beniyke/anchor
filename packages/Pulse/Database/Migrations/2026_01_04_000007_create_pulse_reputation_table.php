@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000007_create_pulse_reputation_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -19,7 +17,7 @@ class CreatePulseReputationTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('pulse_reputation', function ($table) {
+        Schema::createIfNotExists('pulse_reputation', function ($table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->integer('points')->default(0);

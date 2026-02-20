@@ -17,7 +17,7 @@ class CreateLinkTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('link', function ($table) {
+        Schema::createIfNotExists('link', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique();
             $table->string('token', 128)->unique()->index();

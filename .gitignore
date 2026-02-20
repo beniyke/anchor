@@ -13,6 +13,7 @@ Thumbs.db
 /_playground
 
 # Storage
+/App/storage/logs
 /App/storage/cache
 /App/storage/query
 /App/storage/**/*.sqlite

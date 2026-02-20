@@ -27,7 +27,9 @@ use Helpers\DateTimeHelper;
  */
 class Tag extends BaseModel
 {
-    protected string $table = 'scribe_tag';
+    public const TABLE = 'scribe_tag';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

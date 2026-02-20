@@ -17,7 +17,7 @@ class CreateScribeEventTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scribe_event', function ($table) {
+        Schema::createIfNotExists('scribe_event', function ($table) {
             $table->id();
             $table->unsignedBigInteger('scribe_post_id')->nullable()->index();
             $table->string('event_type', 32)->index(); // view, share, read

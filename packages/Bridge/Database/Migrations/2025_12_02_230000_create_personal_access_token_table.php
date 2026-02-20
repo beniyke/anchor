@@ -21,7 +21,7 @@ class CreatePersonalAccessTokenTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('personal_access_token', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('personal_access_token', function (SchemaBuilder $table) {
             $table->id();
             $table->string('tokenable_type');
             $table->bigInteger('tokenable_id')->unsigned();

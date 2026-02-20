@@ -17,7 +17,7 @@ class CreateStackEventTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('stack_event', function ($table) {
+        Schema::createIfNotExists('stack_event', function ($table) {
             $table->id();
             $table->unsignedBigInteger('stack_form_id')->index();
             $table->string('event_type', 32)->index(); // view, start, submit, error

@@ -13,6 +13,10 @@ declare(strict_types=1);
 namespace Media\Services;
 
 use Core\Services\ConfigServiceInterface;
+use Helpers\File\Adapters\Interfaces\FileMetaInterface;
+use Helpers\File\Adapters\Interfaces\FileReadWriteInterface;
+use Helpers\File\FileSystem;
+use Helpers\File\Paths;
 use InvalidArgumentException;
 
 class MediaValidatorService
@@ -56,7 +60,9 @@ class MediaValidatorService
     ];
 
     public function __construct(
-        private readonly ConfigServiceInterface $config
+        private readonly ConfigServiceInterface $config,
+        private readonly FileMetaInterface $fileMeta,
+        private readonly FileReadWriteInterface $fileReadWrite
     ) {
     }
 
@@ -67,27 +73,27 @@ class MediaValidatorService
      */
     public function validate(string $filePath, string $originalName, ?string $mimeType = null): void
     {
-        if (!file_exists($filePath)) {
+        if (!$this->fileMeta->exists($filePath)) {
             throw new InvalidArgumentException('File not found.');
         }
 
         // Check file size
         $maxSize = $this->config->get('media.max_file_size', 10485760);
-        $fileSize = filesize($filePath);
+        $fileSize = $this->fileMeta->size($filePath);
 
         if ($fileSize > $maxSize) {
             throw new InvalidArgumentException('File size exceeds maximum allowed.');
         }
 
         // Check extension is not dangerous
-        $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+        $extension = strtolower(FileSystem::extension($originalName));
 
         if (in_array($extension, self::DANGEROUS_EXTENSIONS)) {
             throw new InvalidArgumentException('File type not allowed for security reasons.');
         }
 
         // Detect actual MIME type (don't trust client-provided)
-        $detectedMime = mime_content_type($filePath);
+        $detectedMime = $this->fileMeta->mimeType($filePath);
 
         // Validate MIME type matches extension
         if (!$this->validateMimeExtension($detectedMime, $extension)) {
@@ -142,7 +148,8 @@ class MediaValidatorService
 
     private function containsPhpCode(string $filePath): bool
     {
-        $content = file_get_contents($filePath, false, null, 0, 1024); // Check first 1KB
+        $content = $this->fileReadWrite->get($filePath);
+        $content = substr($content, 0, 1024); // Check first 1KB
 
         if ($content === false) {
             return false;
@@ -168,15 +175,15 @@ class MediaValidatorService
     public static function sanitizeFilename(string $filename): string
     {
         // Remove path traversal
-        $filename = basename($filename);
+        $filename = Paths::basename($filename);
 
         // Remove special characters
         $filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', $filename);
 
         // Limit length
         if (strlen($filename) > 200) {
-            $extension = pathinfo($filename, PATHINFO_EXTENSION);
-            $name = pathinfo($filename, PATHINFO_FILENAME);
+            $extension = FileSystem::extension($filename);
+            $name = Paths::basename($filename, '.' . $extension);
             $filename = substr($name, 0, 190) . '.' . $extension;
         }
 

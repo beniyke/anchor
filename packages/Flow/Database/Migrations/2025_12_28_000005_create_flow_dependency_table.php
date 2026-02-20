@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_12_28_000005_create_flow_dependency_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -18,7 +16,7 @@ class CreateFlowDependencyTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('flow_dependency', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('flow_dependency', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('task_id');
             $table->unsignedBigInteger('depends_on_task_id');

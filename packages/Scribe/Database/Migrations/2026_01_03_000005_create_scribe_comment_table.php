@@ -17,7 +17,7 @@ class CreateScribeCommentTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scribe_comment', function ($table) {
+        Schema::createIfNotExists('scribe_comment', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique()->index();
             $table->unsignedBigInteger('scribe_post_id')->index();

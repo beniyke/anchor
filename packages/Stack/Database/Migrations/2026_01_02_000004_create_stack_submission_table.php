@@ -17,7 +17,7 @@ class CreateStackSubmissionTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('stack_submission', function ($table) {
+        Schema::createIfNotExists('stack_submission', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique();
             $table->unsignedBigInteger('stack_form_id')->index();

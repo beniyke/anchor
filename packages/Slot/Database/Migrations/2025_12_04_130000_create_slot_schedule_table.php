@@ -21,7 +21,7 @@ class CreateSlotScheduleTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('slot_schedule', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('slot_schedule', function (SchemaBuilder $table) {
             $table->id();
             $table->string('schedulable_type');
             $table->bigInteger('schedulable_id')->unsigned();

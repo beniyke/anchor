@@ -14,7 +14,8 @@ namespace Metric\Services;
 use App\Models\User;
 use Audit\Audit;
 use Helpers\DateTimeHelper;
-use Metric\Models\Goal;
+use Metric\Enums\GoalStatus;
+use Metric\Models\Competency;
 use Metric\Models\KeyResult;
 use Metric\Models\Kpi;
 use Metric\Models\KpiValue;
@@ -39,10 +40,10 @@ class MetricManagerService
 
         $goal->update([
             'progress' => $totalProgress / $keyResults->count(),
-            'status' => $goal->progress >= 100 ? 'completed' : 'active'
+            'status' => $goal->progress >= 100 ? GoalStatus::COMPLETED : GoalStatus::ACTIVE
         ]);
 
-        if (class_exists('Audit\Audit')) {
+        if (class_exists(Audit::class)) {
             Audit::log('metric.goal.progress', [
                 'goal' => $goal->title,
                 'progress' => $goal->progress
@@ -63,7 +64,7 @@ class MetricManagerService
             'meta' => $meta,
         ]);
 
-        if (class_exists('Audit\Audit')) {
+        if (class_exists(Audit::class)) {
             Audit::log('metric.kpi.recorded', [
                 'kpi' => $kpi->name,
                 'value' => $value
@@ -81,5 +82,14 @@ class MetricManagerService
             ['slug' => $slug],
             ['name' => $name, 'unit' => $unit]
         );
+    }
+
+    public function addCompetency(string $name, ?string $description = null, ?string $category = null): Competency
+    {
+        return Competency::create([
+            'name' => $name,
+            'description' => $description,
+            'category' => $category,
+        ]);
     }
 }

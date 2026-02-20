@@ -17,7 +17,7 @@ class CreateScribeCategoryTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scribe_category', function ($table) {
+        Schema::createIfNotExists('scribe_category', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique()->index();
             $table->string('name', 128);

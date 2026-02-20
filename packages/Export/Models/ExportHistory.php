@@ -41,7 +41,9 @@ use Helpers\DateTimeHelper;
  */
 class ExportHistory extends BaseModel
 {
-    protected string $table = 'export_history';
+    public const TABLE = 'export_history';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

@@ -21,7 +21,7 @@ class CreateApiKeyTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('api_key', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('api_key', function (SchemaBuilder $table) {
             $table->id();
             $table->string('name');
             $table->string('key', 64)->unique(); // Hashed key

@@ -12,20 +12,20 @@ declare(strict_types=1);
 
 namespace Bridge\ApiAuth\Validators;
 
-use Bridge\Contracts\TokenableInterface;
-use Bridge\TokenManager;
+use Security\Auth\Contracts\Authenticatable;
+use Security\Auth\Interfaces\TokenManagerInterface;
 
 class AuthTokenValidator
 {
     public function __construct(
-        private TokenManager $tokenManager
+        private TokenManagerInterface $tokenManager
     ) {
     }
 
     /**
      * Validate a Bridge personal access token.
      */
-    public function validate(string $token, array $requiredAbilities = ['*']): ?TokenableInterface
+    public function validate(string $token, array $requiredAbilities = ['*']): ?Authenticatable
     {
         $tokenable = $this->tokenManager->authenticate($token, function (string $type, int $id) {
             if (! class_exists($type)) {

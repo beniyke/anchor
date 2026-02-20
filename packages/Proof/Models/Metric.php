@@ -28,7 +28,9 @@ use Helpers\DateTimeHelper;
  */
 class Metric extends BaseModel
 {
-    protected string $table = 'proof_metric';
+    public const TABLE = 'proof_metric';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'proof_case_study_id',

@@ -17,7 +17,7 @@ class CreateLinkUsageTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('link_usage', function ($table) {
+        Schema::createIfNotExists('link_usage', function ($table) {
             $table->id();
             $table->unsignedBigInteger('link_id')->index();
             $table->datetime('used_at');

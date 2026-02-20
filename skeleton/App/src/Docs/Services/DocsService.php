@@ -194,13 +194,13 @@ class DocsService
             }
 
             $groups = [
-                'Getting Started' => ['README', 'introduction', 'configuration', 'directory-structure', 'lifecycle'],
-                'Core Concepts' => ['architecture', 'kernel', 'container', 'providers', 'services', 'events'],
+                'Getting Started' => ['README', 'introduction', 'installation', 'configuration', 'directory-structure', 'lifecycle'],
+                'Core Concepts' => ['architecture', 'kernel', 'container', 'providers', 'services', 'events', 'security', 'scheduling'],
                 'Basics' => ['routing', 'controllers', 'middleware', 'requests', 'responses', 'views', 'view-models'],
                 'Database' => ['database', 'query-builder', 'models', 'migrations', 'seeding'],
-                'Security' => ['authentication', 'security', 'csrf', 'encryption', 'firewall'],
-                'Features' => ['mail', 'notifications', 'defer', 'queues', 'package-management'],
-                'Packages' => ['bridge', 'workflow', 'watcher', 'tenancy', 'vault', 'slot', 'tokit', 'money', 'verify', 'wallet', 'pay', 'release', 'flow', 'wave', 'ghost', 'support', 'refer', 'export', 'import', 'media', 'geo', 'audit', 'rollout', 'permit', 'client', 'forge', 'ally', 'link', 'hub', 'scribe', 'proof', 'guide', 'pulse', 'blish', 'stack', 'scout', 'onboard', 'metric', 'shield'],
+                'Security' => ['authentication', 'csrf', 'encryption', 'firewall', 'request-validation'],
+                'Features' => ['mail', 'notify', 'defer', 'queues', 'package-management'],
+                'Packages' => ['notification', 'activity', 'bridge', 'workflow', 'watcher', 'tenancy', 'vault', 'slot', 'tokit', 'money', 'verify', 'wallet', 'pay', 'release', 'flow', 'wave', 'ghost', 'support', 'refer', 'export', 'import', 'media', 'geo', 'audit', 'rollout', 'permit', 'client', 'forge', 'ally', 'link', 'hub', 'scribe', 'proof', 'guide', 'pulse', 'blish', 'stack', 'scout', 'onboard', 'metric', 'shield', 'rank'],
                 'Testing & Quality' => ['testing', 'code-quality', 'troubleshooting', 'debugger'],
                 'Console' => array_merge(['cli', 'dock-command']),
                 'Helpers' => array_merge(['functions', 'helpers'], $helperDocs),

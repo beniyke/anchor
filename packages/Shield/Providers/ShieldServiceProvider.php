@@ -24,8 +24,5 @@ class ShieldServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Register global helper if needed, or leave to composer autoloading
-        // if file-based. Since we decided on a dynamic helper 'shield()',
-        // it might be best defined in a Helpers file loaded here or by composer.
     }
 }

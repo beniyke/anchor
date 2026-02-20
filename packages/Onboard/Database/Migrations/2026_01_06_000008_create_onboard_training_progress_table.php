@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_06_000008_create_onboard_training_progress_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateOnboardTrainingProgressTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('onboard_training_progress', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('onboard_training_progress', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('onboard_training_id')->index();

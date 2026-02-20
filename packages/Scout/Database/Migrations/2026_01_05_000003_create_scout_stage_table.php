@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_05_000003_create_scout_stage_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateScoutStageTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scout_stage', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('scout_stage', function (SchemaBuilder $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();

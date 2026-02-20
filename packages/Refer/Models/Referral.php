@@ -40,7 +40,9 @@ use Refer\Enums\ReferralStatus;
  */
 class Referral extends BaseModel
 {
-    protected string $table = 'referral';
+    public const TABLE = 'referral';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'code_id',

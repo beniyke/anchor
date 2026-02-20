@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Verify\Commands;
 
 use Exception;
+use Helpers\Log;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -59,7 +60,7 @@ class OtpCleanupCommand extends Command
 
             $io->note('Cleanup completed successfully');
 
-            logger('verify.log')->info('OTP cleanup completed', [
+            Log::channel('verify')->info('OTP cleanup completed', [
                 'deleted_codes' => $deletedCodes,
                 'deleted_attempts' => $deletedAttempts,
                 'retention_days' => $days,
@@ -68,7 +69,7 @@ class OtpCleanupCommand extends Command
             return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error('Cleanup failed: ' . $e->getMessage());
-            logger('verify.log')->error('OTP cleanup failed', [
+            Log::channel('verify')->error('OTP cleanup failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);

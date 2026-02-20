@@ -42,7 +42,9 @@ use Helpers\DateTimeHelper;
  */
 class AuditLog extends BaseModel
 {
-    protected string $table = 'audit_log';
+    public const TABLE = 'audit_log';
+
+    protected string $table = self::TABLE;
 
     public bool $timestamps = false;
 

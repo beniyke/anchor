@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_12_28_000006_create_flow_attachment_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -18,7 +16,7 @@ class CreateFlowAttachmentTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('flow_attachment', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('flow_attachment', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique();
             $table->unsignedBigInteger('task_id');

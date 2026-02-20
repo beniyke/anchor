@@ -29,7 +29,9 @@ use Helpers\DateTimeHelper;
  */
 class Event extends BaseModel
 {
-    protected string $table = 'scribe_event';
+    public const TABLE = 'scribe_event';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'scribe_post_id',

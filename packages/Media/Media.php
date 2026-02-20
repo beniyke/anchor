@@ -46,6 +46,11 @@ class Media
         return resolve(MediaManagerService::class)->getUrl($media, $conversion);
     }
 
+    public static function getPath(MediaModel $media, ?string $conversion = null): string
+    {
+        return resolve(MediaManagerService::class)->getPath($media, $conversion);
+    }
+
     public static function delete(MediaModel $media): bool
     {
         return resolve(MediaManagerService::class)->delete($media);

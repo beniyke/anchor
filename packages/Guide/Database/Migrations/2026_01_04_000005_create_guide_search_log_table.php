@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000005_create_guide_search_log_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateGuideSearchLogTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('guide_search_log', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('guide_search_log', function (SchemaBuilder $table) {
             $table->id();
             $table->string('query');
             $table->integer('results_count')->default(0);
@@ -24,6 +22,11 @@ class CreateGuideSearchLogTable extends BaseMigration
             $table->string('ip_address', 45)->nullable();
             $table->json('metadata')->nullable();
             $table->dateTimestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->onDelete('set null');
         });
     }
 

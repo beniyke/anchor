@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ *
  * This abstract class serves as a foundational controller for the application,
  * providing common functionality for handling HTTP requests and responses.
  *

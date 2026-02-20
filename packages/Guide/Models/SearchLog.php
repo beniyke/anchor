@@ -26,7 +26,9 @@ use Helpers\DateTimeHelper;
  */
 class SearchLog extends BaseModel
 {
-    protected string $table = 'guide_search_log';
+    public const TABLE = 'guide_search_log';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'query',

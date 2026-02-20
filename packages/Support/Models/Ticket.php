@@ -49,7 +49,9 @@ use Support\Enums\TicketStatus;
  */
 class Ticket extends BaseModel
 {
-    protected string $table = 'support_ticket';
+    public const TABLE = 'support_ticket';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

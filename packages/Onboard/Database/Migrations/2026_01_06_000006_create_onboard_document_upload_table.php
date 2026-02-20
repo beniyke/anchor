@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_06_000006_create_onboard_document_upload_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateOnboardDocumentUploadTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('onboard_document_upload', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('onboard_document_upload', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('onboard_document_id')->index();

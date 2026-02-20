@@ -28,7 +28,9 @@ use DateTimeInterface;
  */
 class ReviewCycle extends BaseModel
 {
-    protected string $table = 'metric_review_cycle';
+    public const TABLE = 'metric_review_cycle';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

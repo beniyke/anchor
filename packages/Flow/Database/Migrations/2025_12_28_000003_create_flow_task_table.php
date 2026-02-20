@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_12_28_000003_create_flow_task_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -18,7 +16,7 @@ class CreateFlowTaskTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('flow_task', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('flow_task', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique();
             $table->unsignedBigInteger('project_id');

@@ -17,7 +17,7 @@ class CreateHubThreadTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('hub_thread', function ($table) {
+        Schema::createIfNotExists('hub_thread', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique();
             $table->string('threadable_type', 255)->nullable()->index();

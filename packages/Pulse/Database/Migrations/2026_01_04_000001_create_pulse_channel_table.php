@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000001_create_pulse_channel_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -19,7 +17,7 @@ class CreatePulseChannelTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('pulse_channel', function ($table) {
+        Schema::createIfNotExists('pulse_channel', function ($table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();

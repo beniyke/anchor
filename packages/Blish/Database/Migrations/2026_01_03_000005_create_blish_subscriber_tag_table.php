@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_03_000005_create_blish_subscriber_tag_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateBlishSubscriberTagTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('blish_subscriber_tag', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('blish_subscriber_tag', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedInteger('subscriber_id');
             $table->unsignedInteger('tag_id');

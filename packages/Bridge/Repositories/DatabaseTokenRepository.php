@@ -12,18 +12,18 @@ declare(strict_types=1);
 
 namespace Bridge\Repositories;
 
-use Bridge\Contracts\TokenableInterface;
 use Bridge\Contracts\TokenRepositoryInterface;
 use Bridge\PersonalAccessToken;
 use Database\DB;
 use DateTimeImmutable;
 use Helpers\DateTimeHelper;
+use Security\Auth\Contracts\Tokenable;
 
 class DatabaseTokenRepository implements TokenRepositoryInterface
 {
     protected const TABLE = 'personal_access_token';
 
-    public function createToken(TokenableInterface $tokenable, string $name, string $hashedToken, array $abilities = ['*'], DateTimeImmutable|DateTimeHelper|null $expiresAt = null): PersonalAccessToken
+    public function createToken(Tokenable $tokenable, string $name, string $hashedToken, array $abilities = ['*'], DateTimeImmutable|DateTimeHelper|null $expiresAt = null): PersonalAccessToken
     {
         $tokenableType = $tokenable->getTokenableType();
         $tokenableId = $tokenable->getTokenableId();
@@ -65,7 +65,7 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
             ->delete() > 0;
     }
 
-    public function revokeAllTokens(TokenableInterface $tokenable): int
+    public function revokeAllTokens(Tokenable $tokenable): int
     {
         return DB::table(self::TABLE)
             ->where('tokenable_type', $tokenable->getTokenableType())
@@ -73,7 +73,7 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
             ->delete();
     }
 
-    public function findTokensByTokenable(TokenableInterface $tokenable): array
+    public function findTokensByTokenable(Tokenable $tokenable): array
     {
         $rows = DB::table(self::TABLE)
             ->where('tokenable_type', $tokenable->getTokenableType())

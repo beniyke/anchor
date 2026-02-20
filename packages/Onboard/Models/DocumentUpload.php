@@ -13,15 +13,17 @@ namespace Onboard\Models;
 
 use App\Models\User;
 use Database\BaseModel;
+use Database\Query\Builder;
 use Database\Relations\BelongsTo;
 use Helpers\DateTimeHelper;
+use Onboard\Enums\DocumentStatus;
 
 /**
  * @property int             $id
  * @property int             $user_id
  * @property int             $onboard_document_id
  * @property ?int            $media_id
- * @property string          $status
+ * @property DocumentStatus  $status
  * @property ?string         $rejection_reason
  * @property ?DateTimeHelper $verified_at
  * @property ?int            $verified_by
@@ -33,7 +35,9 @@ use Helpers\DateTimeHelper;
  */
 class DocumentUpload extends BaseModel
 {
-    protected string $table = 'onboard_document_upload';
+    public const TABLE = 'onboard_document_upload';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'user_id',
@@ -47,7 +51,13 @@ class DocumentUpload extends BaseModel
 
     protected array $casts = [
         'verified_at' => 'datetime',
+        'status' => DocumentStatus::class,
     ];
+
+    public function scopeVerified(Builder $query): Builder
+    {
+        return $query->where('status', DocumentStatus::VERIFIED->value);
+    }
 
     public function user(): BelongsTo
     {

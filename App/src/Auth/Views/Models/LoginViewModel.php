@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Auth\Views\Models;
 
-use App\Services\UserService;
+use App\Auth\Services\IdentityService;
 use Helpers\Http\Flash;
 
 readonly class LoginViewModel
@@ -16,7 +16,7 @@ readonly class LoginViewModel
     public string $subheading;
 
     public function __construct(
-        private readonly UserService $service,
+        private readonly IdentityService $service,
         private readonly Flash $flash
     ) {
         $this->page_title = 'Login';

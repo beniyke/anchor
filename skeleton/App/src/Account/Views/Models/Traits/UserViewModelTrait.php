@@ -18,7 +18,7 @@ trait UserViewModelTrait
     {
         $dropdown = [];
         foreach ($this->getRoles() as $role) {
-            $dropdown[$role->getId()] = $role->getTitle();
+            $dropdown[$role->getSlug()] = $role->getName();
         }
 
         return $this->prependSelectToOptions($dropdown);
@@ -41,7 +41,7 @@ trait UserViewModelTrait
         $status = UserStatus::all();
 
         foreach ($status as $option) {
-            $options[$option] = $option;
+            $options[$option] = UserStatus::from($option)->label();
         }
 
         return $this->prependSelectToOptions($options);

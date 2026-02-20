@@ -42,7 +42,9 @@ use Helpers\String\Str;
  */
 class Media extends BaseModel
 {
-    protected string $table = 'media';
+    public const TABLE = 'media';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'uuid',

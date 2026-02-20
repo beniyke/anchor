@@ -1,7 +1,3 @@
-<?php
-use Helpers\File\Paths;
-
-?>
 <?php $this->startSection('layout')?>
 <main class="d-flex w-100">
 	<div class="container d-flex flex-column">
@@ -15,7 +11,7 @@ use Helpers\File\Paths;
 						<h2 class="fw-medium"><?= $this->section('heading')?></h2>
 						<p class="text-secondary"><?= $this->section('subheading')?></p>
 					</div>
-					<?= $this->inc('message', path: Paths::layoutPath())?>
+					<?= $this->layout()->inc('message')?>
 					<?= $this->section('content')?>
 				</div>
 			</div>

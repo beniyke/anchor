@@ -33,7 +33,9 @@ use Helpers\DateTimeHelper;
  */
 class Submission extends BaseModel
 {
-    protected string $table = 'stack_submission';
+    public const TABLE = 'stack_submission';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

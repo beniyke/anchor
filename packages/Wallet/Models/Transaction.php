@@ -51,8 +51,9 @@ use Wallet\Enums\TransactionType;
 class Transaction extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wallet_transaction';
 
-    protected string $table = 'wallet_transaction';
+    protected string $table = self::TABLE;
 
     public bool $timestamps = false;
 

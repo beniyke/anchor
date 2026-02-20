@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_12_28_000002_create_flow_column_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -18,7 +16,7 @@ class CreateFlowColumnTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('flow_column', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('flow_column', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('project_id');
             $table->string('name');

@@ -14,7 +14,7 @@ namespace Ally\Listeners;
 
 use Ally\Events\LowCreditEvent;
 use Ally\Notifications\LowCreditNotification;
-use Helpers\Data;
+use Helpers\Data\Data;
 use Mail\Mail;
 
 class SendLowCreditNotificationListener

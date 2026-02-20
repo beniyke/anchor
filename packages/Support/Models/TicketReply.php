@@ -31,7 +31,9 @@ use Helpers\DateTimeHelper;
  */
 class TicketReply extends BaseModel
 {
-    protected string $table = 'support_ticket_reply';
+    public const TABLE = 'support_ticket_reply';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'ticket_id',

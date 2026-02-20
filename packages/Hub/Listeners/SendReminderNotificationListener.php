@@ -14,7 +14,7 @@ namespace Hub\Listeners;
 
 use App\Models\User;
 use Core\Services\ConfigServiceInterface;
-use Helpers\Data;
+use Helpers\Data\Data;
 use Hub\Events\ReminderDueEvent;
 use Hub\Notifications\ReminderNotification;
 use Mail\Mail;

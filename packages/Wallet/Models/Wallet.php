@@ -38,8 +38,9 @@ use Wallet\Enums\Currency;
 class Wallet extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wallet';
 
-    protected string $table = 'wallet';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'owner_id',

@@ -19,8 +19,16 @@ class RedirectIfAuthenticatedMiddleware implements MiddlewareInterface
 
     public function handle(Request $request, Response $response, Closure $next): mixed
     {
-        if ($this->auth->isAuthenticated() && $request->isLoginRoute()) {
-            return $response->redirect($request->fullRouteByName('home'));
+        if (! $request->isLoginRoute()) {
+            return $next($request, $response);
+        }
+
+        $guards = $request->getRouteContext('guards') ?? ['web'];
+
+        foreach ($guards as $guard) {
+            if ($this->auth->viaGuard($guard)->isAuthenticated()) {
+                return $response->redirect($request->fullRouteByName('home'));
+            }
         }
 
         return $next($request, $response);

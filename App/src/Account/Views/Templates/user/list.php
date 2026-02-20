@@ -5,7 +5,7 @@
     <?php $this->setSection('back', $user_list_view_model->getBackUrl())?>
 <?php endif?>
 
-<?php if ($user_list_view_model->hasUsers()) :?>
+<?php if ($user_list_view_model->hasUsers() && $this->canAccessAction('create')):?>
     <?php $this->startSection('action')?>
         <?= component('link')->content('<i class="align-middle" data-feather="plus"></i>  Create User')->data(['href' => $user_list_view_model->getCreateActionUrl()])->attributes(['class' => 'btn btn-primary btn-lg'])->render()?>
     <?php $this->endSection()?>
@@ -53,26 +53,39 @@
                                 <i class="align-middle me-1 fas fa-fw fa-2x fa-user-circle"></i>
                                 <?php endif?>
                             </td>
-                            <td class="fw-bold"><?= $user->getName()?></td>
+                            <td class="fw-bold">
+                                <a href="<?=url(route('permission/'.$user->getRefid(), true))?>"><?=$user->getName()?></a>        
+                            </td>
                             <td><?= $user->getEmail()?></td>
                             <td class="fw-medium text-primary"><?= ucfirst($user->getRoleName() ?? '')?></td>
                             <td><span class="fw-medium text-capitalize badge bg-<?= $user->getStatusColor()?>"><?= $user->getStatus()?></span></td>
                             <td class="table-action">
-                                <div class="dropdown position-relative">
-                                   <button type="button" class="btn btn-outline-primary btn-lg dropdown-toggle fw-bold" data-bs-toggle="dropdown" aria-expanded="false">
-                                      Action
-                                   </button>
-                                   <ul class="dropdown-menu">
-                                         <li><a class="dropdown-item text-primary" href="<?= $user_list_view_model->getEditUrl($user->getRefid())?>">Edit</a></li>
-                                        <li>
-                                            <?= component('delete')->content('Delete')->data(['url' => $user_list_view_model->getDeleteUrl($user->getRefid()), 'important-fields' => $this->importantFormFields('delete')])->attributes(['class' => 'dropdown-item text-danger'])->render()?>
-                                        </li>
+                                <?php if (!$user->isTheSame($layout->getUser()->getId()) && $this->canAccessAction('edit|delete')):?>
+                                    <div class="dropdown position-relative">
+                                        <button type="button" class="btn btn-outline-primary btn-lg dropdown-toggle fw-bold" data-bs-toggle="dropdown" aria-expanded="false">
+                                          Action
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <?php if ($this->canAccessAction('edit')):?>
+                                                <li>
+                                                    <a class="dropdown-item text-primary" href="<?= $user_list_view_model->getEditUrl($user->getRefid())?>">Edit</a>
+                                                </li>
+                                            <?php endif?>
 
-                                        <?php if ($user->isPending()): ?>
-                                        <li><a class="dropdown-item text-dark needs-confirmation-link" data-message="Are you sure you want to resend link?" href="<?= $user_list_view_model->getResendUrl($user->getRefid())?>">Resend Link</a></li>
-                                        <?php endif?>
-                                    </ul>
-                                </div>
+                                            <?php if ($this->canAccessAction('delete')):?>
+                                            <li>
+                                                <?= component('delete')->content('Delete')->data(['url' => $user_list_view_model->getDeleteUrl($user->getRefid()), 'important-fields' => $this->importantFormFields('delete')])->attributes(['class' => 'dropdown-item text-danger'])->render()?>
+                                            </li>
+                                            <?php endif?>
+
+                                            <?php if ($user->isPending()): ?>
+                                            <li><a class="dropdown-item text-dark needs-confirmation-link" data-message="Are you sure you want to resend link?" href="<?= $user_list_view_model->getResendUrl($user->getRefid())?>">Resend Link</a></li>
+                                            <?php endif?>
+                                        </ul>
+                                    </div>
+                                <?php else:?>
+                                    <button class="btn btn-outline-secondary disabled btn-lg"><span class="fa fa-lock"></span> Locked</button>
+                                <?php endif?>
                             </td>
                             <td class="text-end">
                                  <?= $user->getFormattedUpdatedAt()?>
@@ -88,12 +101,16 @@
         </div>
     <?php endif?>
 </div>
+ <?php if ($this->canAccessAction('delete')):?>
 <?= $this->layout()->modal('confirm'); ?>
+<?php endif?>
 <?= $this->layout()->modal('are-you-sure'); ?>
 <?php $this->endSection()?>
 
 <?php $this->startSection('script')?>
-<script src="<?= assets('js/confirm.js')?>"></script>
+    <?php if ($this->canAccessAction('delete')):?>
+        <script src="<?= assets('js/confirm.js')?>"></script>
+    <?php endif?>
 <script src="<?= assets('js/areyousure.js')?>"></script>
 <?php $this->endSection()?>
 

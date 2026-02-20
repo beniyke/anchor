@@ -41,9 +41,9 @@ readonly class EditUserViewModel
         return $this->user->email ?? '';
     }
 
-    public function getRoleId(): ?int
+    public function getRoleSlug(): string
     {
-        return $this->user->role_id;
+        return $this->user->role()?->slug ?? '';
     }
 
     public function getStatus(): string

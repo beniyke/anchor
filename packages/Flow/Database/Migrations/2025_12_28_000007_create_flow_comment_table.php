@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_12_28_000007_create_flow_comment_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -18,7 +16,7 @@ class CreateFlowCommentTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('flow_comment', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('flow_comment', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique();
             $table->unsignedBigInteger('task_id');

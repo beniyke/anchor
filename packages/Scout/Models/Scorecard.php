@@ -30,7 +30,9 @@ use DateTimeInterface;
  */
 class Scorecard extends BaseModel
 {
-    protected string $table = 'scout_scorecard';
+    public const TABLE = 'scout_scorecard';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'scout_interview_id',

@@ -17,7 +17,7 @@ class CreateRolloutSegmentUserTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('rollout_segment_user', function ($table) {
+        Schema::createIfNotExists('rollout_segment_user', function ($table) {
             $table->unsignedBigInteger('segment_id');
             $table->unsignedBigInteger('user_id');
 

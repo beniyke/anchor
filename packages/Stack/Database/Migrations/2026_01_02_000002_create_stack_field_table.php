@@ -17,7 +17,7 @@ class CreateStackFieldTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('stack_field', function ($table) {
+        Schema::createIfNotExists('stack_field', function ($table) {
             $table->id();
             $table->unsignedBigInteger('stack_form_id')->index();
             $table->string('name', 64);

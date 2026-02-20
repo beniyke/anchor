@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000006_create_pulse_report_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -19,7 +17,7 @@ class CreatePulseReportTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('pulse_report', function ($table) {
+        Schema::createIfNotExists('pulse_report', function ($table) {
             $table->id();
             $table->string('reportable_type');
             $table->unsignedBigInteger('reportable_id');

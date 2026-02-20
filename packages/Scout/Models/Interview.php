@@ -36,7 +36,9 @@ use DateTimeInterface;
  */
 class Interview extends BaseModel
 {
-    protected string $table = 'scout_interview';
+    public const TABLE = 'scout_interview';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'scout_application_id',
@@ -47,10 +49,12 @@ class Interview extends BaseModel
         'location',
         'internal_notes',
         'status',
+        'reminded_at',
     ];
 
     protected array $casts = [
         'scheduled_at' => 'datetime',
+        'reminded_at' => 'datetime',
         'duration' => 'integer',
     ];
 
@@ -67,5 +71,12 @@ class Interview extends BaseModel
     public function scorecards(): HasMany
     {
         return $this->hasMany(Scorecard::class, 'scout_interview_id');
+    }
+
+    public function scopePendingReminders($query, $start, $end)
+    {
+        return $query->where('status', 'scheduled')
+            ->whereNull('reminded_at')
+            ->whereBetween('scheduled_at', [$start, $end]);
     }
 }

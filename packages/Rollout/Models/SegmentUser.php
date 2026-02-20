@@ -23,7 +23,9 @@ use Database\Relations\BelongsTo;
  */
 class SegmentUser extends BaseModel
 {
-    protected string $table = 'rollout_segment_user';
+    public const TABLE = 'rollout_segment_user';
+
+    protected string $table = self::TABLE;
 
     public bool $timestamps = false;
 

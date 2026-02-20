@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ * 
  * Routing configuration for the application.
  *
  * This configuration defines default routes, API routes, redirects,
@@ -76,7 +78,7 @@ return [
         ],
         'api' => [
             'api/{auth}',
-        ],
+        ]
     ],
 
     /**

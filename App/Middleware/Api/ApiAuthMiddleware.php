@@ -33,7 +33,20 @@ class ApiAuthMiddleware implements MiddlewareInterface
             return $next($request, $response);
         }
 
-        if (! $this->auth->isAuthenticated()) {
+        $guards = $request->getRouteContext('guards') ?? ['api'];
+        $authenticatedUser = null;
+
+        foreach ($guards as $guard) {
+            $this->auth->viaGuard($guard);
+
+            if ($this->auth->isAuthenticated()) {
+                $authenticatedUser = $this->auth->user();
+                $activeGuard = $guard;
+                break;
+            }
+        }
+
+        if (! $authenticatedUser) {
             return $response
                 ->header(['Content-Type' => 'application/json'])
                 ->status(401)
@@ -41,6 +54,9 @@ class ApiAuthMiddleware implements MiddlewareInterface
                     'error' => 'Unauthorized Access',
                 ]));
         }
+
+        $request->setAuthenticatedUser($authenticatedUser);
+        $request->setRouteContext('auth_guard', $activeGuard);
 
         return $next($request, $response);
     }

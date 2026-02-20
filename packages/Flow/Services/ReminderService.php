@@ -16,7 +16,7 @@ use Core\Services\ConfigServiceInterface;
 use Flow\Models\Reminder;
 use Flow\Notifications\TaskReminderNotification;
 use Flow\Services\Builders\ReminderBuilder;
-use Helpers\Data;
+use Helpers\Data\Data;
 use Helpers\DateTimeHelper;
 use Mail\Mail;
 

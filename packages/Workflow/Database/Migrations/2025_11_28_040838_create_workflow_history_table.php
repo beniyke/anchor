@@ -21,7 +21,7 @@ class CreateWorkflowHistoryTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('workflow_history', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('workflow_history', function (SchemaBuilder $table) {
             $table->id();
             $table->string('instance_id')->index();
             $table->string('type');

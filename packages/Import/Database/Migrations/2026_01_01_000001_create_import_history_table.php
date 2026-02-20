@@ -17,7 +17,7 @@ class CreateImportHistoryTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('import_history', function ($table) {
+        Schema::createIfNotExists('import_history', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique();
             $table->unsignedBigInteger('user_id')->nullable()->index();

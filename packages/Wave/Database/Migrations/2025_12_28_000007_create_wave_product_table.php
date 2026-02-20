@@ -18,7 +18,7 @@ class CreateWaveProductTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::createIfNotExist('wave_product', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('wave_product', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique()->index();
             $table->string('name');

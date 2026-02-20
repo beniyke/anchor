@@ -26,7 +26,9 @@ use DateTimeInterface;
  */
 class Reaction extends BaseModel
 {
-    protected string $table = 'hub_reaction';
+    public const TABLE = 'hub_reaction';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'message_id',

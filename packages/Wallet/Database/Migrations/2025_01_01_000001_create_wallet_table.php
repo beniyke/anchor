@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_01_01_000001_create_wallet_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateWalletTable
 {
     public function up()
     {
-        Schema::create('wallet', function ($table) {
+        Schema::createIfNotExists('wallet', function ($table) {
             $table->id();
             $table->integer('owner_id')->index();
             $table->string('owner_type', 50)->index();

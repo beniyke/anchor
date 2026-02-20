@@ -35,8 +35,9 @@ use Helpers\DateTimeHelper;
 class Attachment extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'flow_attachment';
 
-    protected string $table = 'flow_attachment';
+    protected string $table = self::TABLE;
 
     protected array $fillable = ['refid', 'task_id', 'path', 'filename', 'mime_type', 'size', 'uploaded_by'];
 

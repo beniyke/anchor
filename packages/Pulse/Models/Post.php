@@ -34,13 +34,16 @@ use Helpers\DateTimeHelper;
  */
 class Post extends BaseModel
 {
-    protected string $table = 'pulse_post';
+    public const TABLE = 'pulse_post';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'pulse_thread_id',
         'user_id',
         'parent_id',
         'content',
+        'status',
     ];
 
     public function thread(): BelongsTo

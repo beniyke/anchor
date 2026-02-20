@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_07_000008_create_metric_competency_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateMetricCompetencyTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('metric_competency', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('metric_competency', function (SchemaBuilder $table) {
             $table->id();
             $table->string('name')->unique();
             $table->text('description')->nullable();

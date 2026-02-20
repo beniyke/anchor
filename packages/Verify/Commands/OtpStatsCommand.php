@@ -14,16 +14,22 @@ declare(strict_types=1);
 
 namespace Verify\Commands;
 
-use Database\DB;
 use Exception;
-use Helpers\DateTimeHelper;
+use Helpers\Log;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Verify\Services\VerifyAnalyticsService;
 
 class OtpStatsCommand extends Command
 {
+    public function __construct(
+        private readonly VerifyAnalyticsService $analytics
+    ) {
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
         $this->setName('verify:stats')
@@ -37,77 +43,39 @@ class OtpStatsCommand extends Command
         $io->title('OTP Verification Statistics');
 
         try {
-            // Active codes (not expired, not verified)
-            $activeCount = DB::table('verify_otp_code')
-                ->whereAfter('expires_at', DateTimeHelper::now()->toDateTimeString())
-                ->whereNull('verified_at')
-                ->count();
-
-            // Total codes generated today
-            $todayStart = DateTimeHelper::now()->startOfDay()->toDateTimeString();
-            $todayCount = DB::table('verify_otp_code')
-                ->whereOnOrAfter('created_at', $todayStart)
-                ->count();
-
-            // Total verified codes today
-            $verifiedTodayCount = DB::table('verify_otp_code')
-                ->whereOnOrAfter('created_at', $todayStart)
-                ->whereNotNull('verified_at')
-                ->count();
-
-            // Verification success rate today
-            $successRate = $todayCount > 0
-                ? round(($verifiedTodayCount / $todayCount) * 100, 2)
-                : 0;
-
-            // Expired codes (cleanup candidates)
-            $expiredCount = DB::table('verify_otp_code')
-                ->whereBefore('expires_at', DateTimeHelper::now()->toDateTimeString())
-                ->count();
-
-            // Rate limit violations (high attempt counts)
-            $rateLimitViolations = DB::table('verify_attempt')
-                ->whereGreaterThanOrEqual('count', 5)
-                ->count();
-
-            // Channel breakdown for today
-            $channelStats = DB::table('verify_otp_code')
-                ->whereOnOrAfter('created_at', $todayStart)
-                ->select(DB::raw('channel, COUNT(*) as count'))
-                ->groupBy('channel')
-                ->get();
+            $stats = $this->analytics->getOverviewStats();
 
             // Display statistics
             $io->section('Overview');
             $io->table(
                 ['Metric', 'Value'],
                 [
-                    ['Active Codes', $activeCount],
-                    ['Generated Today', $todayCount],
-                    ['Verified Today', $verifiedTodayCount],
-                    ['Success Rate Today', "{$successRate}%"],
-                    ['Expired Codes', $expiredCount],
-                    ['Rate Limit Violations', $rateLimitViolations],
+                    ['Active Codes', $stats['active_count']],
+                    ['Generated Today', $stats['today_count']],
+                    ['Verified Today', $stats['verified_today_count']],
+                    ['Success Rate Today', "{$stats['success_rate_today']}%"],
+                    ['Expired Codes', $stats['expired_count']],
+                    ['Rate Limit Violations', $stats['rate_limit_violations']],
                 ]
             );
 
-            if (count($channelStats) > 0) {
+            if (count($stats['channel_stats']) > 0) {
                 $io->section('Channel Usage (Today)');
                 $channelData = [];
-                foreach ($channelStats as $stat) {
+                foreach ($stats['channel_stats'] as $stat) {
                     $channelData[] = [$stat['channel'], $stat['count']];
                 }
                 $io->table(['Channel', 'Count'], $channelData);
             }
 
-            if ($expiredCount > 0) {
-                $io->note("Run 'php dock verify:cleanup' to remove {$expiredCount} expired code(s)");
+            if ($stats['expired_count'] > 0) {
+                $io->note("Run 'php dock verify:cleanup' to remove {$stats['expired_count']} expired code(s)");
             }
 
             return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error('Failed to retrieve statistics: ' . $e->getMessage());
-            logger('verify.log')->error('Stats command failed', [
+            Log::channel('verify')->error('Stats command failed', [
                 'error' => $e->getMessage(),
             ]);
 

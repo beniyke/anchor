@@ -18,7 +18,7 @@ class CreateWaveInvoiceTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::createIfNotExist('wave_invoice', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('wave_invoice', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique()->index();
             $table->unsignedBigInteger('owner_id')->index();

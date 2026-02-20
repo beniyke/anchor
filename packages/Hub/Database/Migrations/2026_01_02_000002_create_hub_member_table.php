@@ -17,7 +17,7 @@ class CreateHubMemberTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('hub_member', function ($table) {
+        Schema::createIfNotExists('hub_member', function ($table) {
             $table->id();
             $table->unsignedBigInteger('thread_id')->index();
             $table->unsignedBigInteger('user_id')->index();

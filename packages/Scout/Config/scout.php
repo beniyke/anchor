@@ -36,4 +36,11 @@ return [
         'on_application' => true,
         'on_interview_scheduled' => true,
     ],
+
+    /**
+     * Application URLs.
+     */
+    'urls' => [
+        'application' => 'scout/applications/{id}',
+    ],
 ];

@@ -4,27 +4,27 @@ declare(strict_types=1);
 
 namespace App\Account\Views\Models;
 
-use App\Models\Role;
 use Core\Ioc\ContainerInterface;
 use Core\Services\ConfigServiceInterface;
+use Helpers\Http\Flash;
 use Helpers\Http\Request;
 
 readonly class EditRoleViewModel
 {
-    private Role $role;
+    private RoleViewModel $role;
 
     private ConfigServiceInterface $config;
 
     private Request $request;
 
-    private array $permissions;
+    private Flash $flash;
 
-    public function __construct(ContainerInterface $container, Role $role)
+    public function __construct(ContainerInterface $container, RoleViewModel $role)
     {
         $this->request = $container->get(Request::class);
+        $this->flash = $container->get(Flash::class);
         $this->config = $container->get(ConfigServiceInterface::class);
         $this->role = $role;
-        $this->permissions = $role->permission;
     }
 
     public function getPageTitle(): string
@@ -42,76 +42,39 @@ readonly class EditRoleViewModel
         return $this->request->fullRoute();
     }
 
-    public function getRoleRefId(): string
+    public function getRoleSlug(): string
     {
-        return $this->role->refid;
+        return $this->role->getSlug();
     }
 
-    public function getRoleTitle(): string
+    public function getRoleName(): string
     {
-        return $this->role->title;
+        return $this->role->getName();
     }
 
-    public function getTypeValue(): string
+    public function getRoleDescription(): string
     {
-        return $this->role->type->value;
-    }
-
-    public function getCurrentTypeLabel(): string
-    {
-        return $this->role->type->label();
+        return $this->role->getDescription();
     }
 
     public function getFormActionUrl(): string
     {
-        return $this->request->fullRoute('update/'.$this->getRoleRefId());
+        return $this->request->fullRoute('update/' . $this->getRoleSlug());
     }
 
-    public function getMenuConfig(): array
+    public function getPermissionRegistry(): array
     {
-        return $this->config->get('app.menu');
+        return $this->config->get('permissions');
     }
 
-    public function isMenuAccessible(array $menu): bool
+    public function isPermissionChecked(string $slug): bool
     {
-        $type = $this->getTypeValue();
+        $oldInput = (array) $this->flash->old('permission', []);
 
-        return in_array($type, $menu['type'] ?? []);
-    }
+        if (! empty($oldInput)) {
+            return in_array($slug, $oldInput);
+        }
 
-    public function isSubmenuAccessible(array $submenu): bool
-    {
-        $type = $this->getTypeValue();
-
-        return in_array($type, $submenu['type'] ?? []);
-    }
-
-    public function isMenuChecked(string $url): bool
-    {
-        $key = str_replace('/', '-', $url);
-
-        return in_array($key, $this->permissions['menu'] ?? []);
-    }
-
-    public function isSubmenuChecked(string $menuUrl, string $submenuUrl): bool
-    {
-        $key = str_replace('/', '-', $menuUrl.'::'.$submenuUrl);
-
-        return in_array($key, $this->permissions['submenu'] ?? []);
-    }
-
-    public function getMenuId(string $url): string
-    {
-        return 'mnu-'.str_replace(['/', '#'], ['-', ''], $url);
-    }
-
-    public function getSubmenuClass(string $url): string
-    {
-        return 'sub-'.str_replace(['/', '#'], ['-', ''], $url);
-    }
-
-    public function getSubmenuId(string $url): string
-    {
-        return 'sbm-'.str_replace('/', '-', $url);
+        return $this->role->hasPermission($slug);
     }
 }

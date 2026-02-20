@@ -17,7 +17,7 @@ class CreateScribePostTagTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scribe_post_tag', function ($table) {
+        Schema::createIfNotExists('scribe_post_tag', function ($table) {
             $table->unsignedBigInteger('scribe_post_id')->index();
             $table->unsignedBigInteger('scribe_tag_id')->index();
 

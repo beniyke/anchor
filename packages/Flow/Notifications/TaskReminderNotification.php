@@ -43,11 +43,13 @@ class TaskReminderNotification extends EmailNotification
         return EmailComponent::make()
             ->greeting("Hello {$this->payload->get('name')},")
             ->line("This is a reminder that the task **{$this->payload->get('task_title')}** is approaching its deadline.")
+            ->divider()
             ->attributes([
                 'Project' => $this->payload->get('project_name'),
                 'Due Date' => $this->payload->get('due_date'),
                 'Priority' => ucfirst($this->payload->get('priority')),
             ])
+            ->divider()
             ->action('View Task', $taskUrl)
             ->line('Please ensure all required work is completed on time.')
             ->render();

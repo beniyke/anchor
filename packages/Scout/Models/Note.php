@@ -31,7 +31,9 @@ use DateTimeInterface;
  */
 class Note extends BaseModel
 {
-    protected string $table = 'scout_note';
+    public const TABLE = 'scout_note';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'noteable_type',

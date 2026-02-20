@@ -34,7 +34,9 @@ use Helpers\DateTimeHelper;
  */
 class FeeRule extends BaseModel
 {
-    protected string $table = 'wallet_fee_rule';
+    public const TABLE = 'wallet_fee_rule';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

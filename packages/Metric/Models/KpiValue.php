@@ -30,7 +30,9 @@ use DateTimeInterface;
  */
 class KpiValue extends BaseModel
 {
-    protected string $table = 'metric_kpi_value';
+    public const TABLE = 'metric_kpi_value';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'metric_kpi_id',

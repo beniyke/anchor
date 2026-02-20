@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000004_create_pulse_reaction_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -19,7 +17,7 @@ class CreatePulseReactionTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('pulse_reaction', function ($table) {
+        Schema::createIfNotExists('pulse_reaction', function ($table) {
             $table->id();
             $table->unsignedBigInteger('pulse_post_id');
             $table->unsignedBigInteger('user_id');

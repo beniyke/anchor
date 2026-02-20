@@ -68,6 +68,13 @@ class SubscriberBuilder
         return $this;
     }
 
+    public function inactive(): self
+    {
+        $this->status = 'inactive';
+
+        return $this;
+    }
+
     public function save(): Subscriber
     {
         $data = $this->data;

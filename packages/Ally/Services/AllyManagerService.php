@@ -20,7 +20,7 @@ use Ally\Models\Reseller;
 use Ally\Services\Builders\AllyBuilder;
 use Core\Event;
 use Database\DB;
-use Database\Exceptions\ValidationException;
+use Exceptions\ValidationException;
 use Helpers\Validation\Validator;
 use Money\Money;
 use RuntimeException;

@@ -42,8 +42,9 @@ use Wave\Enums\CouponType;
 class Coupon extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wave_coupon';
 
-    protected string $table = 'wave_coupon';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

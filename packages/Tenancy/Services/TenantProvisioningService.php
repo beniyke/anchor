@@ -17,6 +17,7 @@ use Database\DB;
 use Database\Helpers\DatabaseOperationConfig;
 use Database\Migration\Migrator;
 use Database\Migration\SeedManager;
+use Helpers\Log;
 use RuntimeException;
 use Tenancy\Exceptions\TenantException;
 use Tenancy\Models\Tenant;
@@ -37,20 +38,20 @@ class TenantProvisioningService
             $dbConfig = $this->generateDatabaseConfig($data['subdomain']);
 
             $tenant = Tenant::create(array_merge($data, $dbConfig));
-            logger('tenancy')->info("Tenant created: {$tenant->subdomain}");
+            Log::channel('tenancy')->info("Tenant created: {$tenant->subdomain}");
 
             // Create tenant database
             $this->createTenantDatabase($tenant);
-            logger('tenancy.log')->info("Tenant database created: {$tenant->db_name}");
+            Log::channel('tenancy')->info("Tenant database created: {$tenant->db_name}");
 
             // Run migrations on tenant database
             $this->runTenantMigrations($tenant);
-            logger('tenancy.log')->info("Tenant migrations completed");
+            Log::channel('tenancy')->info("Tenant migrations completed");
 
             // Seed initial data if needed
             if ($data['seed'] ?? false) {
                 $this->seedTenantDatabase($tenant);
-                logger('tenancy.log')->info("Tenant database seeded");
+                Log::channel('tenancy')->info("Tenant database seeded");
             }
 
             return $tenant;
@@ -65,11 +66,11 @@ class TenantProvisioningService
         DB::transaction(function () use ($tenant, $dropDatabase) {
             if ($dropDatabase) {
                 $this->dropTenantDatabase($tenant);
-                logger('tenancy.log')->info("Tenant database dropped: {$tenant->db_name}");
+                Log::channel('tenancy')->info("Tenant database dropped: {$tenant->db_name}");
             }
 
             $tenant->delete();
-            logger('tenancy.log')->info("Tenant deleted: {$tenant->subdomain}");
+            Log::channel('tenancy')->info("Tenant deleted: {$tenant->subdomain}");
 
             // Clear cache
             $cacheKey = config('tenancy.cache.key_prefix', 'tenant:') . "subdomain:{$tenant->subdomain}";

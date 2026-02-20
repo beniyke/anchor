@@ -14,12 +14,17 @@ namespace Bridge\Contracts;
 
 use Bridge\PersonalAccessToken;
 use Helpers\DateTimeHelper;
+use Security\Auth\Contracts\Tokenable;
 
 interface TokenRepositoryInterface
 {
-    public function createToken(TokenableInterface $tokenable, string $name, string $hashedToken, array $abilities = ['*'], ?DateTimeHelper $expiresAt = null): PersonalAccessToken;
+    public function createToken(Tokenable $tokenable, string $name, string $hashedToken, array $abilities = ['*'], ?DateTimeHelper $expiresAt = null): PersonalAccessToken;
 
     public function findToken(int $id): ?PersonalAccessToken;
 
     public function deleteToken(int $id): bool;
+
+    public function findTokensByTokenable(Tokenable $tokenable): array;
+
+    public function revokeAllTokens(Tokenable $tokenable): int;
 }

@@ -35,8 +35,9 @@ use Helpers\DateTimeHelper;
 class Project extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'flow_project';
 
-    protected string $table = 'flow_project';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

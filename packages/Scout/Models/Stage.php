@@ -28,7 +28,9 @@ use DateTimeInterface;
  */
 class Stage extends BaseModel
 {
-    protected string $table = 'scout_stage';
+    public const TABLE = 'scout_stage';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

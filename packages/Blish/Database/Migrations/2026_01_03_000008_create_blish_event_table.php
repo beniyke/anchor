@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_03_000008_create_blish_event_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateBlishEventTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('blish_event', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('blish_event', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedInteger('campaign_id');
             $table->unsignedInteger('subscriber_id');

@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_06_000002_create_onboard_onboarding_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateOnboardOnboardingTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('onboard_onboarding', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('onboard_onboarding', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->unique()->index();
             $table->unsignedBigInteger('onboard_template_id')->index();

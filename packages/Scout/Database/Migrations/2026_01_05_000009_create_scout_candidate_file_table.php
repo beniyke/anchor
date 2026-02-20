@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_05_000009_create_scout_candidate_file_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateScoutCandidateFileTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scout_candidate_file', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('scout_candidate_file', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('scout_candidate_id')->index();
             $table->string('type')->default('resume'); // resume, cover_letter, portfolio, other

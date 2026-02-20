@@ -15,6 +15,7 @@ namespace Tenancy\Models;
 use Database\BaseModel;
 use Helpers\DateTimeHelper;
 use Tenancy\Exceptions\TenantException;
+use Tenancy\Models\Traits\HasSubdomain;
 use Throwable;
 
 /**
@@ -40,7 +41,11 @@ use Throwable;
  */
 class Tenant extends BaseModel
 {
-    protected string $table = 'tenant';
+    use HasSubdomain;
+
+    public const TABLE = 'tenant';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',
@@ -74,27 +79,6 @@ class Tenant extends BaseModel
     protected array $hidden = [
         'db_password',
     ];
-
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::creating(function ($tenant) {
-            if (!self::isValidSubdomain($tenant->subdomain)) {
-                throw new TenantException("Invalid subdomain: {$tenant->subdomain}");
-            }
-
-            if (!$tenant->db_name) {
-                $tenant->db_name = self::generateDatabaseName($tenant->subdomain);
-            }
-        });
-
-        static::updating(function ($tenant) {
-            if ($tenant->isDirty('subdomain') && $tenant->exists) {
-                throw new TenantException('Subdomain cannot be changed after creation');
-            }
-        });
-    }
 
     /**
      * Get tenant configuration value with dot notation support
@@ -191,20 +175,20 @@ class Tenant extends BaseModel
         $this->attributes['db_password'] = encrypt($value);
     }
 
-    public function getDatabaseConfig(): array
+    public function getDatabaseConfig(array $defaults = []): array
     {
         return [
-            'driver' => config('tenancy.database.driver', 'mysql'),
+            'driver' => $defaults['driver'] ?? config('tenancy.database.driver', 'mysql'),
             'host' => $this->db_host,
             'port' => $this->db_port,
             'database' => $this->db_name,
             'username' => $this->db_user,
             'password' => $this->db_password,
-            'charset' => config('tenancy.database.charset', 'utf8mb4'),
-            'collation' => config('tenancy.database.collation', 'utf8mb4_unicode_ci'),
-            'prefix' => '',
-            'strict' => true,
-            'engine' => 'InnoDB',
+            'charset' => $defaults['charset'] ?? config('tenancy.database.charset', 'utf8mb4'),
+            'collation' => $defaults['collation'] ?? config('tenancy.database.collation', 'utf8mb4_unicode_ci'),
+            'prefix' => $defaults['prefix'] ?? '',
+            'strict' => $defaults['strict'] ?? true,
+            'engine' => $defaults['engine'] ?? 'InnoDB',
         ];
     }
 
@@ -217,15 +201,13 @@ class Tenant extends BaseModel
         $this->save();
     }
 
-    public static function isValidSubdomain(string $subdomain): bool
+    public static function isValidSubdomain(string $subdomain, array $excluded = []): bool
     {
         // Must be lowercase alphanumeric with hyphens
         if (!preg_match('/^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$/', $subdomain)) {
             return false;
         }
 
-        // Check against excluded subdomains
-        $excluded = config('tenancy.excluded_subdomains', []);
         if (in_array($subdomain, $excluded)) {
             return false;
         }
@@ -239,9 +221,8 @@ class Tenant extends BaseModel
         return true;
     }
 
-    private static function generateDatabaseName(string $subdomain): string
+    public static function generateDatabaseName(string $subdomain, string $prefix = 'tenant_'): string
     {
-        $prefix = config('tenancy.database.prefix_pattern', 'tenant_');
         $sanitized = preg_replace('/[^a-z0-9_]/', '_', strtolower($subdomain));
 
         return $prefix . $sanitized;

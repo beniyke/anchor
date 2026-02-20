@@ -42,7 +42,9 @@ class Article extends BaseModel
 {
     use HasRefid;
 
-    protected string $table = 'guide_article';
+    public const TABLE = 'guide_article';
+
+    protected string $table = self::TABLE;
 
     protected string $refidPrefix = 'art_';
 

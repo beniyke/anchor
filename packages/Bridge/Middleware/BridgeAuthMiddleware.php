@@ -12,16 +12,16 @@ declare(strict_types=1);
 
 namespace Bridge\Middleware;
 
-use Bridge\TokenManager;
 use Closure;
 use Core\Middleware\MiddlewareInterface;
 use Helpers\Http\Request;
 use Helpers\Http\Response;
+use Security\Auth\Interfaces\TokenManagerInterface;
 
 class BridgeAuthMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly TokenManager $tokenManager
+        private readonly TokenManagerInterface $tokenManager
     ) {
     }
 

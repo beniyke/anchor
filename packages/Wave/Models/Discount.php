@@ -18,8 +18,9 @@ use Database\Traits\HasRefid;
 class Discount extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wave_discount';
 
-    protected string $table = 'wave_discount';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

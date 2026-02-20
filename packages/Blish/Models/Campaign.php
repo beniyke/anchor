@@ -36,7 +36,9 @@ use Helpers\DateTimeHelper;
  */
 class Campaign extends BaseModel
 {
-    protected string $table = 'blish_campaign';
+    public const TABLE = 'blish_campaign';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

@@ -17,7 +17,7 @@ class CreateSupportCategoryTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('support_category', function ($table) {
+        Schema::createIfNotExists('support_category', function ($table) {
             $table->id();
             $table->string('name', 100);
             $table->string('slug', 100)->unique();

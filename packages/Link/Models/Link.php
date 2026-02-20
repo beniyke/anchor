@@ -47,7 +47,9 @@ use Helpers\DateTimeHelper;
  */
 class Link extends BaseModel
 {
-    protected string $table = 'link';
+    public const TABLE = 'link';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000006_create_guide_related_article_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateGuideRelatedArticleTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('guide_related_article', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('guide_related_article', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('guide_article_id');
             $table->unsignedBigInteger('related_article_id');

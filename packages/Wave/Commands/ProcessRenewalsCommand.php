@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Wave\Commands;
 
 use Helpers\DateTimeHelper;
+use Helpers\Log;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -68,7 +69,7 @@ class ProcessRenewalsCommand extends Command
                     $success++;
                 } catch (Throwable $e) {
                     $failed++;
-                    logger('wave.log')->error("CLI Renewal Failed for Sub #{$subscription->id}: " . $e->getMessage());
+                    Log::channel('wave')->error("CLI Renewal Failed for Sub #{$subscription->id}: " . $e->getMessage());
                 }
                 $io->progressAdvance();
             }

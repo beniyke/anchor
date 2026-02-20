@@ -28,7 +28,9 @@ use Helpers\DateTimeHelper;
  */
 class Reaction extends BaseModel
 {
-    protected string $table = 'pulse_reaction';
+    public const TABLE = 'pulse_reaction';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'pulse_post_id',

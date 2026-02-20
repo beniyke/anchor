@@ -18,7 +18,7 @@ class CreateWaveAffiliateTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::createIfNotExist('wave_affiliate', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('wave_affiliate', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique()->index();
             $table->unsignedBigInteger('owner_id')->index();

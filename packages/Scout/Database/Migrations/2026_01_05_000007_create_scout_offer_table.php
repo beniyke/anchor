@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_05_000007_create_scout_offer_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateScoutOfferTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scout_offer', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('scout_offer', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('scout_application_id')->index();
             $table->decimal('amount', 15, 2);

@@ -29,7 +29,9 @@ use Helpers\DateTimeHelper;
  */
 class SubmissionValue extends BaseModel
 {
-    protected string $table = 'stack_submission_value';
+    public const TABLE = 'stack_submission_value';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'stack_submission_id',

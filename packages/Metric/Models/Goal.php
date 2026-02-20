@@ -16,6 +16,7 @@ use Database\BaseModel;
 use Database\Relations\BelongsTo;
 use Database\Relations\HasMany;
 use Helpers\DateTimeHelper;
+use Metric\Enums\GoalStatus;
 
 /**
  * @property int             $id
@@ -34,7 +35,9 @@ use Helpers\DateTimeHelper;
  */
 class Goal extends BaseModel
 {
-    protected string $table = 'metric_goal';
+    public const TABLE = 'metric_goal';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'user_id',
@@ -48,6 +51,7 @@ class Goal extends BaseModel
     ];
 
     protected array $casts = [
+        'status' => GoalStatus::class,
         'progress' => 'float',
         'due_at' => 'datetime',
     ];

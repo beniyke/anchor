@@ -28,7 +28,9 @@ use Helpers\DateTimeHelper;
  */
 class Comment extends BaseModel
 {
-    protected string $table = 'scribe_comment';
+    public const TABLE = 'scribe_comment';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

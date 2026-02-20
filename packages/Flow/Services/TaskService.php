@@ -23,7 +23,7 @@ use Flow\Models\Tag;
 use Flow\Models\Task;
 use Flow\Notifications\TaskAssignedNotification;
 use Flow\Services\Builders\TaskBuilder;
-use Helpers\Data;
+use Helpers\Data\Data;
 use Mail\Mail;
 
 class TaskService

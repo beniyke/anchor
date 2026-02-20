@@ -17,7 +17,7 @@ class CreateSupportTicketReplyTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('support_ticket_reply', function ($table) {
+        Schema::createIfNotExists('support_ticket_reply', function ($table) {
             $table->id();
             $table->unsignedBigInteger('ticket_id')->index();
             $table->unsignedBigInteger('user_id')->index();

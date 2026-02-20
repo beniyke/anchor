@@ -16,6 +16,7 @@ namespace Wallet\Commands;
 
 use Core\Support\Environment;
 use Exception;
+use Helpers\Log;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -107,7 +108,7 @@ class WalletTransactionsCommand extends Command
             return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error('Failed to retrieve transactions: ' . $e->getMessage());
-            logger('wallet.log')->error('Transactions command failed', [
+            Log::channel('wallet')->error('Transactions command failed', [
                 'wallet_id' => $walletId,
                 'error' => $e->getMessage(),
             ]);

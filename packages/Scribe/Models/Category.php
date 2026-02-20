@@ -34,8 +34,9 @@ use Helpers\DateTimeHelper;
 class Category extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'scribe_category';
 
-    protected string $table = 'scribe_category';
+    protected string $table = self::TABLE;
 
     protected string $refidPrefix = 'cat_';
 

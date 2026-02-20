@@ -34,7 +34,9 @@ use Rollout\Enums\SegmentType;
  */
 class Segment extends BaseModel
 {
-    protected string $table = 'rollout_segment';
+    public const TABLE = 'rollout_segment';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'feature_id',

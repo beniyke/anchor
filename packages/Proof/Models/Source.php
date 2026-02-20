@@ -32,7 +32,9 @@ use Helpers\DateTimeHelper;
  */
 class Source extends BaseModel
 {
-    protected string $table = 'proof_source';
+    public const TABLE = 'proof_source';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

@@ -14,6 +14,7 @@ namespace Bridge\Models;
 
 use Database\BaseModel;
 use Helpers\DateTimeHelper;
+use Security\Auth\Contracts\Authenticatable;
 
 /**
  * @property int             $id
@@ -23,9 +24,11 @@ use Helpers\DateTimeHelper;
  * @property ?DateTimeHelper $created_at
  * @property ?DateTimeHelper $updated_at
  */
-class ApiKey extends BaseModel
+class ApiKey extends BaseModel implements Authenticatable
 {
-    protected string $table = 'api_key';
+    public const TABLE = 'api_key';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',
@@ -47,6 +50,26 @@ class ApiKey extends BaseModel
             'key' => $rawKey,
             'model' => $apiKey,
         ];
+    }
+
+    public function getAuthId(): int|string
+    {
+        return $this->id;
+    }
+
+    public function getAuthPassword(): string
+    {
+        return $this->key;
+    }
+
+    public function getAuthIdentifierName(): string
+    {
+        return 'key';
+    }
+
+    public function canAuthenticate(): bool
+    {
+        return true;
     }
 
     public function revoke(): bool

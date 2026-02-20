@@ -43,8 +43,9 @@ use Wave\Enums\PlanInterval;
 class Plan extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wave_plan';
 
-    protected string $table = 'wave_plan';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

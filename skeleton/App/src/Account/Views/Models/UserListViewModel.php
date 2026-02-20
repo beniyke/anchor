@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Account\Views\Models;
 
+use App\Views\Models\UserViewModel;
 use Core\Ioc\ContainerInterface;
 use Database\Pagination\Paginator;
 use Helpers\Http\Request;
@@ -87,7 +88,7 @@ readonly class UserListViewModel
 
     public function getUsersItems(): array
     {
-        return $this->users->items();
+        return UserViewModel::collection($this->users->items(), ['role']);
     }
 
     public function getNoResultComponentData(): array

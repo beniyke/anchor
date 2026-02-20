@@ -12,6 +12,7 @@ The Permit package provides an Authorization system , for Anchor applications fe
 - **Direct User Overrides**: Grant or deny permissions directly to users outside of their roles.
 - **Super Admin Bypass**: Built-in support for a master role (defined in config) that automatically bypasses all permission checks and gates, returning `TRUE` for every request.
 - **High Performance**: Optimized permission caching to ensure zero-latency checks in production.
+- **Convention-based Authorization**: Smart middleware that automatically derives permissions from URI segments (e.g., `account/user/create` -> `users.create`).
 
 ## Installation
 
@@ -28,6 +29,7 @@ This will automatically:
 - Run database migrations for roles, permissions, and assignments.
 - Register the `PermitServiceProvider`.
 - Publish the configuration file.
+- Register `CheckPermissionMiddleware` for `web` and `api` groups.
 
 ### Configuration
 
@@ -256,6 +258,73 @@ Access via `Permit::gates()`. This service manages closure-based authorization (
 | `slug`        | `string`   | Unique identifier (e.g., 'admin').         |
 | `permissions` | `relation` | BelongsToMany relationship to permissions. |
 | `parent_id`   | `integer`  | ID of the parent role for inheritance.     |
+
+## Smart Middleware
+
+Permit includes a **Smart Middleware** that automatically enforces permissions based on URI conventions.
+
+### How it works
+
+The middleware scans URI segments from **right to left** to find a recognized **action** (mapped in config). Once found, it assumes the preceding segment is the **resource**.
+
+**Example:**
+
+- `account/user/create` → Action: `create`, Resource: `user` → Permission: `users.create` (automatically pluralized).
+
+### Action Mapping
+
+Customize behavior in `App/Config/permit.php`:
+
+```php
+'smart_middleware' => [
+    'enabled' => true,
+    'action_map' => [
+        'create'  => 'create',
+        'store'   => 'create',
+        'edit'    => 'edit',
+        'update'  => 'edit',
+        'destroy' => 'delete',
+        'index'   => 'manage',
+    ],
+],
+```
+
+### Route Context Integration
+
+When "Smart Middleware" is enabled, it automatically hydrates the `Request` object with route context. This data can be retrieved anywhere in your application (Controllers, Views, etc.).
+
+```php
+// Get the structured permission (e.g., 'users.create')
+$permission = $request->getRoutePermission();
+
+// Get specific resource/action
+$resource = $request->getRouteContext('resource'); // 'users'
+$action = $request->getRouteContext('action');     // 'create'
+```
+
+This metadata enabling advanced features such as context-aware logging, automatic sidebar highlighting, and dynamic breadcrumbs without manual URL parsing.
+
+## Automation
+
+The Permit package includes an automated cache warming task that is registered in the framework scheduler. This ensures permission data is efficiently cached for performance.
+
+```php
+// packages/Permit/Schedules/PermitCacheSchedule.php
+namespace Permit\Schedules;
+
+use Cron\Interfaces\Schedulable;
+use Cron\Schedule;
+
+class PermitCacheSchedule implements Schedulable
+{
+    public function schedule(Schedule $schedule): void
+    {
+        $schedule->task()
+            ->signature('permit:cache')
+            ->daily();
+    }
+}
+```
 
 ## Troubleshooting
 

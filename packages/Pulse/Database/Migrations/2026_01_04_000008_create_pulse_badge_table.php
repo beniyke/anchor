@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000008_create_pulse_badge_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -19,7 +17,7 @@ class CreatePulseBadgeTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('pulse_badge', function ($table) {
+        Schema::createIfNotExists('pulse_badge', function ($table) {
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();

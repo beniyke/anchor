@@ -27,7 +27,9 @@ use Helpers\DateTimeHelper;
  */
 class Template extends BaseModel
 {
-    protected string $table = 'blish_template';
+    public const TABLE = 'blish_template';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

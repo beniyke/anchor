@@ -19,7 +19,6 @@ use Database\Relations\HasMany;
 use Database\Relations\MorphTo;
 use Helpers\DateTimeHelper;
 use Slot\Enums\ScheduleType;
-use Slot\Interfaces\SlotServiceInterface;
 use Slot\Period;
 
 /**
@@ -41,7 +40,9 @@ use Slot\Period;
  */
 class SlotSchedule extends BaseModel
 {
-    protected string $table = 'slot_schedule';
+    public const TABLE = 'slot_schedule';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'schedulable_type',
@@ -205,15 +206,5 @@ class SlotSchedule extends BaseModel
         }
 
         return $occurrences;
-    }
-
-    public function book(BaseModel $bookable, Period $period, array $options = []): SlotBooking
-    {
-        return resolve(SlotServiceInterface::class)->createBooking($this, $bookable, $period, $options);
-    }
-
-    public function updateSchedule(Period|array $data): bool
-    {
-        return resolve(SlotServiceInterface::class)->updateSchedule($this, $data);
     }
 }

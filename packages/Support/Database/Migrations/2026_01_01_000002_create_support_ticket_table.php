@@ -17,7 +17,7 @@ class CreateSupportTicketTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('support_ticket', function ($table) {
+        Schema::createIfNotExists('support_ticket', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique();
             $table->unsignedBigInteger('user_id')->index();

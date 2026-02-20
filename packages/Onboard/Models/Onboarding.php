@@ -15,6 +15,7 @@ use App\Models\User;
 use Database\BaseModel;
 use Database\Relations\BelongsTo;
 use Helpers\DateTimeHelper;
+use Onboard\Enums\OnboardStatus;
 
 /**
  * @property int             $id
@@ -31,7 +32,9 @@ use Helpers\DateTimeHelper;
  */
 class Onboarding extends BaseModel
 {
-    protected string $table = 'onboard_onboarding';
+    public const TABLE = 'onboard_onboarding';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'user_id',
@@ -43,6 +46,7 @@ class Onboarding extends BaseModel
     ];
 
     protected array $casts = [
+        'status' => OnboardStatus::class,
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
         'due_at' => 'datetime',

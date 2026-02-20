@@ -18,7 +18,7 @@ class CreateWaveTaxRateTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::createIfNotExist('wave_tax_rate', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('wave_tax_rate', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique()->index();
             $table->string('name');

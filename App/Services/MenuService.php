@@ -24,14 +24,7 @@ class MenuService
     {
         $menu = $this->config->get('app.menu');
 
-        if ($user->isSuperAdmin()) {
-            return $this->getAllowedMenuForSuperAdmin($menu);
-        }
-
-        $permissions = $user->role->permission;
-        $type = $user->role->type->value;
-
-        return $this->getFilteredMenu($menu, $permissions, $type);
+        return $this->getFilteredMenu($menu, $user);
     }
 
     /**
@@ -71,7 +64,7 @@ class MenuService
                             ->pluck('routes')
                             ->clean()
                             ->flatten()
-                            ->attach($urls)
+                            ->push($urls)
                             ->get();
                     });
 
@@ -90,32 +83,19 @@ class MenuService
     }
 
     /**
-     * Retrieves a flat list of all menu and submenu items for a super admin.
-     */
-    private function getAllowedMenuForSuperAdmin(array $menu): array
-    {
-        return $menu;
-    }
-
-    /**
      * Filters the menu based on the user's role and permissions.
      */
-    private function getFilteredMenu(array $menu, array $permissions, string $type): array
+    private function getFilteredMenu(array $menu, User $user): array
     {
         $filteredMenu = [];
         foreach ($menu as $mainMenuItem) {
-            if (in_array($type, $mainMenuItem['type'])) {
-                $menuPermissionKey = str_replace('/', '-', $mainMenuItem['url']);
-                if (in_array($menuPermissionKey, $permissions['menu'])) {
-                    $mainMenuItemHasSubmenu = ! empty($mainMenuItem['submenu']);
+            if ($user->can($mainMenuItem['permission'])) {
+                if (! empty($mainMenuItem['submenu'])) {
+                    $mainMenuItem['submenu'] = $this->filterSubmenu($mainMenuItem, $user);
+                }
 
-                    if ($mainMenuItemHasSubmenu) {
-                        $mainMenuItem['submenu'] = $this->filterSubmenu($mainMenuItem, $permissions['submenu'], $type);
-                    }
-
-                    if (! $mainMenuItemHasSubmenu || count($mainMenuItem['submenu']) > 0) {
-                        $filteredMenu[] = $mainMenuItem;
-                    }
+                if (empty($mainMenuItem['submenu']) || count($mainMenuItem['submenu']) > 0) {
+                    $filteredMenu[] = $mainMenuItem;
                 }
             }
         }
@@ -126,12 +106,10 @@ class MenuService
     /**
      * Filters submenu items based on user permissions.
      */
-    private function filterSubmenu(array $menu, array $submenuPermissions, string $type): array
+    private function filterSubmenu(array $menu, User $user): array
     {
-        return array_filter($menu['submenu'], function ($item) use ($submenuPermissions, $menu, $type) {
-            $permissionKey = str_replace('/', '-', $menu['url'].'::'.$item['url']);
-
-            return in_array($type, $item['type']) && in_array($permissionKey, $submenuPermissions);
+        return array_filter($menu['submenu'], function ($item) use ($menu, $user) {
+            return $user->can($item['permission']);
         });
     }
 }

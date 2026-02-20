@@ -58,9 +58,14 @@ class BookingReminderNotification extends EmailNotification
 
         return EmailComponent::make()
             ->greeting("Hello {$name},")
-            ->line("This is a reminder for your upcoming **{$title}**.")
-            ->line("Date: **{$date}**")
-            ->line("Time: **{$time}**")
+            ->markdown("This is a reminder for your upcoming **{$title}**.")
+            ->divider()
+            ->attributes([
+                'Appointment' => $title,
+                'Date' => $date,
+                'Time' => $time,
+            ])
+            ->divider()
             ->line("Please let us know if you need to reschedule.")
             ->action('View Booking', url($viewUrl))
             ->render();

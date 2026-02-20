@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_05_000006_create_scout_scorecard_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateScoutScorecardTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scout_scorecard', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('scout_scorecard', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('scout_interview_id')->index();
             $table->unsignedBigInteger('user_id')->index(); // Reviewer

@@ -1,0 +1,18 @@
+{
+    "name": "beniyke/rank",
+    "description": "Smart SEO metadata and route context titles for the Anchor Framework.",
+    "type": "anchor-package",
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rank\\": ""
+        }
+    },
+    "extra": {
+        "anchor": {
+            "setup": "setup.php"
+        }
+    }
+}

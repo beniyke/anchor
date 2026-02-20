@@ -4,11 +4,10 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000001_create_guide_category_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
+use Database\Migration\BaseMigration;
 use Database\Migration\BaseMigration;
 use Database\Schema\SchemaBuilder;
 
@@ -16,7 +15,7 @@ class CreateGuideCategoryTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('guide_category', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('guide_category', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique();
             $table->string('name');

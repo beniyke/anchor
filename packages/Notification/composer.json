@@ -1,0 +1,22 @@
+{
+  "name": "beniyke/notification",
+  "description": "Modular database notification system for the Anchor framework.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "BenIyke",
+      "email": "beniyke34@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Notification\\": ""
+    }
+  },
+  "extra": {
+    "anchor": {
+      "setup": "setup.php"
+    }
+  }
+}

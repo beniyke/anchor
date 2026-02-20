@@ -26,7 +26,9 @@ use Helpers\DateTimeHelper;
  */
 class Tag extends BaseModel
 {
-    protected string $table = 'blish_tag';
+    public const TABLE = 'blish_tag';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

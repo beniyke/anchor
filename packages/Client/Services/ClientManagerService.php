@@ -19,8 +19,8 @@ use Client\Models\Client;
 use Client\Notifications\StatusChangeNotification;
 use Client\Notifications\WelcomeEmailNotification;
 use Client\Services\Builders\ClientBuilder;
-use Database\Exceptions\ValidationException;
-use Helpers\Data;
+use Exceptions\ValidationException;
+use Helpers\Data\Data;
 use Helpers\Validation\Validator;
 use Mail\Mail;
 

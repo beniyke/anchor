@@ -28,7 +28,9 @@ use Helpers\DateTimeHelper;
  */
 class Event extends BaseModel
 {
-    protected string $table = 'blish_event';
+    public const TABLE = 'blish_event';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'campaign_id',

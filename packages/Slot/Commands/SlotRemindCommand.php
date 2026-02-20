@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Slot\Commands;
 
 use Core\Event;
+use Helpers\Log;
 use Slot\Events\BookingReminderEvent;
 use Slot\SlotManager;
 use Symfony\Component\Console\Command\Command;
@@ -64,7 +65,7 @@ class SlotRemindCommand extends Command
                 } catch (Throwable $e) {
                     $failed++;
                     $io->error("Failed to process booking #{$booking->id}: " . $e->getMessage());
-                    logger('slot.log')->error("Reminder failed for Booking #{$booking->id}: " . $e->getMessage());
+                    Log::channel('slot')->error("Reminder failed for Booking #{$booking->id}: " . $e->getMessage());
                 }
                 $io->progressAdvance();
             }

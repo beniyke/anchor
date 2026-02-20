@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Account\Controllers;
 
-use App\Account\Validations\Form\RoleFormRequestValidation;
+use App\Account\Services\RoleService;
 use App\Account\Views\Models\CreateRoleViewModel;
 use App\Account\Views\Models\EditRoleViewModel;
 use App\Account\Views\Models\RoleListViewModel;
+use App\Account\Views\Models\RoleViewModel;
 use App\Core\BaseController;
-use App\Services\RoleService;
 use Helpers\Http\Response;
 
 class RoleController extends BaseController
@@ -30,35 +30,27 @@ class RoleController extends BaseController
         return $this->asView('role.create', compact('create_role_view_model'));
     }
 
-    public function edit(RoleService $service, ?string $refid = null): Response
+    public function edit(RoleService $service, ?string $slug = null): Response
     {
-        $role = $service->getRole($refid);
+        $role = $service->getRole($slug);
 
         if (! $role) {
             return $this->response->redirect($this->request->fullRoute());
         }
 
-        $edit_role_view_model = new EditRoleViewModel($this->container, $role);
+        $role_view_model = new RoleViewModel($role);
+        $edit_role_view_model = new EditRoleViewModel($this->container, $role_view_model);
 
         return $this->asView('role.edit', compact('edit_role_view_model'));
     }
 
-    public function store(RoleFormRequestValidation $validator, RoleService $service): Response
+    public function store(RoleService $service): Response
     {
-        if (! $this->request->isPut()) {
+        if (!$this->request->isPut()) {
             return $this->response->redirect($this->request->callback());
         }
 
-        $formdata = $this->request->post();
-        $validator->validate($formdata);
-
-        if ($validator->has_error()) {
-            $this->flash->error($validator->errors());
-
-            return $this->response->redirect($this->request->callback());
-        }
-
-        $role_created = $service->createRole($validator->getRequest());
+        $role_created = $service->createRole($this->request->validated());
 
         if (! $role_created) {
             $this->flash->error('Role could not be created.');
@@ -66,33 +58,24 @@ class RoleController extends BaseController
             return $this->response->redirect($this->request->callback());
         }
 
-        $this->flash->success('Role successfully created.');
+        $this->flash->success('Role successfully created with permissions synced.');
 
         return $this->response->redirect($this->request->fullRoute());
     }
 
-    public function update(RoleFormRequestValidation $validator, RoleService $service, ?string $refid = null): Response
+    public function update(RoleService $service, ?string $slug = null): Response
     {
-        if (! $this->request->isPatch()) {
+        if (!$this->request->isPostOrPatch()) {
             return $this->response->redirect($this->request->callback());
         }
 
-        $role = $service->getRole($refid);
+        $role = $service->getRole($slug);
 
         if (! $role) {
             return $this->response->redirect($this->request->fullRoute());
         }
 
-        $formdata = $this->request->post();
-        $validator->validate($formdata);
-
-        if ($validator->has_error()) {
-            $this->flash->error($validator->errors());
-
-            return $this->response->redirect($this->request->callback());
-        }
-
-        $updated = $service->updateRole($role, $validator->getRequest());
+        $updated = $service->updateRole($role, $this->request->validated());
 
         if (! $updated) {
             $this->flash->error('Role could not be updated.');

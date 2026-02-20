@@ -1,0 +1,11 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g_rust" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF8C00" /><stop offset="50%" stop-color="#B7410E" /><stop offset="100%" stop-color="#7B3F00" />
+    </linearGradient>
+  </defs>
+  <!-- Forge: Software Licensing / Key Metaphor -->
+  <circle cx="7" cy="11" r="4" stroke="url(#g_rust)" stroke-width="2"/>
+  <path d="M11 11h11m-3 0v3m-4-3v3" stroke="url(#g_rust)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M7 11V7" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

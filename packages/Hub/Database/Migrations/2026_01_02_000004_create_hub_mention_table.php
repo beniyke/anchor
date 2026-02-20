@@ -17,7 +17,7 @@ class CreateHubMentionTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('hub_mention', function ($table) {
+        Schema::createIfNotExists('hub_mention', function ($table) {
             $table->id();
             $table->unsignedBigInteger('message_id')->index();
             $table->unsignedBigInteger('user_id')->index();

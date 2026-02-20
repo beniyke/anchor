@@ -13,30 +13,30 @@ return [
     ],
     'menu' => [
         [
-            'type' => ['user', 'admin', 'super-admin', 'senior-admin'],
             'icon' => 'fas fa-home',
             'title' => 'Home',
             'url' => 'account/home',
+            'permission' => 'home.section',
             'submenu' => false,
             'routes' => false,
         ],
         [
-            'type' => ['admin', 'super-admin', 'senior-admin'],
             'icon' => 'fas fa-user',
             'title' => 'Account',
             'url' => '#account',
+            'permission' => 'account.section',
             'submenu' => [
                 [
-                    'type' => ['admin', 'super-admin', 'senior-admin'],
                     'icon' => 'fas fa-users',
                     'title' => 'Users',
                     'url' => 'account/user',
-                    'routes' => false,
+                    'permission' => 'users.manage',
+                    'routes' => ['account/permission'],
                 ],
                 [
-                    'type' => ['super-admin', 'senior-admin'],
                     'title' => 'Roles',
                     'url' => 'account/role',
+                    'permission' => 'roles.manage',
                     'routes' => false,
                 ],
             ],

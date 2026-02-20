@@ -44,16 +44,16 @@ This is the most common use case, where users generate tokens for their own acco
 
 ### Setup the Model
 
-Add the `HasApiTokens` trait and implement `TokenableInterface` in your `User` model:
+Add the `HasApiTokens` trait and implement `Tokenable` in your `User` model:
 
 ```php
 namespace App\Models;
 
 use Bridge\Traits\HasApiTokens;
-use Bridge\Contracts\TokenableInterface;
+use Security\Auth\Contracts\Tokenable;
 use Database\BaseModel;
 
-class User extends BaseModel implements TokenableInterface
+class User extends BaseModel implements Tokenable
 {
     use HasApiTokens;
 }

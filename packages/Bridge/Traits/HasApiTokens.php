@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace Bridge\Traits;
 
-use Bridge\Contracts\TokenableInterface;
 use Bridge\Contracts\TokenRepositoryInterface;
-use Bridge\PersonalAccessToken;
-use Bridge\TokenManager;
+use Security\Auth\Contracts\Tokenable;
+use Security\Auth\Interfaces\AccessTokenInterface;
+use Security\Auth\Interfaces\TokenManagerInterface;
 
 /**
- * @implements TokenableInterface
+ * @implements Tokenable
  * Requires the implementing class to have 'id' property.
  */
 trait HasApiTokens
@@ -26,14 +26,14 @@ trait HasApiTokens
     /**
      * The access token the user is currently using.
      */
-    protected ?PersonalAccessToken $accessToken = null;
+    protected ?AccessTokenInterface $accessToken = null;
 
-    public function currentAccessToken(): ?PersonalAccessToken
+    public function currentAccessToken(): ?AccessTokenInterface
     {
         return $this->accessToken;
     }
 
-    public function withAccessToken(PersonalAccessToken $token): self
+    public function withAccessToken(AccessTokenInterface $token): self
     {
         $this->accessToken = $token;
 
@@ -98,8 +98,8 @@ trait HasApiTokens
     /**
      * Resolve the TokenManager from the IoC container.
      */
-    protected function resolveTokenManager(): TokenManager
+    protected function resolveTokenManager(): TokenManagerInterface
     {
-        return resolve(TokenManager::class);
+        return resolve(TokenManagerInterface::class);
     }
 }

@@ -15,7 +15,7 @@ namespace Wave\Services;
 use Core\Services\ConfigServiceInterface;
 use Database\DB;
 use Exception;
-use Helpers\Data;
+use Helpers\Data\Data;
 use Helpers\DateTimeHelper;
 use Helpers\String\Str;
 use Mail\Mail;

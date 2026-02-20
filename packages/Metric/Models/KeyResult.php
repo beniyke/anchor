@@ -28,7 +28,9 @@ use DateTimeInterface;
  */
 class KeyResult extends BaseModel
 {
-    protected string $table = 'metric_key_result';
+    public const TABLE = 'metric_key_result';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'metric_goal_id',

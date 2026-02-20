@@ -15,6 +15,7 @@ use App\Models\User;
 use Database\BaseModel;
 use Database\Relations\BelongsTo;
 use DateTimeInterface;
+use Metric\Enums\OneOnOneStatus;
 
 /**
  * @property int                $id
@@ -32,7 +33,9 @@ use DateTimeInterface;
  */
 class OneOnOne extends BaseModel
 {
-    protected string $table = 'metric_one_on_one';
+    public const TABLE = 'metric_one_on_one';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'user_id',
@@ -45,6 +48,7 @@ class OneOnOne extends BaseModel
     ];
 
     protected array $casts = [
+        'status' => OneOnOneStatus::class,
         'scheduled_at' => 'datetime',
     ];
 

@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_12_28_000001_create_flow_project_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -18,7 +16,7 @@ class CreateFlowProjectTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('flow_project', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('flow_project', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique();
             $table->string('name');

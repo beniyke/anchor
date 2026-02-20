@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_01_01_000002_create_wallet_transaction_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -18,7 +16,7 @@ class CreateWalletTransactionTable
 {
     public function up()
     {
-        Schema::create('wallet_transaction', function ($table) {
+        Schema::createIfNotExists('wallet_transaction', function ($table) {
             $table->id();
             $table->integer('wallet_id')->index();
             $table->enum('type', TransactionType::class)->index();

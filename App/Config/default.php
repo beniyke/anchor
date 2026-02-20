@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ * 
  * Configuration settings for the application.
  *
  * @author BenIyke <beniyke34@gmail.com> | (twitter:@BigBeniyke)
@@ -104,7 +106,7 @@ return [
          * The name of the session cookie used to store session data.
          * Specifies the name of the session cookie for tracking user sessions.
          */
-        'name' => 'anchor_session',
+        'name' => env('SESSION_COOKIE_NAME', 'anchor_session'),
 
         /**
          * Duration before the session times out (in seconds).

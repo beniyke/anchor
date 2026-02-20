@@ -14,6 +14,7 @@ namespace Audit\Commands;
 
 use Audit\Audit;
 use Exception;
+use Helpers\File\FileSystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -60,7 +61,7 @@ class AuditExportCommand extends Command
             $content = Audit::export($filters, $format);
 
             if ($outputPath) {
-                file_put_contents($outputPath, $content);
+                FileSystem::write($outputPath, $content);
                 $io->success("Audit logs exported to: {$outputPath}");
             } else {
                 $output->writeln($content);

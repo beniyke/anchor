@@ -18,8 +18,9 @@ use Database\Traits\HasRefid;
 class TaxRate extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wave_tax_rate';
 
-    protected string $table = 'wave_tax_rate';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

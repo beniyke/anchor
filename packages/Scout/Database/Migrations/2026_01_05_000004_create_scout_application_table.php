@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_05_000004_create_scout_application_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateScoutApplicationTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scout_application', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('scout_application', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('scout_job_id')->index();
             $table->unsignedBigInteger('scout_candidate_id')->index();

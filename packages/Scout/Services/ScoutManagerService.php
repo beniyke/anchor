@@ -13,12 +13,16 @@ namespace Scout\Services;
 
 use App\Models\User;
 use Audit\Audit;
+use Helpers\Data\Data;
 use Helpers\DateTimeHelper;
+use Mail\Mail;
 use RuntimeException;
 use Scout\Models\Application;
 use Scout\Models\Candidate;
+use Scout\Models\Interview;
 use Scout\Models\Job;
 use Scout\Models\Stage;
+use Scout\Notifications\InterviewReminderNotification;
 
 class ScoutManagerService
 {
@@ -29,7 +33,7 @@ class ScoutManagerService
     {
         $job = Job::create($data);
 
-        if (class_exists('Audit\Audit')) {
+        if (class_exists(Audit::class)) {
             Audit::log('scout.job.created', ['id' => $job->id, 'title' => $job->title], $job);
         }
 
@@ -71,7 +75,7 @@ class ScoutManagerService
             'status' => 'active',
         ]);
 
-        if (class_exists('Audit\Audit')) {
+        if (class_exists(Audit::class)) {
             Audit::log('scout.application.submitted', ['id' => $application->id, 'job' => $job->title], $application, $candidate->user_id ? User::find($candidate->user_id) : null);
         }
 
@@ -87,5 +91,86 @@ class ScoutManagerService
         $count = $model::where('slug', 'like', "{$slug}%")->count();
 
         return $count > 0 ? "{$slug}-" . ($count + 1) : $slug;
+    }
+
+    public function sendReminders(): int
+    {
+        $now = DateTimeHelper::now();
+        $limit = (clone $now)->addMinutes(30);
+
+        // Find confirmed interviews starting soon that haven't been reminded
+        $interviews = Interview::pendingReminders($now, $limit)->get();
+
+        $count = 0;
+
+        foreach ($interviews as $interview) {
+            if ($interview->interviewer && $interview->interviewer->email) {
+                $payload = Data::make([
+                    'interview_id' => $interview->id,
+                    'candidate_name' => $interview->application->candidate->name,
+                    'interviewer_name' => $interview->interviewer->name,
+                    'job_title' => $interview->application->job->title,
+                    'date' => $interview->scheduled_at->format('F j, Y'),
+                    'time' => $interview->scheduled_at->format('H:i'),
+                    'location' => $interview->location,
+                    'to_email' => $interview->interviewer->email,
+                    'to_name' => $interview->interviewer->name,
+                ]);
+
+                Mail::send(new InterviewReminderNotification($payload));
+
+                $interview->update([
+                    'reminded_at' => DateTimeHelper::now(),
+                ]);
+
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    public function stages(): mixed
+    {
+        return Stage::orderBy('order', 'asc')->get();
+    }
+
+    public function findStage(int|string $idOrSlug): ?Stage
+    {
+        if (is_numeric($idOrSlug)) {
+            return Stage::find((int) $idOrSlug);
+        }
+
+        return Stage::findBySlug($idOrSlug);
+    }
+
+    /**
+     * Create a new recruitment stage.
+     */
+    public function createStage(array $data): Stage
+    {
+        if (!isset($data['slug'])) {
+            $data['slug'] = $this->generateSlug($data['name'], Stage::class);
+        }
+
+        return Stage::create($data);
+    }
+
+    public function updateStage(Stage $stage, array $data): bool
+    {
+        if (isset($data['name']) && !isset($data['slug'])) {
+            $data['slug'] = $this->generateSlug($data['name'], Stage::class);
+        }
+
+        return $stage->update($data);
+    }
+
+    public function deleteStage(Stage $stage): bool
+    {
+        if ($stage->applications()->count() > 0) {
+            throw new RuntimeException("Cannot delete stage that has active applications.");
+        }
+
+        return $stage->delete();
     }
 }

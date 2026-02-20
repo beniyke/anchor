@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_01_01_000003_create_wallet_fee_rule_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -19,7 +17,7 @@ class CreateWalletFeeRuleTable
 {
     public function up()
     {
-        Schema::create('wallet_fee_rule', function ($table) {
+        Schema::createIfNotExists('wallet_fee_rule', function ($table) {
             $table->id();
             $table->string('name')->unique();
             $table->enum('transaction_type', TransactionType::class)->index();

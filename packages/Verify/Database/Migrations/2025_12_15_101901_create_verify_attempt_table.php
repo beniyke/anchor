@@ -19,7 +19,7 @@ class CreateVerifyAttemptTable extends BaseMigration
      */
     public function up(): void
     {
-        $this->schema()->create('verify_attempt', function ($table) {
+        $this->schema()->createIfNotExists('verify_attempt', function ($table) {
             $table->id();
             $table->string('identifier');
             $table->string('refid')->unique()->index();

@@ -33,8 +33,9 @@ use Helpers\DateTimeHelper;
 class Comment extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'flow_comment';
 
-    protected string $table = 'flow_comment';
+    protected string $table = self::TABLE;
 
     protected array $fillable = ['refid', 'task_id', 'user_id', 'content', 'mentions'];
 

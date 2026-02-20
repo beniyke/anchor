@@ -14,7 +14,7 @@ namespace Hub\Listeners;
 
 use App\Models\User;
 use Core\Services\ConfigServiceInterface;
-use Helpers\Data;
+use Helpers\Data\Data;
 use Helpers\String\Str;
 use Hub\Events\MessagePostedEvent;
 use Hub\Notifications\MessagePostedNotification;

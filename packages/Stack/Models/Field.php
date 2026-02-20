@@ -35,7 +35,9 @@ use Helpers\DateTimeHelper;
  */
 class Field extends BaseModel
 {
-    protected string $table = 'stack_field';
+    public const TABLE = 'stack_field';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'stack_form_id',

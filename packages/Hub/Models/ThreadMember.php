@@ -29,7 +29,9 @@ use Hub\Enums\ThreadRole;
  */
 class ThreadMember extends BaseModel
 {
-    protected string $table = 'hub_member';
+    public const TABLE = 'hub_member';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'thread_id',

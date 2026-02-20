@@ -32,7 +32,9 @@ use Helpers\DateTimeHelper;
  */
 class Stat extends BaseModel
 {
-    protected string $table = 'blish_stat';
+    public const TABLE = 'blish_stat';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'campaign_id',

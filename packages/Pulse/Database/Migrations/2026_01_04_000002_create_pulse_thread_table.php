@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000002_create_pulse_thread_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -19,7 +17,7 @@ class CreatePulseThreadTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('pulse_thread', function ($table) {
+        Schema::createIfNotExists('pulse_thread', function ($table) {
             $table->id();
             $table->unsignedBigInteger('pulse_channel_id');
             $table->unsignedBigInteger('user_id');
@@ -27,6 +25,7 @@ class CreatePulseThreadTable extends BaseMigration
             $table->string('slug')->unique();
             $table->boolean('is_pinned')->default(false);
             $table->boolean('is_locked')->default(false);
+            $table->string('status')->default('active');
             $table->integer('view_count')->default(0);
             $table->dateTime('last_activity_at')->nullable();
             $table->dateTimestamps();

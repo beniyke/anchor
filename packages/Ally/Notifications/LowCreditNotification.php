@@ -59,8 +59,13 @@ class LowCreditNotification extends EmailNotification
 
         return EmailComponent::make()
             ->greeting("Hello {$companyName},")
-            ->line("Your distribution credit balance has fallen to **{$currentBalance}**.")
-            ->line("The notification threshold is set to {$threshold}.")
+            ->markdown("Your distribution credit balance is low.")
+            ->divider()
+            ->attributes([
+                'Current Balance' => $currentBalance,
+                'Threshold' => $threshold,
+            ])
+            ->divider()
             ->status('Please top up your wallet to ensure uninterrupted service provision.', 'warning')
             ->action('Login to Dashboard', url($dashboardUrl))
             ->render();

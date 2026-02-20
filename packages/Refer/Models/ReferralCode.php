@@ -34,7 +34,9 @@ use Helpers\DateTimeHelper;
  */
 class ReferralCode extends BaseModel
 {
-    protected string $table = 'referral_code';
+    public const TABLE = 'referral_code';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'user_id',

@@ -25,7 +25,9 @@ use DateTimeInterface;
  */
 class Mention extends BaseModel
 {
-    protected string $table = 'hub_mention';
+    public const TABLE = 'hub_mention';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'message_id',

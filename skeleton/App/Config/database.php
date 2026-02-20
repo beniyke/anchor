@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ *
  * Database configuration settings for the application.
  *
  * This configuration defines the database driver, connections for various database types,

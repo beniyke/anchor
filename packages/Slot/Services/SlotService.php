@@ -259,4 +259,40 @@ class SlotService implements SlotServiceInterface
             ->get()
             ->all();
     }
+
+    public function getBooking(int $id): ?SlotBooking
+    {
+        return SlotBooking::find($id);
+    }
+
+    public function createBookingById(int $scheduleId, BaseModel $bookable, Period $period, array $options = []): SlotBooking
+    {
+        $schedule = $this->findSchedule($scheduleId);
+
+        if (! $schedule) {
+            throw new RuntimeException("Schedule with ID {$scheduleId} not found");
+        }
+
+        return $this->createBooking($schedule, $bookable, $period, $options);
+    }
+
+    public function findSchedule(int $id): ?SlotSchedule
+    {
+        return SlotSchedule::find($id);
+    }
+
+    public function getSchedules(BaseModel $schedulable, ?ScheduleType $type = null, ?Period $overlapping = null): array
+    {
+        $query = SlotSchedule::forSchedulable($schedulable);
+
+        if ($type) {
+            $query->type($type);
+        }
+
+        if ($overlapping) {
+            $query->overlapping($overlapping->start, $overlapping->end);
+        }
+
+        return $query->get()->all();
+    }
 }

@@ -15,6 +15,7 @@ use App\Models\User;
 use Database\BaseModel;
 use Database\Relations\BelongsTo;
 use Helpers\DateTimeHelper;
+use Onboard\Enums\TrainingStatus;
 
 /**
  * @property int             $id
@@ -29,7 +30,9 @@ use Helpers\DateTimeHelper;
  */
 class TrainingProgress extends BaseModel
 {
-    protected string $table = 'onboard_training_progress';
+    public const TABLE = 'onboard_training_progress';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'user_id',
@@ -39,6 +42,7 @@ class TrainingProgress extends BaseModel
     ];
 
     protected array $casts = [
+        'status' => TrainingStatus::class,
         'completed_at' => 'datetime',
     ];
 

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Account\Validations\Form;
 
+use App\Account\Requests\UserRequest;
 use App\Core\BaseRequestValidation;
 use App\Enums\UserStatus;
-use App\Requests\UserRequest;
 use Helpers\String\StrCollection;
+use Permit\Models\Role;
 
 class UserFormRequestValidation extends BaseRequestValidation
 {
@@ -28,8 +29,8 @@ class UserFormRequestValidation extends BaseRequestValidation
                 'is_valid' => ['name'],
             ],
             'role' => [
-                'type' => 'integer',
-                'exist' => 'role.id',
+                'type' => 'string',
+                'exist' => Role::TABLE.'.slug',
             ],
             'status' => [
                 'exist' => UserStatus::all(),
@@ -74,11 +75,6 @@ class UserFormRequestValidation extends BaseRequestValidation
             'email' => ['lowercase', 'clean_email'],
             'name' => ['ucwords', 'clean'],
         ])->get();
-    }
-
-    public function modify(): array
-    {
-        return ['role' => 'role_id'];
     }
 
     public function getRequest(): UserRequest

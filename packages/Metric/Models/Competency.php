@@ -24,7 +24,9 @@ use DateTimeInterface;
  */
 class Competency extends BaseModel
 {
-    protected string $table = 'metric_competency';
+    public const TABLE = 'metric_competency';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

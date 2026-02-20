@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Auth\Views\Models;
 
-use App\Services\UserService;
+use App\Auth\Services\IdentityService;
 use Helpers\Http\Flash;
 
 readonly class SignupViewModel
@@ -15,11 +15,11 @@ readonly class SignupViewModel
 
     public string $subheading;
 
-    private readonly UserService $service;
+    private readonly IdentityService $service;
 
     private readonly Flash $flash;
 
-    public function __construct(UserService $service, Flash $flash)
+    public function __construct(IdentityService $service, Flash $flash)
     {
         $this->page_title = 'Create Account';
         $this->heading = 'Create Account';

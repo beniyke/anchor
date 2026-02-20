@@ -36,7 +36,9 @@ use DateTimeInterface;
  */
 class Application extends BaseModel
 {
-    protected string $table = 'scout_application';
+    public const TABLE = 'scout_application';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'scout_job_id',

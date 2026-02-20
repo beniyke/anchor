@@ -37,7 +37,9 @@ use Helpers\DateTimeHelper;
  */
 class Thread extends BaseModel
 {
-    protected string $table = 'pulse_thread';
+    public const TABLE = 'pulse_thread';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'pulse_channel_id',
@@ -48,6 +50,7 @@ class Thread extends BaseModel
         'is_locked',
         'view_count',
         'last_activity_at',
+        'status',
     ];
 
     protected array $casts = [

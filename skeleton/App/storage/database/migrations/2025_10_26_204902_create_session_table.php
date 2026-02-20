@@ -11,21 +11,24 @@ class CreateSessionTable extends BaseMigration
      */
     public function up(): void
     {
-        if (! Schema::hasTable('session')) {
-            Schema::create('session', function (SchemaBuilder $table) {
-                $table->id();
-                $table->bigInteger('user_id')->unsigned();
-                $table->string('token')->unique();
-                $table->string('browser');
-                $table->string('device');
-                $table->string('ip');
-                $table->string('os');
-                $table->datetime('expire_at')->nullable();
-                $table->dateTimestamps();
-                $table->index('user_id');
-                $table->foreign('user_id')->references('id')->on('user')->onDelete('CASCADE');
-            });
-        }
+        Schema::createIfNotExists('session', function (SchemaBuilder $table) {
+            $table->id();
+            $table->bigInteger('user_id')->unsigned();
+            $table->string('token')->unique();
+            $table->string('browser');
+            $table->string('device');
+            $table->string('ip');
+            $table->string('os');
+            $table->datetime('expire_at')->nullable();
+            $table->dateTimestamps();
+
+            // Performance Indexes
+            $table->index('expire_at', 'session_expire_at_index');
+            $table->index(['user_id', 'expire_at'], 'session_user_expire_index');
+            $table->index('created_at', 'session_created_at_index');
+            $table->index('user_id');
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('CASCADE');
+        });
     }
 
     /**

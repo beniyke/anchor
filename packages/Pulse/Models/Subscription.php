@@ -27,7 +27,9 @@ use Helpers\DateTimeHelper;
  */
 class Subscription extends BaseModel
 {
-    protected string $table = 'pulse_subscription';
+    public const TABLE = 'pulse_subscription';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'pulse_thread_id',

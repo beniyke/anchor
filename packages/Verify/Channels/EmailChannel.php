@@ -15,7 +15,8 @@ declare(strict_types=1);
 namespace Verify\Channels;
 
 use Exception;
-use Helpers\Data;
+use Helpers\Data\Data;
+use Helpers\Log;
 use Notify\Notify;
 use Verify\Channels\Notifications\SendOtpEmailNotification;
 use Verify\Contracts\ChannelInterface;
@@ -35,21 +36,21 @@ class EmailChannel implements ChannelInterface
             $sent = ($result['status'] === 'success');
 
             if ($sent) {
-                logger('verify.log')->info('OTP email sent successfully', [
+                Log::channel('verify')->info('OTP email sent successfully', [
                     'to' => $identifier,
                 ]);
 
                 return true;
             }
 
-            logger('verify.log')->warning('OTP email send returned unsuccessful', [
+            Log::channel('verify')->warning('OTP email send returned unsuccessful', [
                 'to' => $identifier,
                 'result' => $result,
             ]);
 
             return false;
         } catch (Exception $e) {
-            logger('verify.log')->error('OTP email send failed', [
+            Log::channel('verify')->error('OTP email send failed', [
                 'to' => $identifier,
                 'error' => $e->getMessage(),
             ]);

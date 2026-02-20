@@ -36,6 +36,12 @@ use Scout\Services\ScoutManagerService;
  * @method static void        reject(Application $application, string $reason)
  * @method static Interview   scheduleInterview(Application $application, User $interviewer, array $data)
  * @method static Offer       createOffer(Application $application, float $amount, array $data)
+ * @method static int         sendReminders()
+ * @method static mixed       stages()
+ * @method static ?Stage      findStage(int|string $idOrSlug)
+ * @method static Stage       createStage(array $data)
+ * @method static bool        updateStage(Stage $stage, array $data)
+ * @method static bool        deleteStage(Stage $stage)
  */
 class Scout
 {

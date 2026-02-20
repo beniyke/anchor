@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Views\Models;
 
 use App\Models\User;
+use Database\Collections\ModelCollection;
 use Helpers\DateTimeHelper;
 use Helpers\String\Str;
 
 readonly class UserViewModel
 {
+    private User $user;
+
     private int $id;
 
     private string $name;
@@ -25,6 +28,8 @@ readonly class UserViewModel
     private bool $hasPhoto;
 
     private ?string $photo;
+
+    private ModelCollection $roles;
 
     private bool $hasIncompleteProfile;
 
@@ -48,12 +53,15 @@ readonly class UserViewModel
 
     private bool $isPending;
 
+    private bool $isNewUser;
+
     private DateTimeHelper $createdAt;
 
     private DateTimeHelper $updatedAt;
 
     public function __construct(User $user, array $with = [])
     {
+        $this->user = $user;
         $this->id = $user->id;
         $this->name = $user->name;
         $this->email = $user->email;
@@ -70,11 +78,13 @@ readonly class UserViewModel
         $this->isActive = $user->isActive();
         $this->isSuspended = $user->isSuspended();
         $this->isPending = $user->hasActivationToken();
+        $this->isNewUser = $user->isNewUser();
+        $this->roles = $user->roles();
         $this->createdAt = $user->created_at;
         $this->updatedAt = $user->updated_at;
 
         if (in_array('role', $with, true)) {
-            $this->roleName = $user->role ? $user->role->title : null;
+            $this->roleName = $user->roleNames();
         } else {
             $this->roleName = null;
         }
@@ -176,6 +186,11 @@ readonly class UserViewModel
         return $this->statusColor;
     }
 
+    public function hasDefaultPassword(): bool
+    {
+        return $this->isNewUser;
+    }
+
     public function shouldUpdatePassword(): bool
     {
         return $this->shouldUpdatePassword;
@@ -270,6 +285,16 @@ readonly class UserViewModel
         return ! $this->isActive && ! $this->isSuspended && ! $this->isPending;
     }
 
+    public function isTheSame(int $id): bool
+    {
+        return $this->getId() === $id;
+    }
+
+    public function getRoles(): ModelCollection
+    {
+        return $this->roles;
+    }
+
     public function toArray(): array
     {
         $data = [
@@ -286,6 +311,7 @@ readonly class UserViewModel
             'status' => $this->getStatus(),
             'status_color' => $this->getStatusColor(),
             'should_update_password' => $this->shouldUpdatePassword(),
+            'is_new_user' => $this->isNewUser(),
             'missing_profile_fields' => $this->getMissingProfileFields(),
             'notification_count' => $this->getNotificationCount(),
             'created_at' => $this->getFormattedCreatedAt(),

@@ -17,7 +17,7 @@ class CreateHubMessageTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('hub_message', function ($table) {
+        Schema::createIfNotExists('hub_message', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique();
             $table->unsignedBigInteger('thread_id')->index();

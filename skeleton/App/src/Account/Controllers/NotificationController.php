@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Account\Controllers;
 
 use App\Core\BaseController;
-use App\Services\NotificationService;
 use App\Views\Models\NotificationLogViewModel;
 use Helpers\Http\Response;
+use Notification\Services\NotificationManagerService;
 
 class NotificationController extends BaseController
 {
-    public function index(NotificationService $service): Response
+    public function index(NotificationManagerService $service): Response
     {
         $user = $this->auth->user();
         $page = $this->request->get('page', 1);
@@ -21,7 +21,7 @@ class NotificationController extends BaseController
         return $this->asView('notification.list', compact('notification_log_view_model'));
     }
 
-    public function destroy(NotificationService $service): Response
+    public function destroy(NotificationManagerService $service): Response
     {
         if (! $this->request->isDelete()) {
             return $this->response->redirect($this->request->callback());

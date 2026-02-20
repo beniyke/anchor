@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_06_000004_create_onboard_task_completion_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateOnboardTaskCompletionTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('onboard_task_completion', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('onboard_task_completion', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('onboard_task_id')->index();

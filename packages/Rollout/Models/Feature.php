@@ -38,7 +38,9 @@ use Helpers\DateTimeHelper;
  */
 class Feature extends BaseModel
 {
-    protected string $table = 'rollout_feature';
+    public const TABLE = 'rollout_feature';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

@@ -52,7 +52,7 @@ readonly class RoleListViewModel
 
     public function getRolesItems(): array
     {
-        return $this->roles->items();
+        return RoleViewModel::collection($this->roles->items());
     }
 
     public function hasRoles(): bool

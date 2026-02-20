@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_07_000001_create_metric_goal_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateMetricGoalTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('metric_goal', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('metric_goal', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->string('title');

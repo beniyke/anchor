@@ -18,7 +18,7 @@ class CreateWaveSubscriptionTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::createIfNotExist('wave_subscription', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('wave_subscription', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique()->index();
             $table->unsignedBigInteger('owner_id')->index();

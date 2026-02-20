@@ -45,7 +45,9 @@ use Import\Enums\ImportStatus;
  */
 class ImportHistory extends BaseModel
 {
-    protected string $table = 'import_history';
+    public const TABLE = 'import_history';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

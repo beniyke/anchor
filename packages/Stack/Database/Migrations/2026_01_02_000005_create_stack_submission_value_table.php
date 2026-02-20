@@ -17,7 +17,7 @@ class CreateStackSubmissionValueTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('stack_submission_value', function ($table) {
+        Schema::createIfNotExists('stack_submission_value', function ($table) {
             $table->id();
             $table->unsignedBigInteger('stack_submission_id')->index();
             $table->unsignedBigInteger('stack_field_id')->index();

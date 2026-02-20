@@ -97,6 +97,19 @@
         </div>
     </div>
 
+    <!-- Page Search Bar -->
+    <div class="page-search-bar" id="pageSearchBar">
+        <div class="page-search-input-wrapper">
+            <input type="text" id="pageSearchInput" placeholder="Find in page...">
+            <span class="page-search-count" id="pageSearchCount">0/0</span>
+        </div>
+        <div class="page-search-nav">
+            <button id="pageSearchPrev" title="Previous match">↑</button>
+            <button id="pageSearchNext" title="Next match">↓</button>
+        </div>
+        <button class="page-search-close" id="pageSearchClose" title="Close search">✕</button>
+    </div>
+
     <!-- Scroll to Top Button -->
     <button class="scroll-to-top" id="scrollToTop" title="Go to top">
         <svg viewBox="0 0 24 24">
@@ -106,6 +119,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="<?= assets('docs/smart-search.js') ?>"></script>
+    <script src="<?= assets('docs/page-search.js') ?>"></script>
     <script>
         // Highlight code blocks
         hljs.highlightAll();
@@ -259,6 +273,7 @@
         });
 
         const smartSearch = new SmartSearch(flatDocs, <?= json_encode($searchIndex ?? []) ?>, <?= json_encode($keywordMap ?? []) ?>);
+        const pageSearch = new PageSearch();
 
         searchTrigger.addEventListener('click', openSearch);
         searchModal.addEventListener('click', (e) => {

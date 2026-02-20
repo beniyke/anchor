@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ *
  * Base class for handling Message notifications.
  * This class provides a structure for building Messaging (SMS, WhatsApp etc) notifications
  * and requires extending classes to implement key notification details.

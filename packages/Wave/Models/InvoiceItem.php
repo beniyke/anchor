@@ -18,8 +18,9 @@ use Database\Traits\HasRefid;
 class InvoiceItem extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wave_invoice_item';
 
-    protected string $table = 'wave_invoice_item';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

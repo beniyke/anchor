@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Watcher\Alerts\Channels;
 
-use Helpers\Data;
+use Helpers\Data\Data;
 use Mail\Mail;
 use Watcher\Alerts\Mail\WatcherAlert;
 

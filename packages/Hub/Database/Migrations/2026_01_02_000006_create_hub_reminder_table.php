@@ -17,7 +17,7 @@ class CreateHubReminderTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('hub_reminder', function ($table) {
+        Schema::createIfNotExists('hub_reminder', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique();
             $table->unsignedBigInteger('user_id')->index();

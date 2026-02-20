@@ -28,7 +28,9 @@ use Helpers\DateTimeHelper;
  */
 class OtpCode extends BaseModel
 {
-    protected string $table = 'verify_otp_code';
+    public const TABLE = 'verify_otp_code';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'identifier',

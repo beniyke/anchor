@@ -13,6 +13,7 @@ namespace Blish\Models;
 
 use Database\BaseModel;
 use Database\Collections\ModelCollection;
+use Database\Query\Builder;
 use Database\Relations\BelongsToMany;
 use Database\Relations\HasMany;
 use Helpers\DateTimeHelper;
@@ -34,7 +35,9 @@ use Helpers\DateTimeHelper;
  */
 class Subscriber extends BaseModel
 {
-    protected string $table = 'blish_subscriber';
+    public const TABLE = 'blish_subscriber';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',
@@ -67,5 +70,30 @@ class Subscriber extends BaseModel
     public function events(): HasMany
     {
         return $this->hasMany(Event::class, 'subscriber_id');
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeSearch(Builder $query, string $term): Builder
+    {
+        return $query->where('email', 'like', "%{$term}%")
+            ->orWhere('name', 'like', "%{$term}%");
+    }
+
+    public function scopeInList(Builder $query, int $listId): Builder
+    {
+        return $query->whereHas('lists', function ($query) use ($listId) {
+            $query->where('id', $listId);
+        });
+    }
+
+    public function scopeHasTag(Builder $query, int $tagId): Builder
+    {
+        return $query->whereHas('tags', function ($query) use ($tagId) {
+            $query->where('id', $tagId);
+        });
     }
 }

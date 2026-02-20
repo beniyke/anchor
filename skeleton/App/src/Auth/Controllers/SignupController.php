@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Auth\Controllers;
 
+use App\Auth\Services\IdentityService;
 use App\Auth\Views\Models\SignupViewModel;
 use App\Core\BaseController;
-use App\Services\UserService;
-use App\Validations\Form\SignupFormRequestValidation;
 use Helpers\Http\Response;
 
 class SignupController extends BaseController
@@ -21,7 +20,7 @@ class SignupController extends BaseController
         return $this->asView('signup', compact('signup_view_model'));
     }
 
-    public function store(SignupFormRequestValidation $validator, UserService $service): Response
+    public function store(IdentityService $service): Response
     {
         $has_setup = $service->isFirstUserSetup();
 
@@ -29,19 +28,10 @@ class SignupController extends BaseController
             return $this->response->redirect($this->request->fullRoute());
         }
 
-        $formdata = $this->request->post();
-        $validator->validate($formdata);
-
-        if ($validator->has_error()) {
-            $this->flash->withInput($formdata, $validator->errors());
-
-            return $this->response->redirect($this->request->fullRoute());
-        }
-
-        $user_registered = $service->registerUser($validator->getRequest());
+        $user_registered = $service->registerUser($this->request->validated());
 
         if (! $user_registered) {
-            $this->flash->withInput($formdata, 'Signup failed.');
+            $this->flash->withInput($this->request->post(), 'Signup failed.');
 
             return $this->response->redirect($this->request->fullRoute());
         }

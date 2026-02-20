@@ -32,7 +32,15 @@ interface SlotServiceInterface
 
     public function createBooking(SlotSchedule $schedule, BaseModel $bookable, Period $period, array $options = []): SlotBooking;
 
+    public function createBookingById(int $scheduleId, BaseModel $bookable, Period $period, array $options = []): SlotBooking;
+
     public function getConflicts(Period $period, ScheduleType|string|null $type, BaseModel $schedulable, ?int $excludeScheduleId = null): array;
 
     public function getUpcomingBookings(int $minutes): array;
+
+    public function getBooking(int $id): ?SlotBooking;
+
+    public function findSchedule(int $id): ?SlotSchedule;
+
+    public function getSchedules(BaseModel $schedulable, ?ScheduleType $type = null, ?Period $overlapping = null): array;
 }

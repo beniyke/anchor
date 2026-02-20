@@ -30,7 +30,9 @@ use Helpers\DateTimeHelper;
  */
 class Template extends BaseModel
 {
-    protected string $table = 'onboard_template';
+    public const TABLE = 'onboard_template';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

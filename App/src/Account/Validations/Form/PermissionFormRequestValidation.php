@@ -1,0 +1,158 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Account\Validations\Form;
+
+use App\Account\Requests\PermissionRequest;
+use App\Core\BaseRequestValidation;
+
+class PermissionFormRequestValidation extends BaseRequestValidation
+{
+    /**
+     * Define the expected request fields.
+     *
+     * @return array<string> An array of expected request field names.
+     */
+    public function expected(): array
+    {
+        return ['permissions'];
+    }
+
+    /**
+     * Define the validation rules for the request fields.
+     *
+     * @return array<string, mixed> An array of validation rules, where keys are field names and values are the rules.
+     */
+    public function rules(): array
+    {
+        return [
+            'permissions' => [
+                'type' => 'string'
+            ]
+        ];
+    }
+
+    /**
+     * Define the human-readable names for request fields.
+     *
+     * @return array<string, string> An associative array where keys are field names and values are their human-readable labels.
+     */
+    public function parameters(): array
+    {
+        return [
+            'permissions' => 'Permissions'
+        ];
+    }
+
+    /**
+     * Define human-readable names for file upload fields.
+     *
+     * @return array<string, string> An associative array where keys are file field names and values are their human-readable labels.
+     */
+    public function file(): array
+    {
+        return [];
+    }
+
+    /**
+     * Add additional data to be passed during validation.
+     *
+     * @return array<string, mixed>|null Additional data for validation, or null if no additional data is needed.
+     */
+    public function additionalData(): ?array
+    {
+        return null;
+    }
+
+    /**
+     * Apply transformations to the request data before validation.
+     *
+     * @param array<string, mixed> $data The request data to be transformed.
+     *
+     * @return array<string, mixed> The transformed request data.
+     */
+    public function transformData(array $data): array
+    {
+        return $data;
+    }
+
+    /**
+    * Return an array of optional validation rules.
+    *
+     * @return array<string> An array of request fields that have optional validation rules.
+    */
+    public function optional(): array
+    {
+        return [];
+    }
+
+    /**
+     * Return an array of not empty validation rules.
+     *
+     * @return array<string> An array of request fields that have not empty validation rules.
+     */
+    public function notempty(): array
+    {
+        return [];
+    }
+
+    /**
+     * Return an array of custom validation messages.
+     *
+     * @return array<string, string> An associative array of custom validation messages where keys are field names and values are the messages.
+     */
+    public function messages(): array
+    {
+        return [];
+    }
+
+    /**
+     * Specify request fields to include in the validated fields payload, even though they may be empty or optional.
+     *
+     * @return array<string> An array of request field names to be included in the validated fields payload, even if they are empty or optional.
+     */
+    public function include(): array
+    {
+        return [];
+    }
+
+    /**
+     * Specify request fields to exclude from validation.
+     *
+     * @return array<string> An array of request field names to be excluded from validation.
+     */
+    public function exclude(): array
+    {
+        return [];
+    }
+
+    /**
+     * Specify request fields to modify after validation.
+     *
+     * @return array<string> An array of modified request field names.
+     */
+    public function modify(): array
+    {
+        return [];
+    }
+
+    /**
+     * Processes the request data before validation or further processing.
+     * Implement custom cleanup logic, such as trimming whitespace, removing unwanted fields,
+     * or transforming data formats.
+     *
+     * @param array $requestData The request data to be cleaned up.
+     *
+     * @return array The cleaned-up request data.
+     */
+    public function cleanup(array $requestData): array
+    {
+        return $requestData;
+    }
+
+    public function getRequest(): PermissionRequest
+    {
+        return new PermissionRequest($this->validated()->data());
+    }
+}

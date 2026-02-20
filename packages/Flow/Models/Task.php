@@ -56,7 +56,9 @@ class Task extends BaseModel
 {
     use HasRefid;
 
-    protected string $table = 'flow_task';
+    public const TABLE = 'flow_task';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'project_id',
@@ -117,12 +119,12 @@ class Task extends BaseModel
 
     public function dependencies(): BelongsToMany
     {
-        return $this->belongsToMany(Task::class, 'flow_dependency', 'task_id', 'depends_on_task_id');
+        return $this->belongsToMany(Task::class, Dependency::TABLE, 'task_id', 'depends_on_task_id');
     }
 
     public function dependents(): BelongsToMany
     {
-        return $this->belongsToMany(Task::class, 'flow_dependency', 'depends_on_task_id', 'task_id');
+        return $this->belongsToMany(Task::class, Dependency::TABLE, 'depends_on_task_id', 'task_id');
     }
 
     public function attachments(): HasMany

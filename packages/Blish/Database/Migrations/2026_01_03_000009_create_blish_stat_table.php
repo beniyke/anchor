@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_03_000009_create_blish_stat_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateBlishStatTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('blish_stat', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('blish_stat', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedInteger('campaign_id')->unique();
             $table->integer('recipients')->default(0);

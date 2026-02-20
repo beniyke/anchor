@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_07_000006_create_metric_review_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateMetricReviewTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('metric_review', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('metric_review', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('metric_review_cycle_id')->index();
             $table->unsignedBigInteger('user_id')->index(); // Employee

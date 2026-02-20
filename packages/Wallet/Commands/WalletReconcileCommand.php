@@ -17,6 +17,7 @@ namespace Wallet\Commands;
 
 use Database\DB;
 use Exception;
+use Helpers\Log;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -76,7 +77,7 @@ class WalletReconcileCommand extends Command
             return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error("Reconciliation failed: {$e->getMessage()}");
-            logger('wallet.log')->error('Reconcile command failed', [
+            Log::channel('wallet')->error('Reconcile command failed', [
                 'wallet_id' => $walletId,
                 'error' => $e->getMessage(),
             ]);
@@ -130,7 +131,7 @@ class WalletReconcileCommand extends Command
             return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error("Bulk reconciliation failed: {$e->getMessage()}");
-            logger('wallet.log')->error('Bulk reconcile failed', [
+            Log::channel('wallet')->error('Bulk reconcile failed', [
                 'error' => $e->getMessage(),
             ]);
 

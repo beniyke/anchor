@@ -18,7 +18,7 @@ class CreateWaveDiscountTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::createIfNotExist('wave_discount', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('wave_discount', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique()->index();
             $table->unsignedBigInteger('owner_id')->index();

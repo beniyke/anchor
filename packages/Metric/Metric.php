@@ -14,10 +14,12 @@ namespace Metric;
 use App\Models\User;
 use BadMethodCallException;
 use DateTimeInterface;
+use Metric\Models\Competency;
 use Metric\Models\Feedback;
 use Metric\Models\KeyResult;
 use Metric\Models\Kpi;
 use Metric\Models\KpiValue;
+use Metric\Models\OneOnOne;
 use Metric\Models\Recognition;
 use Metric\Models\Review;
 use Metric\Models\ReviewCycle;
@@ -36,6 +38,9 @@ use Metric\Services\PerformanceManagerService;
  * @method static ReviewCycle startCycle(string $name, DateTimeInterface $start, DateTimeInterface $end)
  * @method static Feedback    giveFeedback(User $author, User $recipient, string $content, ?Review $review = null)
  * @method static Recognition recognize(User $sender, User $receiver, string $awardType, string $message)
+ * @method static Competency  addCompetency(string $name, ?string $description = null, ?string $category = null)
+ * @method static OneOnOne    scheduleOneOnOne(User $user, User $manager, DateTimeInterface $scheduledAt, ?string $agenda = null)
+ * @method static void        completeOneOnOne(OneOnOne $oneOnOne, string $notes)
  */
 class Metric
 {

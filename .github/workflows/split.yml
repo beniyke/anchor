@@ -22,6 +22,8 @@ jobs:
       fail-fast: false
       matrix:
         package:
+          - local_path: "packages/Activity"
+            split_repository: "activity"
           - local_path: "packages/Ally"
             split_repository: "ally"
           - local_path: "packages/Audit"
@@ -58,6 +60,8 @@ jobs:
             split_repository: "metric"
           - local_path: "packages/Money"
             split_repository: "money"
+          - local_path: "packages/Notification"
+            split_repository: "notification"
           - local_path: "packages/Onboard"
             split_repository: "onboard"
           - local_path: "packages/Pay"
@@ -68,6 +72,8 @@ jobs:
             split_repository: "proof"
           - local_path: "packages/Pulse"
             split_repository: "pulse"
+          - local_path: "packages/Rank"
+            split_repository: "rank"
           - local_path: "packages/Refer"
             split_repository: "refer"
           - local_path: "packages/Release"

@@ -19,6 +19,7 @@ use Bridge\ApiAuth\Validators\StaticTokenValidator;
 use Core\Ioc\ContainerInterface;
 use Core\Services\ConfigServiceInterface;
 use Helpers\Http\Request;
+use Security\Auth\Contracts\Authenticatable;
 
 class ApiTokenValidatorService implements ApiTokenValidatorServiceInterface
 {
@@ -30,7 +31,7 @@ class ApiTokenValidatorService implements ApiTokenValidatorServiceInterface
     {
     }
 
-    public function getAuthenticatedUser(): ?object
+    public function getAuthenticatedUser(): ?Authenticatable
     {
         $route = $this->request->route();
         $config = $this->config->get("api.{$route}");

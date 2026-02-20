@@ -18,7 +18,7 @@ class CreateImportErrorTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('import_error', function ($table) {
+        Schema::createIfNotExists('import_error', function ($table) {
             $table->id();
             $table->unsignedBigInteger('import_id')->index();
             $table->unsignedInteger('row_number');

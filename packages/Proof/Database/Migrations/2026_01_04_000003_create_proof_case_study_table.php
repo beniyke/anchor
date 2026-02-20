@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000003_create_proof_case_study_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateProofCaseStudyTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('proof_case_study', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('proof_case_study', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('proof_source_id');
             $table->string('title');

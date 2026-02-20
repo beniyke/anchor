@@ -34,7 +34,9 @@ use Helpers\DateTimeHelper;
  */
 class Job extends BaseModel
 {
-    protected string $table = 'scout_job';
+    public const TABLE = 'scout_job';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'title',

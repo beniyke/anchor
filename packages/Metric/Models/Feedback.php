@@ -31,7 +31,9 @@ use DateTimeInterface;
  */
 class Feedback extends BaseModel
 {
-    protected string $table = 'metric_feedback';
+    public const TABLE = 'metric_feedback';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'metric_review_id',

@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_07_000002_create_metric_key_result_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateMetricKeyResultTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('metric_key_result', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('metric_key_result', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('metric_goal_id')->index();
             $table->string('title');

@@ -18,7 +18,7 @@ class CreateWaveCouponTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::createIfNotExist('wave_coupon', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('wave_coupon', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique()->index();
             $table->string('code')->unique()->index();

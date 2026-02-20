@@ -18,8 +18,9 @@ use Database\Traits\HasRefid;
 class Affiliate extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wave_affiliate';
 
-    protected string $table = 'wave_affiliate';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

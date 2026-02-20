@@ -17,7 +17,7 @@ class CreateScribePostTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scribe_post', function ($table) {
+        Schema::createIfNotExists('scribe_post', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique()->index();
             $table->string('title', 255);

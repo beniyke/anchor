@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_03_000006_create_blish_template_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateBlishTemplateTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('blish_template', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('blish_template', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid', 32)->unique();
             $table->string('name');

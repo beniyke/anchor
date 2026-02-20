@@ -42,7 +42,9 @@ use Helpers\DateTimeHelper;
  */
 class Message extends BaseModel
 {
-    protected string $table = 'hub_message';
+    public const TABLE = 'hub_message';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

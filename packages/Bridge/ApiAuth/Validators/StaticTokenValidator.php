@@ -12,12 +12,15 @@ declare(strict_types=1);
 
 namespace Bridge\ApiAuth\Validators;
 
+use Bridge\ApiAuth\StaticUser;
+use Security\Auth\Contracts\Authenticatable;
+
 class StaticTokenValidator
 {
-    public function validate(string $request_token, string $expected_token): ?object
+    public function validate(string $request_token, string $expected_token): ?Authenticatable
     {
         if (hash_equals($request_token, $expected_token)) {
-            return (object) ['token' => $expected_token, 'type' => 'static'];
+            return new StaticUser($expected_token);
         }
 
         return null;

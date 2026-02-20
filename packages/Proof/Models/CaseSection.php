@@ -27,7 +27,9 @@ use Helpers\DateTimeHelper;
  */
 class CaseSection extends BaseModel
 {
-    protected string $table = 'proof_case_section';
+    public const TABLE = 'proof_case_section';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'proof_case_study_id',

@@ -8,11 +8,6 @@ class SmartSearch {
         this.docs = docs;
         this.contentIndex = contentIndex;
         this.keywords = keywordMap;
-        console.group('SmartSearch Initialized');
-        console.log('Docs:', this.docs.length);
-        console.log('Content Index:', this.contentIndex.length);
-        console.log('Keyword Map:', Object.keys(this.keywords).length);
-        console.groupEnd();
     }
 
     /**

@@ -17,7 +17,7 @@ class CreateReferralTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('referral', function ($table) {
+        Schema::createIfNotExists('referral', function ($table) {
             $table->id();
             $table->unsignedBigInteger('code_id')->index();
             $table->unsignedBigInteger('referrer_id')->index();

@@ -6,12 +6,10 @@ namespace App\Models;
 
 use App\Enums\UserStatus;
 use Database\BaseModel;
-use Database\Collections\ModelCollection;
 use Database\Query\Builder;
-use Database\Relations\BelongsTo;
-use Database\Relations\HasMany;
 use Database\Traits\HasRefid;
 use Helpers\DateTimeHelper;
+use Security\Auth\Contracts\Authenticatable;
 
 /**
  * @property int             $id
@@ -28,18 +26,36 @@ use Helpers\DateTimeHelper;
  * @property ?string         $activation_token
  * @property ?DateTimeHelper $activation_token_created_at
  * @property ?DateTimeHelper $password_updated_at
- * @property ?int            $role_id
- * @property ?DateTimeHelper $created_at
+ * @property DateTimeHelper  $created_at
  * @property ?DateTimeHelper $updated_at
- * @property-read ?Role $role
- * @property-read ModelCollection $activities
- * @property-read ModelCollection $notifications
  */
-class User extends BaseModel
+class User extends BaseModel implements Authenticatable
 {
     use HasRefid;
 
-    protected string $table = 'user';
+    public const TABLE = 'user';
+
+    public function getAuthId(): int|string
+    {
+        return $this->id;
+    }
+
+    public function getAuthPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function getAuthIdentifierName(): string
+    {
+        return 'id';
+    }
+
+    public function canAuthenticate(): bool
+    {
+        return $this->canLogin();
+    }
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',
@@ -55,37 +71,20 @@ class User extends BaseModel
         'activation_token',
         'activation_token_created_at',
         'password_updated_at',
-        'role_id',
     ];
 
     protected array $hidden = ['password', 'reset_token', 'activation_token'];
 
     protected array $casts = [
+        'id' => 'int',
         'refid' => 'string',
         'password_updated_at' => 'datetime',
         'reset_token_created_at' => 'datetime',
         'activation_token_created_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'role_id' => 'integer',
         'status' => UserStatus::class,
     ];
-
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class, 'role_id', 'id');
-    }
-
-    public function activities(): HasMany
-    {
-        return $this->hasMany(Activity::class, 'user_id', 'id');
-    }
-
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(Notification::class, 'user_id', 'id')
-            ->latest();
-    }
 
     public static function findByEmail(string $email): ?static
     {
@@ -108,14 +107,6 @@ class User extends BaseModel
             ->cache(3600) // 1 hour
             ->cacheTags(['users', "user:refid:{$refid}"])
             ->first();
-    }
-
-    public static function superAdmin(): Builder
-    {
-        return static::query()
-            ->whereNull('role_id')
-            ->cache(3600)
-            ->cacheTags(['users', 'super-admin']);
     }
 
     public function scopeWhereActivationToken(Builder $query, string $token): Builder
@@ -182,11 +173,6 @@ class User extends BaseModel
         });
 
         return $query;
-    }
-
-    public function scopeNonSuperAdmin(Builder $query): Builder
-    {
-        return $query->whereNotNull('role_id');
     }
 
     public function isActive(): bool
@@ -259,6 +245,11 @@ class User extends BaseModel
         return $this->save();
     }
 
+    public function isSelf(Authenticatable $user): bool
+    {
+        return $this->getAuthId() === $user->getAuthId();
+    }
+
     public function hasActivationToken(): bool
     {
         return ! is_null($this->activation_token) && trim($this->activation_token) !== '';
@@ -276,41 +267,7 @@ class User extends BaseModel
 
     public function canLogin(): bool
     {
-        return ! $this->hasPendingTokens() && $this->isActive();
-    }
-
-    public function isSuperAdmin(): bool
-    {
-        return is_null($this->role_id);
-    }
-
-    public function hasRole(string $roleTitle): bool
-    {
-        return $this->role && $this->role->title === $roleTitle;
-    }
-
-    public function hasNotifications(): bool
-    {
-        return $this->notificationsCount() > 0;
-    }
-
-    public function hasUnreadNotifications(): bool
-    {
-        return $this->unreadNotificationsCount() > 0;
-    }
-
-    public function hasActivities(): bool
-    {
-        return $this->activities()->exists();
-    }
-
-    public function can(string $permissionKey): bool
-    {
-        if ($this->isSuperAdmin()) {
-            return true;
-        }
-
-        return $this->role ? $this->role->hasPermission($permissionKey) : false;
+        return $this->hasRoles() && ! $this->hasPendingTokens() && $this->isActive();
     }
 
     public function emailHasChanged(string $newEmail): bool
@@ -320,9 +277,18 @@ class User extends BaseModel
 
     public function passwordNeedsUpdate(int $maxAgeInDays): bool
     {
+        if ($this->isNewUser()) {
+            return true;
+        }
+
         $daysSinceUpdate = DateTimeHelper::now()->diffInDays($this->password_updated_at);
 
         return $daysSinceUpdate > $maxAgeInDays;
+    }
+
+    public function isNewUser(): bool
+    {
+        return empty($this->password_updated_at);
     }
 
     public function hasPhoto(): bool
@@ -335,48 +301,12 @@ class User extends BaseModel
         return empty($this->phone) && ! $this->hasPhoto();
     }
 
-    public static function findWithRole(int $id): ?static
-    {
-        return static::query()
-            ->with('role')
-            ->where('id', $id)
-            ->cache(3600) // 1 hour
-            ->cacheTags(['users', "user:{$id}", 'with-role'])
-            ->first();
-    }
-
     public static function activeUsersCount(): int
     {
         return static::query()
             ->active()
             ->cache(900) // 15 minutes
             ->cacheTags(['users', 'stats', 'active-users'])
-            ->count();
-    }
-
-    public function unreadNotificationsCount(): int
-    {
-        return Notification::unreadCountForUser($this->id);
-    }
-
-    public function unreadNotifications(int $limit = 10): array
-    {
-        return Notification::unreadForUser($this->id, $limit);
-    }
-
-    public function unreadNotificationsData(int $limit = 10): array
-    {
-        return [
-            'notifications' => $this->unreadNotifications($limit),
-            'count' => $this->unreadNotificationsCount(),
-        ];
-    }
-
-    public function notificationsCount(): int
-    {
-        return $this->notifications()
-            ->cache(300) // 5 minutes
-            ->cacheTags(['notifications', "user:{$this->id}", 'count'])
             ->count();
     }
 }

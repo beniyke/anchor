@@ -29,7 +29,9 @@ use Helpers\DateTimeHelper;
  */
 class ImportError extends BaseModel
 {
-    protected string $table = 'import_error';
+    public const TABLE = 'import_error';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'import_id',

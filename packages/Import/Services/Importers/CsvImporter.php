@@ -12,10 +12,14 @@ declare(strict_types=1);
 
 namespace Import\Services\Importers;
 
+use Core\Event;
 use Core\Services\ConfigServiceInterface;
+use Database\DB;
 use Exception;
 use Helpers\File\Adapters\Interfaces\FileMetaInterface;
+use Helpers\File\Storage\Storage;
 use Import\Contracts\Importable;
+use Import\Events\RowProcessed;
 use Import\Models\ImportError;
 use Import\Models\ImportHistory;
 
@@ -34,16 +38,16 @@ class CsvImporter
     {
         $filePath = $history->path;
 
-        if (!$this->fileMeta->exists($filePath)) {
+        if (!Storage::exists($filePath)) {
             $history->markAsFailed('Import file not found.');
 
             return;
         }
 
-        $handle = fopen($filePath, 'r');
+        $handle = Storage::readStream($filePath);
 
         if (!$handle) {
-            $history->markAsFailed('Could not open import file.');
+            $history->markAsFailed('Could not open import file stream.');
 
             return;
         }
@@ -64,13 +68,15 @@ class CsvImporter
 
         // Count total rows
         $totalRows = 0;
-        while (fgetcsv($handle) !== false) {
-            $totalRows++;
-        }
+        $meta = stream_get_meta_data($handle);
 
-        // Reset to beginning (after header)
-        rewind($handle);
-        fgetcsv($handle); // Skip header again
+        if ($meta['seekable']) {
+            while (fgetcsv($handle) !== false) {
+                $totalRows++;
+            }
+            rewind($handle);
+            fgetcsv($handle); // Skip header again
+        }
 
         $history->markAsProcessing($totalRows);
 
@@ -83,6 +89,11 @@ class CsvImporter
 
             try {
                 // Map row to associative array
+                if (count($headers) !== count($row)) {
+                    // Handle mismatch
+                    continue;
+                }
+
                 $mappedRow = array_combine($headers, $row);
 
                 if ($mappedRow === false) {
@@ -118,12 +129,15 @@ class CsvImporter
 
                 if ($result === null) {
                     $history->incrementProgress('skipped');
+                    Event::dispatch(new RowProcessed($history, $rowNumber, $totalRows, 'skipped'));
                 } else {
                     $history->incrementProgress('success');
+                    Event::dispatch(new RowProcessed($history, $rowNumber, $totalRows, 'success'));
                 }
             } catch (Exception $e) {
                 $this->logError($history, $rowNumber, null, null, $e->getMessage(), $row);
                 $history->incrementProgress('failed');
+                Event::dispatch(new RowProcessed($history, $rowNumber, $totalRows, 'failed'));
 
                 if ($stopOnError) {
                     break;
@@ -142,20 +156,77 @@ class CsvImporter
     {
         $errors = [];
 
-        foreach ($rules as $field => $rule) {
+        foreach ($rules as $field => $fieldRules) {
             $value = $row[$field] ?? null;
 
-            // Simple validation (can be extended)
-            if (str_contains($rule, 'required') && empty($value)) {
+            // Normalize rules to array
+            if (is_string($fieldRules)) {
+                $fieldRules = explode('|', $fieldRules);
+                $temp = [];
+                foreach ($fieldRules as $r) {
+                    if ($r === 'required') {
+                        $temp['required'] = true;
+                    } elseif ($r === 'email') {
+                        $temp['type'] = 'email';
+                    } elseif ($r === 'numeric') {
+                        $temp['type'] = 'numeric';
+                    }
+                }
+                $fieldRules = $temp;
+            }
+
+            // Required
+            if (($fieldRules['required'] ?? false) && (is_null($value) || $value === '')) {
                 $errors[$field] = "The {$field} field is required.";
+                continue;
             }
 
-            if (str_contains($rule, 'email') && !empty($value) && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                $errors[$field] = "The {$field} field must be a valid email.";
+            if (is_null($value) || $value === '') {
+                continue;
             }
 
-            if (str_contains($rule, 'numeric') && !empty($value) && !is_numeric($value)) {
-                $errors[$field] = "The {$field} field must be numeric.";
+            // Type
+            if (isset($fieldRules['type'])) {
+                switch ($fieldRules['type']) {
+                    case 'email':
+                        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                            $errors[$field] = "The {$field} field must be a valid email.";
+                        }
+                        break;
+                    case 'numeric':
+                        if (!is_numeric($value)) {
+                            $errors[$field] = "The {$field} field must be numeric.";
+                        }
+                        break;
+                    case 'string':
+                        if (!is_string($value)) {
+                            $errors[$field] = "The {$field} field must be a string.";
+                        }
+                        break;
+                }
+            }
+
+            // Maxlength
+            if (isset($fieldRules['maxlength']) && strlen((string)$value) > $fieldRules['maxlength']) {
+                $errors[$field] = "The {$field} field must not exceed {$fieldRules['maxlength']} characters.";
+            }
+
+            // Unique: table.column
+            if (isset($fieldRules['unique'])) {
+                [$table, $column] = explode('.', $fieldRules['unique']);
+                $exists = DB::connection()->table($table)->where($column, $value)->exists();
+                if ($exists) {
+                    $errors[$field] = "The {$field} has already been taken.";
+                }
+            }
+
+            // Exist: table.column
+            if (isset($fieldRules['exist'])) {
+                [$table, $column] = explode('.', $fieldRules['exist']);
+                $exists = DB::connection()->table($table)->where($column, $value)->exists();
+                if (!$exists) {
+                    $errors[$field] = "The selected {$field} is invalid.";
+                }
             }
         }
 

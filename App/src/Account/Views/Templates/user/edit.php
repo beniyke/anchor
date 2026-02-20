@@ -21,7 +21,7 @@
 			<div class="row">
 				<div class="col-md-4 mb-3">
 					<?= component('label')->content('Role')->attributes(['class' => 'form-label fw-bold'])->render()?>
-					<?= component('select')->attributes(['class' => 'form-select form-control-lg', 'name' => 'role', 'required' => true])->options($edit_user_view_model->getRolesForDropdown())->selected($edit_user_view_model->getRoleId())->render()?>
+					<?= component('select')->attributes(['class' => 'form-select form-control-lg', 'name' => 'role', 'required' => true])->options($edit_user_view_model->getRolesForDropdown())->selected($edit_user_view_model->getRoleSlug())->render()?>
 					<?= component('error')->attributes(['name' => 'role'])->render()?>
 				</div>
 				<div class="col-md-4 mb-3">

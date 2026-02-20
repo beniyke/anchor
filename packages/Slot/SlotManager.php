@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Slot;
 
+use Database\BaseModel;
 use InvalidArgumentException;
 use RuntimeException;
 use Slot\Enums\ScheduleType;
@@ -116,6 +117,28 @@ class SlotManager
     public function getUpcomingBookings(int $minutes): array
     {
         return $this->service->getUpcomingBookings($minutes);
+    }
+
+    public function getBooking(int $id): ?SlotBooking
+    {
+        return $this->service->getBooking($id);
+    }
+
+    public function findSchedule(int $id): ?SlotSchedule
+    {
+        return $this->service->findSchedule($id);
+    }
+
+    public function getSchedules(?ScheduleType $type = null, ?Period $overlapping = null): array
+    {
+        $this->ensureModelSet();
+
+        return $this->service->getSchedules($this->model, $type, $overlapping);
+    }
+
+    public function bookByScheduleId(int $scheduleId, BaseModel $bookable, Period $period, array $options = []): SlotBooking
+    {
+        return $this->service->createBookingById($scheduleId, $bookable, $period, $options);
     }
 
     private function ensureModelSet(): void

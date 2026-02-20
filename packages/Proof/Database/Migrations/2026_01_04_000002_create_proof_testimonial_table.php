@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000002_create_proof_testimonial_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,10 +14,10 @@ class CreateProofTestimonialTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('proof_testimonial', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('proof_testimonial', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('proof_source_id');
-            $table->text('content');
+            $table->text('comment');
             $table->integer('rating')->nullable();
             $table->string('status')->default('pending'); // pending, approved, rejected
             $table->string('video_url')->nullable();

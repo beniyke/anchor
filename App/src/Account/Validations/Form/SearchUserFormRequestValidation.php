@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Account\Validations\Form;
 
+use App\Account\Requests\SearchUserRequest;
 use App\Core\BaseRequestValidation;
 use App\Enums\UserStatus;
-use App\Requests\SearchUserRequest;
 
 class SearchUserFormRequestValidation extends BaseRequestValidation
 {

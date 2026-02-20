@@ -32,8 +32,9 @@ use Database\Traits\HasRefid;
 class Product extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wave_product';
 
-    protected string $table = 'wave_product';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

@@ -36,7 +36,9 @@ use DateTimeInterface;
  */
 class Candidate extends BaseModel
 {
-    protected string $table = 'scout_candidate';
+    public const TABLE = 'scout_candidate';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'user_id',

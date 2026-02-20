@@ -39,7 +39,9 @@ use Hub\Enums\RepeatInterval;
  */
 class Reminder extends BaseModel
 {
-    protected string $table = 'hub_reminder';
+    public const TABLE = 'hub_reminder';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

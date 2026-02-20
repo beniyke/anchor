@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ * 
  * Image Setting & Configuration
  *
  * @author BenIyke <beniyk34@gmail.com> | (twitter:@BigBeniyke)

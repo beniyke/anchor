@@ -17,7 +17,7 @@ class CreateMediaTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('media', function ($table) {
+        Schema::createIfNotExists('media', function ($table) {
             $table->id();
             $table->string('uuid', 64)->unique();
             $table->string('disk', 50)->default('local');

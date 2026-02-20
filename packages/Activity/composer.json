@@ -1,0 +1,25 @@
+{
+  "name": "beniyke/activity",
+  "description": "Anchor Activity Logging Package",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "BenIyke",
+      "email": "beniyke34@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Activity\\": ""
+    }
+  },
+  "extra": {
+    "anchor": {
+      "setup": "setup.php"
+    }
+  }
+}

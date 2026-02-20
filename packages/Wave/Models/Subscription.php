@@ -49,8 +49,9 @@ use Wave\Enums\SubscriptionStatus;
 class Subscription extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wave_subscription';
 
-    protected string $table = 'wave_subscription';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

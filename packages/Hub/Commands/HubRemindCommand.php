@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Hub\Commands;
 
 use Core\Event;
+use Helpers\Log;
 use Hub\Events\ReminderDueEvent;
 use Hub\Models\Reminder;
 use Symfony\Component\Console\Command\Command;
@@ -67,7 +68,7 @@ class HubRemindCommand extends Command
                 } catch (Throwable $e) {
                     $failed++;
                     $io->error("Failed to process reminder #{$reminder->refid}: " . $e->getMessage());
-                    logger('hub.log')->error("Reminder failed #{$reminder->refid}: " . $e->getMessage());
+                    Log::channel('hub')->error("Reminder failed #{$reminder->refid}: " . $e->getMessage());
                 }
                 $io->progressAdvance();
             }

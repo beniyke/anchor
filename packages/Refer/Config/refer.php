@@ -67,4 +67,13 @@ return [
     |--------------------------------------------------------------------------
     */
     'user_model' => 'App\Models\User',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Registration URL
+    |--------------------------------------------------------------------------
+    | The base URL used for generating referral links.
+    |
+    */
+    'registration_url' => config('host', 'http://localhost') . '/register',
 ];

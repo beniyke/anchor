@@ -13,18 +13,25 @@ namespace Pulse\Services;
 
 use App\Models\User;
 use Audit\Audit;
+use Core\Services\ConfigServiceInterface;
+use Database\Collections\ModelCollection;
+use Helpers\Data\Data;
 use Helpers\DateTimeHelper;
+use Helpers\String\Str;
+use Mail\Mail;
 use Pulse\Models\Channel;
 use Pulse\Models\Post;
 use Pulse\Models\Reaction;
 use Pulse\Models\Subscription;
 use Pulse\Models\Thread;
+use Pulse\Notifications\MentionNotification;
+use Pulse\Notifications\PostReplyNotification;
 use RuntimeException;
 
 class PulseManagerService
 {
     public function __construct(
-        private readonly \Core\Services\ConfigServiceInterface $config
+        private readonly ConfigServiceInterface $config
     ) {
     }
 
@@ -112,6 +119,18 @@ class PulseManagerService
             ->delete();
     }
 
+    public function getSubscribedThreads(User $user): array
+    {
+        $threadIds = Subscription::where('user_id', $user->id)
+            ->pluck('pulse_thread_id');
+
+        if (empty($threadIds)) {
+            return [];
+        }
+
+        return Thread::whereIn('id', $threadIds)->get()->all();
+    }
+
     /**
      * Notify users of replies or mentions.
      */
@@ -126,12 +145,12 @@ class PulseManagerService
                 continue;
             }
 
-            \Mail\Mail::send(new \Pulse\Notifications\MentionNotification(\Helpers\Data::make([
+            Mail::send(new MentionNotification(Data::make([
                 'email' => $user->email,
                 'name' => $user->name ?? 'there',
                 'mentioner_name' => $author->name ?? 'Someone',
                 'thread_title' => $thread->title ?? 'a conversation',
-                'message_preview' => \Helpers\String\Str::limit($post->content, 100),
+                'message_preview' => Str::limit($post->content, 100),
                 'thread_url' => $this->getPulseThreadUrl($thread),
             ])));
         }
@@ -155,35 +174,27 @@ class PulseManagerService
         }
 
         if (!empty($recipients)) {
-            \Mail\Mail::send(new \Pulse\Notifications\PostReplyNotification(\Helpers\Data::make([
+            Mail::send(new PostReplyNotification(Data::make([
                 'recipients' => $recipients,
                 'sender_name' => $author->name ?? 'Someone',
                 'thread_title' => $thread->title ?? 'a conversation',
-                'message_preview' => \Helpers\String\Str::limit($post->content, 100),
+                'message_preview' => Str::limit($post->content, 100),
                 'thread_url' => $this->getPulseThreadUrl($thread),
             ])));
         }
     }
 
-    private function resolveMentions(string $content): \Database\Collections\ModelCollection
+    private function resolveMentions(string $content): ModelCollection
     {
         $pattern = '/@(\w+)/';
         preg_match_all($pattern, $content, $matches);
         $usernames = $matches[1] ?? [];
 
         if (empty($usernames)) {
-            return new \Database\Collections\ModelCollection([]);
+            return new ModelCollection([]);
         }
 
-        // Assuming users have a 'username' or 'name' column.
-        // Using 'name' for now based on typical schema, or 'username' if it exists.
-        // Best guess: 'name' is often used as display name, but 'username' is handle.
-        // Let's check User model if possible, but for now I'll try 'username' or fallback to 'name'.
-        // Actually User model usually has 'email', 'name'.
-        // I will assume 'username' exists or I should query 'name'.
-        // Safer to just query 'name' for now or 'username' if I knew.
-        // I'll query 'username' as it's standard for mentions.
-        return User::whereIn('username', $usernames)->get();
+        return User::whereIn('name', $usernames)->get();
     }
 
     private function getPulseThreadUrl(Thread $thread): string

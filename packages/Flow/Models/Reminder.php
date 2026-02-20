@@ -33,7 +33,9 @@ use Helpers\DateTimeHelper;
  */
 class Reminder extends BaseModel
 {
-    protected string $table = 'flow_reminder';
+    public const TABLE = 'flow_reminder';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'task_id',

@@ -1,0 +1,13 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g_rust" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF8C00" /><stop offset="50%" stop-color="#B7410E" /><stop offset="100%" stop-color="#7B3F00" />
+    </linearGradient>
+  </defs>
+  <!-- Rank Icon: Represents SEO growth and ranking status -->
+  <path d="M3 20h18" stroke="url(#g_rust)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M7 20v-4" stroke="url(#g_rust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 20v-8" stroke="url(#g_rust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M17 20V4" stroke="url(#g_rust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M17 4l3 3m-3-3l-3 3" stroke="url(#g_rust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

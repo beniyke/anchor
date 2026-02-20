@@ -27,7 +27,9 @@ use Helpers\DateTimeHelper;
  */
 class LinkUsage extends BaseModel
 {
-    protected string $table = 'link_usage';
+    public const TABLE = 'link_usage';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'link_id',

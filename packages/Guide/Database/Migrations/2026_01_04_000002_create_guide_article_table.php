@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_04_000002_create_guide_article_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -16,7 +14,7 @@ class CreateGuideArticleTable extends BaseMigration
 {
     public function up(): void
     {
-        $this->schema()->create('guide_article', function (SchemaBuilder $table) {
+        $this->schema()->createIfNotExists('guide_article', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique();
             $table->unsignedBigInteger('guide_category_id')->nullable();

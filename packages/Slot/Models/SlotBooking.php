@@ -39,8 +39,9 @@ use Slot\Period;
 class SlotBooking extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'slot_booking';
 
-    protected string $table = 'slot_booking';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

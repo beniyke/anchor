@@ -20,7 +20,7 @@ class CreateAllyResellerTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('ally_reseller', function ($table) {
+        Schema::createIfNotExists('ally_reseller', function ($table) {
             $table->id();
             $table->string('refid', 16)->unique();
             $table->unsignedBigInteger('user_id')->unique();

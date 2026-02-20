@@ -41,7 +41,9 @@ use Hub\Services\Builders\MemberBuilder;
  */
 class Thread extends BaseModel
 {
-    protected string $table = 'hub_thread';
+    public const TABLE = 'hub_thread';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

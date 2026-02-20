@@ -34,7 +34,9 @@ use Helpers\DateTimeHelper;
  */
 class Form extends BaseModel
 {
-    protected string $table = 'stack_form';
+    public const TABLE = 'stack_form';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

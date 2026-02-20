@@ -26,7 +26,9 @@ use Helpers\DateTimeHelper;
  */
 class ProofRequest extends BaseModel
 {
-    protected string $table = 'proof_request';
+    public const TABLE = 'proof_request';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'proof_source_id',

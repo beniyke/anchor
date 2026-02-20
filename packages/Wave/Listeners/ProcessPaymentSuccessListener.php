@@ -14,6 +14,7 @@ namespace Wave\Listeners;
 
 use Core\Contracts\ShouldQueue;
 use Exception;
+use Helpers\Log;
 use Money\Money;
 use Pay\Events\PaymentSuccessfulEvent;
 use Wave\Enums\InvoiceStatus;
@@ -38,7 +39,7 @@ class ProcessPaymentSuccessListener implements ShouldQueue
 
         $invoice = Wave::invoices()->find($invoiceId);
         if (! $invoice) {
-            logger('wave.log')->error("ProcessPaymentSuccessListener: Invoice #{$invoiceId} not found.");
+            Log::channel('wave')->error("ProcessPaymentSuccessListener: Invoice #{$invoiceId} not found.");
 
             return;
         }
@@ -57,7 +58,7 @@ class ProcessPaymentSuccessListener implements ShouldQueue
                 $this->handleDirectPayment($invoice, $transaction);
             }
         } catch (Exception $e) {
-            logger('wave.log')->error("ProcessPaymentSuccessListener Error: " . $e->getMessage());
+            Log::channel('wave')->error("ProcessPaymentSuccessListener Error: " . $e->getMessage());
         }
     }
 
@@ -84,7 +85,7 @@ class ProcessPaymentSuccessListener implements ShouldQueue
         $paid = Wave::invoices()->attemptPayment($invoice);
 
         if (! $paid) {
-            logger('wave.log')->error("ProcessPaymentSuccessListener: Wallet funding successful, but subsequent wallet payment failed for Invoice #{$invoice->id}.");
+            Log::channel('wave')->error("ProcessPaymentSuccessListener: Wallet funding successful, but subsequent wallet payment failed for Invoice #{$invoice->id}.");
         }
     }
 

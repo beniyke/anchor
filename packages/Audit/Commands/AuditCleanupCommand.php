@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Audit\Commands;
 
-use Audit\Audit;
+use Audit\Services\AuditManagerService;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,6 +22,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class AuditCleanupCommand extends Command
 {
+    public function __construct(
+        private readonly AuditManagerService $auditManager
+    ) {
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
         $this->setName('audit:cleanup')
@@ -39,7 +45,7 @@ class AuditCleanupCommand extends Command
         $io->title('Cleaning Up Audit Logs');
 
         try {
-            $count = Audit::cleanup($days);
+            $count = $this->auditManager->cleanup($days);
 
             if ($count > 0) {
                 $io->success("Deleted {$count} old audit log entries.");

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ * 
  * Firewall Configuration
  *
  * @author BenIyke <beniyke34@gmail.com> | (twitter:@BigBeniyke)
@@ -84,6 +86,9 @@ return [
                 'ignore' => true,
                 'list' => [],
             ],
+        ],
+        'locked_resources' => [
+            // Example: 'users', 'roles'
         ],
     ],
     'blacklist' => [

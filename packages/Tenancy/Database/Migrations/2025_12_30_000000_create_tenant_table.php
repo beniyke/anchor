@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_12_30_000000_create_tenant_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -21,7 +19,7 @@ class CreateTenantTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('tenant', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('tenant', function (SchemaBuilder $table) {
             $table->id();
             $table->string('name');
             $table->string('subdomain')->unique();

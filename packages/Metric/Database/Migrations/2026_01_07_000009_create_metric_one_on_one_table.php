@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_07_000009_create_metric_one_on_one_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateMetricOneOnOneTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('metric_one_on_one', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('metric_one_on_one', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('manager_id')->index();

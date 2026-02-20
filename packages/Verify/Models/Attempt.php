@@ -27,7 +27,9 @@ use Helpers\DateTimeHelper;
  */
 class Attempt extends BaseModel
 {
-    protected string $table = 'verify_attempt';
+    public const TABLE = 'verify_attempt';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'identifier',

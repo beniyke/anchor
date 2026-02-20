@@ -1,0 +1,13 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g_rust" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF8C00" /><stop offset="50%" stop-color="#B7410E" /><stop offset="100%" stop-color="#7B3F00" />
+    </linearGradient>
+  </defs>
+  <!-- Standardized Tenancy: Centered with 2px padding -->
+  <rect x="4" y="4" width="7" height="7" rx="1.5" stroke="url(#g_rust)" stroke-width="2"/>
+  <rect x="13" y="4" width="7" height="7" rx="1.5" stroke="url(#g_rust)" stroke-width="2"/>
+  <rect x="4" y="13" width="7" height="7" rx="1.5" stroke="url(#g_rust)" stroke-width="2"/>
+  <rect x="13" y="13" width="7" height="7" rx="1.5" stroke="url(#g_rust)" stroke-width="2"/>
+  <path d="M7.5 7.5h.01M16.5 7.5h.01M7.5 16.5h.01M16.5 16.5h.01" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+</svg>

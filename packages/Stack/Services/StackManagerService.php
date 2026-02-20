@@ -14,7 +14,7 @@ namespace Stack\Services;
 
 use Audit\Audit;
 use Core\Services\ConfigServiceInterface;
-use Database\Exceptions\ValidationException;
+use Exceptions\ValidationException;
 use Helpers\DateTimeHelper;
 use Helpers\Validation\Validator;
 use RuntimeException;

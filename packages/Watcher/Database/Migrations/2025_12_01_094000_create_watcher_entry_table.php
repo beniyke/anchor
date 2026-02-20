@@ -21,7 +21,7 @@ class CreateWatcherEntryTable extends BaseMigration
      */
     public function up(): void
     {
-        Schema::create('watcher_entry', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('watcher_entry', function (SchemaBuilder $table) {
             $table->id();
             $table->string('batch_id', 36)->nullable()->index();
             $table->string('type', 50)->index();

@@ -1,45 +1,90 @@
-# Anchor Framework Skeleton
+# Anchor Framework
 
-> The clean, stable starting point for your next high-performance PHP application.
+> Anchor is a modular, high-performance PHP framework built on a philosophy of self-reliance. It provides a full-featured, zero-bloat toolkit for modern applications, minimizing external dependencies in favor of integrated excellence.
 
-This skeleton provides the essential directory structure and entry points (`index.php`, `dock`) to build a modern application using the **Anchor Framework**.
+## Philosophy
 
-## Quick Start
+### Stability & Foundation
 
-Anchor supports two primary installation workflows. Both start by running the `dock` tool.
+Just as an anchor provides stability to a ship, the **Anchor Framework** gives you a solid, reliable foundation to build upon. It keeps your application grounded with robust architecture, proven patterns, and production-ready features.
 
-### 1. Managed Mode (Recommended)
+### Shipping Code
 
-Standard composer-based setup for modern development.
+In software development, we don't just _deploy_ code, we **ship** it. Anchor is designed to help you confidently ship quality code to production. Every feature, from the ORM to the queue system, is built with production readiness in mind.
+
+## Key Features
+
+- **Module-Based Architecture**: Organize code by feature, not just file type.
+- **Lightweight Core**: Fast request lifecycle with minimal overhead.
+- **Powerful ORM**: Eloquent-like syntax for database interactions.
+- **Convention over Configuration**: Sensible defaults to get you started quickly.
+- **Built-in Tools**: CLI, Migrations, Queues, Mailer, and more.
+- **Zero-Bloat**: Minimized external dependencies in favor of integrated, optimized solutions.
+
+## Requirements
+
+Anchor is designed for modern PHP environments. Ensure your system meets these requirements:
+
+- **PHP**: >= 8.2
+- **Database**: SQLite (default), MySQL 8.0+, or PostgreSQL 15+
+- **Extensions**: PDO, Mbstring, OpenSSL, Ctype, JSON, **BCMath**, **cURL**, **ZipArchive**, **Tokenizer**, **fileinfo**
+- **Composer**: Dependency Manager (for Managed Mode)
+
+## Installation
+
+Anchor provides two ways to build your application: **Managed** (via Composer) and **Standalone** (Portable).
+
+### Create a New Project (Managed Mode)
+
+The recommended way to start is with the **[Anchor Skeleton](https://github.com/beniyke/anchor-skeleton)**:
 
 ```bash
+# Create project from skeleton
 composer create-project beniyke/anchor-skeleton my-app
+
+# Initialize the framework
 cd my-app
 php dock
 ```
 
-### 2. Standalone Mode (Portable)
+Choosing the "Managed" option in the `dock` tool will provision the latest version of the framework.
 
-Zero-dependency, portable setup. Download this repository and run:
+### Environment Configuration
+
+Copy the example environment file and configure your settings:
 
 ```bash
-php dock
+cp .env.example .env
 ```
 
-## Core Requirements
+### Database Initialization
 
-- **PHP**: >= 8.2
-- **Database**: SQLite (default), MySQL 8.0+, or PostgreSQL 15+
-- **Extensions**: PDO, Mbstring, OpenSSL, Ctype, JSON, BCMath, cURL, ZipArchive
+Run the migrations to create your core application tables:
+
+```bash
+# Run database migrations
+php dock migration:run
+```
+
+## Maintenance
+
+Keep your framework core up to date with a single command:
+
+```bash
+php dock anchor:update
+```
+
+It intelligently handles both Managed (Composer) and Standalone (Hydrated) installations.
 
 ## Documentation
 
-Comprehensive guides are available on the official repository:
+Full documentation is available in the [docs/](docs/) directory.
 
-- [Installation Guide](https://github.com/beniyke/anchor/blob/master/docs/installation.md)
-- [Architecture Overview](https://github.com/beniyke/anchor/blob/master/docs/architecture.md)
-- [Package Management](https://github.com/beniyke/anchor/blob/master/docs/package-management.md)
+- **[Installation](docs/installation.md)** - Managed vs Standalone setups
+- **[Introduction](docs/introduction.md)** - Core philosophy and metaphors
+- **[Architecture](docs/architecture.md)** - How Anchor works under the hood
+- **[Package Management](docs/package-management.md)** - Extending the framework
 
 ## License
 
-Open-sourced software licensed under the [MIT license](LICENSE).
+The Anchor Framework is open-sourced software licensed under the [MIT license](LICENSE).

@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_05_000001_create_scout_job_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateScoutJobTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scout_job', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('scout_job', function (SchemaBuilder $table) {
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();

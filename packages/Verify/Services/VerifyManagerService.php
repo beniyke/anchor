@@ -16,6 +16,7 @@ namespace Verify\Services;
 
 use Core\Services\ConfigServiceInterface;
 use Exception;
+use Helpers\Log;
 use Verify\Contracts\ChannelInterface;
 use Verify\Contracts\OtpGeneratorInterface;
 use Verify\Contracts\OtpStorageInterface;
@@ -60,7 +61,7 @@ class VerifyManagerService
             $sent = $channelInstance->send($identifier, $code, $receiverName);
 
             if (! $sent) {
-                logger('verify.log')->warning('OTP send failed via channel', [
+                Log::channel('verify')->warning('OTP send failed via channel', [
                     'identifier' => $this->maskIdentifier($identifier),
                     'channel' => $channel,
                 ]);
@@ -68,7 +69,7 @@ class VerifyManagerService
                 return false;
             }
 
-            logger('verify.log')->info('OTP generated and sent', [
+            Log::channel('verify')->info('OTP generated and sent', [
                 'identifier' => $this->maskIdentifier($identifier),
                 'channel' => $channel,
                 'expires_in_minutes' => $expiresIn,
@@ -76,7 +77,7 @@ class VerifyManagerService
 
             return true;
         } catch (Exception $e) {
-            logger('verify.log')->error('OTP channel send error', [
+            Log::channel('verify')->error('OTP channel send error', [
                 'identifier' => $this->maskIdentifier($identifier),
                 'channel' => $channel,
                 'error' => $e->getMessage(),
@@ -103,14 +104,14 @@ class VerifyManagerService
                 $this->rateLimiter->reset($identifier, 'verification');
                 $this->rateLimiter->reset($identifier, 'generation');
 
-                logger('verify.log')->info('OTP verified successfully', [
+                Log::channel('verify')->info('OTP verified successfully', [
                     'identifier' => $this->maskIdentifier($identifier),
                 ]);
             }
 
             return $isValid;
         } catch (Exception $e) {
-            logger('verify.log')->warning('OTP verification failed', [
+            Log::channel('verify')->warning('OTP verification failed', [
                 'identifier' => $this->maskIdentifier($identifier),
                 'error' => $e->getMessage(),
             ]);
@@ -133,7 +134,7 @@ class VerifyManagerService
             throw new OtpNotFoundException($identifier);
         }
 
-        logger('verify.log')->info('OTP resend requested', [
+        Log::channel('verify')->info('OTP resend requested', [
             'identifier' => $this->maskIdentifier($identifier),
             'channel' => $channel,
         ]);
@@ -145,7 +146,7 @@ class VerifyManagerService
     {
         $identifier = $this->normalizeIdentifier($identifier);
 
-        logger('verify.log')->info('OTP deleted', [
+        Log::channel('verify')->info('OTP deleted', [
             'identifier' => $this->maskIdentifier($identifier),
         ]);
 

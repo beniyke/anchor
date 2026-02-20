@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Session;
-use App\Models\User;
 use Core\Services\ConfigServiceInterface;
 use Helpers\DateTimeHelper;
 use Helpers\Http\UserAgent;
 use Helpers\Lottery;
 use Helpers\String\Str;
 use RuntimeException;
+use Security\Auth\Contracts\Authenticatable;
+use Security\Auth\Interfaces\SessionManagerInterface;
 
-class SessionService
+class SessionService implements SessionManagerInterface
 {
     protected readonly UserAgent $agent;
 
@@ -25,30 +26,43 @@ class SessionService
         $this->config = $config;
     }
 
-    public function createNewSession(User $user, ?int $lifetime = null): Session
+    public function create(Authenticatable $user): string
     {
         $token = Str::random('secure', 32);
-
-        if (empty($lifetime)) {
-            $lifetime = (int) $this->config->get('session.timeout');
-        }
-
+        $lifetime = (int) $this->config->get('session.timeout');
         $expiresAt = DateTimeHelper::now()->addSeconds($lifetime);
 
-        $session = Session::create([
-            'user_id' => $user->id,
+        Session::create([
+            'user_id' => $user->getAuthId(),
             'token' => $token,
             'browser' => $this->agent->browser() . ' ' . $this->agent->version(),
             'device' => $this->agent->device(),
             'ip' => $this->agent->ip(),
             'os' => $this->agent->platform(),
-            'expires_at' => $expiresAt,
+            'expire_at' => $expiresAt,
         ]);
 
-        // Automatic session garbage collection
         $this->handleGarbageCollection();
 
-        return $session;
+        return $token;
+    }
+
+    public function validate(string $token): ?Authenticatable
+    {
+        $session = Session::findByToken($token);
+
+        if ($this->isSessionValid($session)) {
+            $session->refresh();
+
+            return $session->user;
+        }
+
+        return null;
+    }
+
+    public function revoke(string $token): bool
+    {
+        return $this->terminateSession($token);
     }
 
     /**

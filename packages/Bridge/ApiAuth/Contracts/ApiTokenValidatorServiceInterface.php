@@ -12,7 +12,10 @@ declare(strict_types=1);
 
 namespace Bridge\ApiAuth\Contracts;
 
-interface ApiTokenValidatorServiceInterface
+use Security\Auth\Contracts\Authenticatable;
+use Security\Auth\Interfaces\TokenValidatorInterface;
+
+interface ApiTokenValidatorServiceInterface extends TokenValidatorInterface
 {
-    public function getAuthenticatedUser(): ?object;
+    public function getAuthenticatedUser(): ?Authenticatable;
 }

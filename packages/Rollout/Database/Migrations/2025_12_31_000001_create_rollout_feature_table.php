@@ -17,7 +17,7 @@ class CreateRolloutFeatureTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('rollout_feature', function ($table) {
+        Schema::createIfNotExists('rollout_feature', function ($table) {
             $table->id();
             $table->string('name', 100);
             $table->string('slug', 100)->unique();

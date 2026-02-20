@@ -31,7 +31,9 @@ use Helpers\DateTimeHelper;
  */
 class Report extends BaseModel
 {
-    protected string $table = 'pulse_report';
+    public const TABLE = 'pulse_report';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'reportable_type',

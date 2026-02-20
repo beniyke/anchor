@@ -28,7 +28,9 @@ use Helpers\DateTimeHelper;
  */
 class Badge extends BaseModel
 {
-    protected string $table = 'pulse_badge';
+    public const TABLE = 'pulse_badge';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'name',

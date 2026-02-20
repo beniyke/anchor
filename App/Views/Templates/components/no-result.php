@@ -15,7 +15,7 @@
             <div class="card-subtitle text-muted mb-3"><?= $no_result['subheading'] ?></div>
         <?php endif; ?>
 
-        <?php if (! empty($no_result['cta'])): ?>
+        <?php if (! empty($no_result['cta']) && $this->canAccessAction('create')): ?>
             <div>
                 <a class="btn btn-primary btn-lg" href="<?= $no_result['cta']['url'] ?? '#' ?>"><i class="fas fa-plus fa-fw"></i> <?= $no_result['cta']['content'] ?? '' ?></a>
             </div>

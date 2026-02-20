@@ -18,8 +18,9 @@ use Database\Traits\HasRefid;
 class Referral extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'wave_referral';
 
-    protected string $table = 'wave_referral';
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'refid',

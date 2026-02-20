@@ -41,8 +41,9 @@ use Helpers\DateTimeHelper;
 class Post extends BaseModel
 {
     use HasRefid;
+    public const TABLE = 'scribe_post';
 
-    protected string $table = 'scribe_post';
+    protected string $table = self::TABLE;
 
     protected string $refidPrefix = 'pst_';
 

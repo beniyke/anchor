@@ -15,6 +15,7 @@ use App\Models\User;
 use Database\BaseModel;
 use Database\Relations\BelongsTo;
 use Helpers\DateTimeHelper;
+use Onboard\Enums\EquipmentStatus;
 
 /**
  * @property int             $id
@@ -29,7 +30,9 @@ use Helpers\DateTimeHelper;
  */
 class Equipment extends BaseModel
 {
-    protected string $table = 'onboard_equipment';
+    public const TABLE = 'onboard_equipment';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'user_id',
@@ -37,6 +40,10 @@ class Equipment extends BaseModel
         'status',
         'asset_tag',
         'notes',
+    ];
+
+    protected array $casts = [
+        'status' => EquipmentStatus::class,
     ];
 
     public function user(): BelongsTo

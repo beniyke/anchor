@@ -16,6 +16,7 @@ use Closure;
 use Core\Middleware\MiddlewareInterface;
 use Helpers\Http\Request;
 use Helpers\Http\Response;
+use Helpers\Log;
 use Tenancy\Exceptions\TenantException;
 use Tenancy\TenantManager;
 use Throwable;
@@ -61,7 +62,7 @@ class TenantIdentificationMiddleware implements MiddlewareInterface
 
             return $next($request, $response);
         } catch (Throwable $e) {
-            logger('tenant.log')->error('Tenant identification failed', [
+            Log::channel('tenant')->error('Tenant identification failed', [
                 'error' => $e->getMessage(),
                 'host' => $request->getHost(),
                 'path' => $request->getPath(),
@@ -106,7 +107,7 @@ class TenantIdentificationMiddleware implements MiddlewareInterface
 
     private function handleTenantNotFound(?string $subdomain, Response $response): Response
     {
-        logger('tenant.log')->warning('Tenant not found', ['subdomain' => $subdomain]);
+        Log::channel('tenant')->warning('Tenant not found', ['subdomain' => $subdomain]);
 
         return $response->status(404)
             ->header([
@@ -120,7 +121,7 @@ class TenantIdentificationMiddleware implements MiddlewareInterface
 
     private function handleTenantException(TenantException $e, Response $response): Response
     {
-        logger('tenant.log')->warning('Tenant error', [
+        Log::channel('tenant')->warning('Tenant error', [
             'error' => $e->getMessage(),
         ]);
 

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ *
  * Base class for handling InApp notifications.
  * This class provides a structure for building InApp notifications
  * and requires extending classes to implement key notification details.

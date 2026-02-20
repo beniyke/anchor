@@ -18,7 +18,7 @@ class CreateWaveReferralTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::createIfNotExist('wave_referral', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('wave_referral', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid')->unique()->index();
             $table->unsignedBigInteger('affiliate_id')->index();

@@ -38,7 +38,7 @@
             <div class="hero-content">
                 <div class="badge-pill">
                     <span class="badge-dot"></span>
-                    v2.0 is now available
+                    version 2.0
                 </div>
                 <h1 class="hero-title">
                     The <span class="text-gradient">Stable Foundation</span> for<br>

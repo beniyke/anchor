@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace Bridge;
 
 use Helpers\DateTimeHelper;
+use Security\Auth\Interfaces\AccessTokenInterface;
 
-class PersonalAccessToken
+class PersonalAccessToken implements AccessTokenInterface
 {
     public function __construct(
         public int $id,

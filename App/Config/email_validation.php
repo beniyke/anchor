@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ * 
  * Email Validation Configuration
  *
  * Configure email validation behavior for the Anchor framework

@@ -29,7 +29,9 @@ use DateTimeInterface;
  */
 class Recognition extends BaseModel
 {
-    protected string $table = 'metric_recognition';
+    public const TABLE = 'metric_recognition';
+
+    protected string $table = self::TABLE;
 
     protected array $fillable = [
         'sender_id',

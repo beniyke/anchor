@@ -14,10 +14,11 @@ namespace Bridge\ApiAuth\Validators;
 
 use Bridge\Models\ApiKey;
 use Helpers\DateTimeHelper;
+use Security\Auth\Contracts\Authenticatable;
 
 class DynamicTokenValidator
 {
-    public function validate(string $token): ?object
+    public function validate(string $token): ?Authenticatable
     {
         $hashedToken = hash('sha256', $token);
 

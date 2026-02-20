@@ -17,7 +17,7 @@ class CreateScribeTagTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('scribe_tag', function ($table) {
+        Schema::createIfNotExists('scribe_tag', function ($table) {
             $table->id();
             $table->string('refid', 64)->unique()->index();
             $table->string('name', 64)->unique()->index();

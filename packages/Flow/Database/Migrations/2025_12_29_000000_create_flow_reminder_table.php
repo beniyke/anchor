@@ -5,8 +5,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2025_12_29_000000_create_flow_reminder_table
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -18,7 +16,7 @@ class CreateFlowReminderTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('flow_reminder', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('flow_reminder', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('task_id');
             $table->unsignedBigInteger('user_id');

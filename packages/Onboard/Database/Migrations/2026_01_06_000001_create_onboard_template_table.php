@@ -4,8 +4,6 @@ declare(strict_types=1);
 /**
  * Anchor Framework
  *
- * 2026_01_06_000001_create_onboard_template_table.
- *
  * @author BenIyke <beniyke34@gmail.com> | Twitter: @BigBeniyke
  */
 
@@ -17,7 +15,7 @@ class CreateOnboardTemplateTable extends BaseMigration
 {
     public function up(): void
     {
-        Schema::create('onboard_template', function (SchemaBuilder $table) {
+        Schema::createIfNotExists('onboard_template', function (SchemaBuilder $table) {
             $table->id();
             $table->string('name');
             $table->string('role')->nullable();

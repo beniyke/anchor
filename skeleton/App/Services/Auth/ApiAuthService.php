@@ -5,67 +5,65 @@ declare(strict_types=1);
 namespace App\Services\Auth;
 
 use App\Models\User;
-use App\Notifications\InApp\LoginInAppNotification;
-use App\Requests\LoginRequest;
 use App\Services\Auth\Interfaces\AuthServiceInterface;
-use App\Services\UserService;
-use Bridge\ApiAuth\Contracts\ApiTokenValidatorServiceInterface;
-use Bridge\TokenManager;
-use Helpers\Data;
-use Helpers\DateTimeHelper;
+use Core\Event;
+use Core\Services\ConfigServiceInterface;
+use Helpers\Data\Contracts\DataTransferObject;
 use Helpers\Http\Request;
-use Helpers\Http\UserAgent;
-use Security\Firewall\Drivers\AuthFirewall;
+use Security\Auth\Events\LoginEvent;
+use Security\Auth\Events\LoginFailedEvent;
+use Security\Auth\Events\LogoutEvent;
+use Security\Auth\Interfaces\AuthManagerInterface;
+use Security\Auth\Interfaces\TokenManagerInterface;
 
 class ApiAuthService implements AuthServiceInterface
 {
-    private ?User $user = null;
+    private string $guard = 'api';
 
     private ?string $generatedToken = null;
 
     public function __construct(
-        private readonly ApiTokenValidatorServiceInterface $token_validator,
-        private readonly UserService $user_service,
-        private readonly TokenManager $token_manager,
-        private readonly AuthFirewall $firewall,
-        private readonly UserAgent $agent,
-        private readonly Request $request
+        private readonly TokenManagerInterface $token_manager,
+        private readonly Request $request,
+        private readonly AuthManagerInterface $auth,
+        private readonly ConfigServiceInterface $config
     ) {
-        $this->user = $token_validator->getAuthenticatedUser();
+    }
+
+    public function viaGuard(string $guard): self
+    {
+        $this->guard = $guard;
+
+        return $this;
     }
 
     public function isAuthenticated(): bool
     {
-        return ! empty($this->user);
+        return $this->auth->guard($this->guard)->check();
     }
 
     public function user(): ?User
     {
-        return $this->user;
+        return $this->auth->guard($this->guard)->user();
     }
 
-    public function login(LoginRequest $request): bool
+    public function login(DataTransferObject $request): bool
     {
         if (! $request->isValid()) {
-            $this->firewall->fail()->capture();
+            Event::dispatch(new LoginFailedEvent($request->toArray(), $this->guard));
 
             return false;
         }
 
-        $user = $this->user_service->confirmUser($request->getData());
-
-        if (! $user) {
-            $this->firewall->fail()->capture();
+        if (! $this->auth->guard($this->guard)->attempt($request->toArray())) {
+            Event::dispatch(new LoginFailedEvent($request->toArray(), $this->guard));
 
             return false;
         }
 
-        $this->user = $user;
+        $user = $this->user();
 
-        // Create Bridge Token
         $tokenName = $this->request->post('device_name') ?? 'API Client';
-
-        // Allow custom abilities from request, default to all
         $abilities = $this->request->post('abilities') ?? ['*'];
 
         $this->generatedToken = $this->token_manager->createToken(
@@ -74,38 +72,42 @@ class ApiAuthService implements AuthServiceInterface
             $abilities
         );
 
-        $this->firewall->clear()->capture();
-        $this->notifyLoginActivity($user);
+        $this->auth->guard($this->guard)->setUser($user);
+
+        Event::dispatch(new LoginEvent($user, false, $this->guard));
 
         return true;
     }
 
-    public function logout(?string $token = null): bool
+    public function logout(): bool
     {
-        if (! $token) {
+        $user = $this->user();
+
+        if ($user) {
             $token = $this->request->getBearerToken();
-        }
 
-        if (! $token) {
-            return true; // No token to revoke is success
-        }
-
-        // Handle personal access tokens (format: id|secret)
-        if (str_contains($token, '|')) {
-            [$id, $secret] = explode('|', $token, 2);
-            if (is_numeric($id)) {
-                $revoked = $this->token_manager->revokeToken((int) $id);
-
-                // Clear user state after successful logout
-                if ($revoked) {
-                    $this->user = null;
+            if ($token && str_contains($token, '|')) {
+                [$id, $secret] = explode('|', $token, 2);
+                if (is_numeric($id)) {
+                    $this->token_manager->revokeToken((int) $id);
                 }
-
-                return $revoked;
             }
+
+            $this->auth->guard($this->guard)->logout();
+            Event::dispatch(new LogoutEvent($user, $this->guard));
         }
 
-        // They are handled differently by their respective validators
+        return true;
+    }
+
+    public function logoutAll(): bool
+    {
+        $guards = $this->config->get('auth.guards', []);
+
+        foreach (array_keys($guards) as $guardName) {
+            $this->viaGuard($guardName)->logout();
+        }
+
         return true;
     }
 
@@ -119,13 +121,11 @@ class ApiAuthService implements AuthServiceInterface
         return $this->isAuthenticated();
     }
 
-    /**
-     * Check if authenticated user's token has specific ability/abilities.
-     *
-     * @param array|string $abilities Single ability or array of abilities
-     *
-     * @return bool True if token has all specified abilities
-     */
+    public function getSessionKey(): ?string
+    {
+        return $this->auth->guard($this->guard)->getSessionKey();
+    }
+
     public function can(string|array $abilities): bool
     {
         if (! $this->isAuthenticated()) {
@@ -147,21 +147,5 @@ class ApiAuthService implements AuthServiceInterface
         }
 
         return true;
-    }
-
-    private function notifyLoginActivity(User $user): void
-    {
-        $payload = Data::make($user->only(['id', 'name', 'email']));
-
-        defer(function () use ($payload, $user) {
-            $data['browser'] = $this->agent->browser();
-            $data['period'] = DateTimeHelper::now()->format('D, M d Y h:i A');
-
-            activity('logged in via API', $data, $user->id);
-
-            notify('in-app')
-                ->with(LoginInAppNotification::class, $payload->add($data))
-                ->send();
-        });
     }
 }
