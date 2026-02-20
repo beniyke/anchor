@@ -29,7 +29,7 @@ class App
 {
     use DeferredTaskTrait;
 
-    public const VERSION = '2.0.0';
+    public const VERSION = '2.0.1';
 
     private ContainerInterface $container;
 
