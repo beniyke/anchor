@@ -42,12 +42,12 @@ class UnixPipes extends AbstractPipes
 
     public function __sleep(): array
     {
-        throw new BadMethodCallException('Cannot serialize '.__CLASS__);
+        throw new BadMethodCallException('Cannot serialize ' . __CLASS__);
     }
 
     public function __wakeup()
     {
-        throw new BadMethodCallException('Cannot unserialize '.__CLASS__);
+        throw new BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }
 
     public function __destruct()
@@ -106,7 +106,7 @@ class UnixPipes extends AbstractPipes
 
         // let's have a look if something changed in streams
         set_error_handler($this->handleError(...));
-        if (($r || $w) && stream_select($r, $w, $e, 0, $blocking ? Process::TIMEOUT_PRECISION * 1E6 : 0) === false) {
+        if (($r || $w) && stream_select($r, $w, $e, 0, $blocking ? (int) (Process::TIMEOUT_PRECISION * 1E6) : 0) === false) {
             restore_error_handler();
             // if a system call has been interrupted, forget about it, let's try again
             // otherwise, an error occurred, let's reset pipes
