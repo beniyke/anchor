@@ -24,13 +24,13 @@ parameters:
     excludePaths:
         analyseAndScan:
             - %currentWorkingDirectory%/App/storage/*
-            - App/src/Api/Controllers/AuthController.php (?)
-            - App/src/Api/Services/ApiGuardService.php (?)
-            - System/Database/BaseModel.php (?)
-            - System/Helpers/Format/FormatCollection.php (?)
+            - System/Database/BaseModel.php
+            - System/Helpers/Format/FormatCollection.php
+
 
     ignoreErrors:
         - '#Using nullsafe property access .* is unnecessary#'
+
         - '#Access to an undefined property .*::\$.*#'
         - '#Instanceof between .* will always evaluate to true#'
         - '#Property .* is never assigned .* so it can be removed from the property type#'

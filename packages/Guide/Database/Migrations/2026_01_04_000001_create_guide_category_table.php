@@ -8,7 +8,6 @@ declare(strict_types=1);
  */
 
 use Database\Migration\BaseMigration;
-use Database\Migration\BaseMigration;
 use Database\Schema\SchemaBuilder;
 
 class CreateGuideCategoryTable extends BaseMigration

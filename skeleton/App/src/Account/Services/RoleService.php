@@ -39,9 +39,7 @@ class RoleService
             ->permissions($permissions)
             ->create();
 
-        if ($role) {
-            activity('created {role} role using Permit', ['role' => $name]);
-        }
+        activity('created {role} role using Permit', ['role' => $name]);
 
         return $role;
     }
@@ -65,9 +63,7 @@ class RoleService
             ->permissions($permissions)
             ->update();
 
-        if ($updatedRole) {
-            activity('updated {role} role using Permit', ['role' => $name]);
-        }
+        activity('updated {role} role using Permit', ['role' => $name]);
 
         return $updatedRole;
     }
@@ -82,9 +78,7 @@ class RoleService
 
         $delete = $role->delete();
 
-        if ($delete) {
-            activity('deleted role: {role} from Permit', ['role' => $roleName]);
-        }
+        activity('deleted role: {role} from Permit', ['role' => $roleName]);
 
         return $delete;
     }

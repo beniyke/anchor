@@ -20,6 +20,7 @@ trait HasSubdomain
                 return;
             }
 
+            /** @var object $model */
             if (!$model->isValidSubdomain($model->subdomain, $excluded)) {
                 throw new TenantException("Invalid subdomain: {$model->subdomain}");
             }

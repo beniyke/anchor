@@ -56,7 +56,7 @@ class WebAuthMiddleware implements MiddlewareInterface
         $request->setAuthenticatedUser($authenticatedUser);
         $request->setRouteContext('auth_guard', $activeGuard);
 
-        if ($authenticatedUser && isset($authenticatedUser->id)) {
+        if (isset($authenticatedUser->id)) {
             $request->setHeader('X-Account-ID', (string) $authenticatedUser->id);
         }
 

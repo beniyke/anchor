@@ -78,7 +78,7 @@ class RegisterUserAction
             $allSlugs = array_merge($allSlugs, array_keys($perms));
         }
 
-        $role = Permit::role()
+        Permit::role()
             ->slug($roleSlug)
             ->name('Super Admin')
             ->description('Full system access bypass.')
@@ -86,8 +86,6 @@ class RegisterUserAction
             ->assign($user)
             ->create();
 
-        if ($role) {
-            activity('initialized system with super-admin: {user}', ['user' => $user->email], $user->id);
-        }
+        activity('initialized system with super-admin: {user}', ['user' => $user->email], $user->id);
     }
 }

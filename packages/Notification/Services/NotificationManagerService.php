@@ -70,9 +70,8 @@ class NotificationManagerService
             $data = $payload->data();
             $data['user_id'] = $user->id;
 
-            if (Notification::create($data)) {
-                $count++;
-            }
+            Notification::create($data);
+            $count++;
         }
 
         return $count;

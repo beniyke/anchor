@@ -94,7 +94,7 @@ class PerformanceManagerService
         if (class_exists(Slot::class)) {
             try {
                 $start = DateTimeHelper::instance($scheduledAt);
-                $end = (clone $start)->addMinutes(30); // Default session length
+                $end = DateTimeHelper::instance((clone $start)->addMinutes(30));
                 $period = new Period($start, $end);
 
                 $availabilities = Slot::forModel($manager)->getSchedules(ScheduleType::Availability, $period);

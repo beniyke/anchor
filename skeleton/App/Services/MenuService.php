@@ -108,7 +108,7 @@ class MenuService
      */
     private function filterSubmenu(array $menu, User $user): array
     {
-        return array_filter($menu['submenu'], function ($item) use ($menu, $user) {
+        return array_filter($menu['submenu'], function ($item) use ($user) {
             return $user->can($item['permission']);
         });
     }
