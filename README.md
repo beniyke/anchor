@@ -84,6 +84,7 @@ Full documentation is available in the [docs/](docs/) directory.
 - **[Introduction](docs/introduction.md)** - Core philosophy and metaphors
 - **[Architecture](docs/architecture.md)** - How Anchor works under the hood
 - **[Package Management](docs/package-management.md)** - Extending the framework
+- **[Versioning](docs/versioning.md)** - Understanding SemVer in Anchor
 
 ## License
 
