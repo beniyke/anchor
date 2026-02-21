@@ -56,8 +56,10 @@ class PageSearch {
 
     open() {
         this.bar.classList.add('active');
-        this.input.focus();
-        this.input.select();
+        setTimeout(() => {
+            this.input.focus();
+            this.input.select();
+        }, 50);
     }
 
     close() {
