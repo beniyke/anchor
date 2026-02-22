@@ -22,6 +22,7 @@ Thumbs.db
 /App/storage/database/backup
 /App/storage/database/seeds/TenantSeeder.php
 /App/storage/database/seeds/RolesSeeder.php
+/tests/storage
 
 # Public
 /public/sent-mail
