@@ -44,7 +44,6 @@ class SecurityHeadersMiddleware implements MiddlewareInterface
 
         $headers = [];
 
-        // X-Frame-Options: Prevent clickjacking
         $headers['X-Frame-Options'] = $this->config->get('security_headers.x_frame_options', 'SAMEORIGIN');
         $headers['X-Content-Type-Options'] = $this->config->get('security_headers.x_content_type_options', 'nosniff');
         $headers['X-XSS-Protection'] = $this->config->get('security_headers.x_xss_protection', '1; mode=block');

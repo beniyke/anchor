@@ -43,7 +43,7 @@ class ThreadBuilder
     public function on(BaseModel $model): self
     {
         $this->threadableType = get_class($model);
-        $this->threadableId = $model->id;
+        $this->threadableId = (int) $model->id;
 
         return $this;
     }

@@ -60,6 +60,7 @@
       "Queue\\": "System/Queue/",
       "Security\\": "System/Security/",
       "Exceptions\\": "System/Exceptions/",
+      "Academy\\": "packages/Academy/",
       "Ally\\": "packages/Ally/",
       "Activity\\": "packages/Activity/",
       "Audit\\": "packages/Audit/",
@@ -84,6 +85,7 @@
       "Permit\\": "packages/Permit/",
       "Proof\\": "packages/Proof/",
       "Pulse\\": "packages/Pulse/",
+      "Rank\\": "packages/Rank/",
       "Refer\\": "packages/Refer/",
       "Release\\": "packages/Release/",
       "Rollout\\": "packages/Rollout/",
@@ -107,7 +109,7 @@
   "scripts": {
     "test": "pest",
     "test:coverage": "pest --coverage",
-    "analyse": "phpstan analyse",
+    "analyse": "phpstan analyse --memory-limit=2G",
     "format": "pint",
     "format:check": "pint --test",
     "sail": [

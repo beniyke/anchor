@@ -1,0 +1,25 @@
+{
+  "name": "beniyke/academy",
+  "description": "Anchor Academy LMS Package",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "BenIyke",
+      "email": "beniyke34@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Academy\\": ""
+    }
+  },
+  "extra": {
+    "anchor": {
+      "setup": "setup.php"
+    }
+  }
+}

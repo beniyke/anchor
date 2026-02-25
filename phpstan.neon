@@ -1,4 +1,7 @@
 parameters:
+    parallel:
+        maximumNumberOfProcesses: 2
+
     # Rule Level:
     # 0 (loosest) to 9 (strictest). 
     # Level 5 catches important bugs without being overly strict about type hints.

@@ -174,6 +174,16 @@ class SubscriptionManagerService
             ->exists();
     }
 
+    public function hasActivePlan(string|int $ownerId, string $ownerType, array $planIds): bool
+    {
+        return Subscription::query()
+            ->where('owner_id', $ownerId)
+            ->where('owner_type', $ownerType)
+            ->whereIn('status', [SubscriptionStatus::ACTIVE->value, SubscriptionStatus::TRIALING->value])
+            ->whereIn('plan_id', $planIds)
+            ->exists();
+    }
+
     public function updateQuantity(string|int $subscriptionId, int $quantity): bool
     {
         $subscription = $this->find($subscriptionId);
