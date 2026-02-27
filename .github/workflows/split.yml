@@ -22,6 +22,8 @@ jobs:
       fail-fast: false
       matrix:
         package:
+          - local_path: "packages/Academy"
+            split_repository: "academy"
           - local_path: "packages/Activity"
             split_repository: "activity"
           - local_path: "packages/Ally"
