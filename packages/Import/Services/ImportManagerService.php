@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Import\Services;
 
-use App\Services\Auth\Interfaces\AuthServiceInterface;
+use Core\Contracts\AuthServiceInterface;
 use Core\Services\ConfigServiceInterface;
 use Exception;
 use Helpers\DateTimeHelper;

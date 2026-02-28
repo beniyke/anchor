@@ -12,6 +12,7 @@ namespace Academy\Models;
 
 use Academy\Enums\EnrolmentStatus;
 use Academy\Traits\AuditableAcademyModel;
+use App\Models\User;
 use Database\BaseModel;
 use Database\Relations\BelongsTo;
 use Database\Relations\HasMany;
@@ -59,6 +60,11 @@ class AcademyEnrolment extends BaseModel
     public function program(): BelongsTo
     {
         return $this->belongsTo(AcademyProgram::class, 'program_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function paymentPlan(): BelongsTo

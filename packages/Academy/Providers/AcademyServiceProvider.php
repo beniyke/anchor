@@ -34,6 +34,7 @@ use Academy\Listeners\SendEnrolmentNotificationListener;
 use Academy\Listeners\SendInstalmentReminderListener;
 use Academy\Listeners\SendLiveSessionReminderListener;
 use Academy\Listeners\SendPaymentReceiptListener;
+use Academy\Listeners\SendProgramCompletedNotificationListener;
 use Academy\Models\AcademyEnrolment;
 use Academy\Services\AcademyAnalyticsService;
 use Academy\Services\AssessmentService;
@@ -113,6 +114,7 @@ class AcademyServiceProvider extends ServiceProvider
         Event::listen(PaymentSuccessfulEvent::class, ProcessPaymentSuccessListener::class);
         Event::listen(ProgramCompletedEvent::class, IssueCertificateListener::class);
         Event::listen(ProgramCompletedEvent::class, AwardBadgeListener::class);
+        Event::listen(ProgramCompletedEvent::class, SendProgramCompletedNotificationListener::class);
 
         // Assessments
         Event::listen(AssessmentGradedEvent::class, SendAssessmentGradedListener::class);

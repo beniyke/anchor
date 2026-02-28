@@ -1,8 +1,8 @@
 <!-- This file is auto-generated from docs/guide.md -->
 
-# Guide (FAQ/Help Center)
+# Guide
 
-The **Guide** package provides a robust FAQ and knowledge base system for the Anchor Framework. It features hierarchical categories, rich media support, full-text search, and helpfulness analytics.
+The **Guide** package provides a comprehensive FAQ and knowledge base system for the Anchor Framework. It features hierarchical categories, rich media support, full-text search, and helpfulness analytics.
 
 ## Core Capabilities
 
@@ -14,9 +14,19 @@ The **Guide** package provides a robust FAQ and knowledge base system for the An
 
 ## Installation
 
+Guide is a **package** that requires installation before use.
+
+### Install the Package
+
 ```bash
 php dock package:install Guide --packages
 ```
+
+This command will:
+
+- Publish the `guide.php` configuration file.
+- Run the migration for Guide tables.
+- Register the `GuideServiceProvider`.
 
 ## Basic Usage
 
@@ -29,13 +39,23 @@ use Guide\Guide;
 $billing = Guide::category()
     ->name('Billing & Payments')
     ->description('Everything related to your invoices and plans.')
-    ->save();
+    ->create();
 
 // Create a sub-category
 Guide::category()
     ->name('Refunds')
     ->parent($billing)
-    ->save();
+    ->create();
+```
+
+### Fetching Categories
+
+```php
+// Find by slug
+$category = Guide::findCategory('billing-payments');
+
+// Find by refid
+$category = Guide::findCategoryByRefId('cat_abcdef123');
 ```
 
 ### Managing Articles
@@ -47,7 +67,17 @@ $article = Guide::article()
     ->content('Go to Settings > Billing and click "Update Card"...')
     ->category($billing)
     ->status('published')
-    ->save();
+    ->create();
+```
+
+### Fetching Articles
+
+```php
+// Find by slug
+$article = Guide::findArticle('how-to-update-your-card');
+
+// Find by refid
+$article = Guide::findArticleByRefId('art_xyz789');
 ```
 
 ### Searching Articles
@@ -92,7 +122,65 @@ Guide::analytics()->submitFeedback(
 ### Popular Articles
 
 ```php
+// Returns: [[Article Model], [Article Model], ...]
 $popular = Guide::analytics()->getPopularArticles(limit: 5);
+```
+
+### Analytics Sample Data
+
+The `Guide::analytics()` service provides insights into how users interact with your help center.
+
+#### Search Logs (`SearchLog::class`)
+
+| Property        | Type     | Description                              |
+| :-------------- | :------- | :--------------------------------------- |
+| `query`         | `string` | The search term entered by the user.     |
+| `results_count` | `int`    | Number of articles found for this query. |
+| `ip_address`    | `string` | The IP address of the user.              |
+| `metadata`      | `json`   | Browser and session data.                |
+
+#### Helpfulness Feedback (`Feedback::class`)
+
+| Property           | Type     | Description                   |
+| :----------------- | :------- | :---------------------------- |
+| `guide_article_id` | `int`    | The ID of the rated article.  |
+| `rating`           | `int`    | Rating value (typically 1-5). |
+| `comment`          | `string` | Optional user feedback.       |
+
+## Advanced Usage
+
+### Article Relationships
+
+You can link related articles to help users discover more content.
+
+```php
+Guide::relateArticles($article, $anotherArticle);
+```
+
+### Media Integration Types
+
+Standardize how media is attached to articles for consistent rendering.
+
+```php
+// Attach as a main featured image
+Guide::attachMedia($article, $mediaId, type: 'featured');
+
+// Attach as a downloadable resource
+Guide::attachMedia($article, $mediaId, type: 'attachment');
+```
+
+### Article Scopes
+
+Standard Eloquent scopes for common queries:
+
+```php
+use Guide\Models\Article;
+
+// Get all published articles
+$articles = Article::published()->get();
+
+// Get most viewed articles
+$popular = Article::orderBy('view_count', 'desc')->limit(10)->get();
 ```
 
 ## Integrations

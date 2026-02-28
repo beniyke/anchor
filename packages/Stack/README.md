@@ -1,8 +1,8 @@
 <!-- This file is auto-generated from docs/stack.md -->
 
-# Stack (Form Builder)
+# Stack
 
-Stack is a powerful, fluent form builder package for the Anchor Framework. It allows you to define complex forms programmatically, handle submissions with built-in validation, and track performance with robust analytics.
+Stack is a fluent form builder package for the Anchor Framework. It allows you to define complex forms programmatically, handle submissions with built-in validation, and track performance with robust analytics.
 
 ## Features
 
@@ -11,6 +11,22 @@ Stack is a powerful, fluent form builder package for the Anchor Framework. It al
 - **Media Integration**: Built-in support for file uploads (via `Media` package).
 - **Hardened Analytics**: Track views, starts, completions, and errors per form.
 - **Strict Isolation**: No direct model dependencies on other packages.
+
+## Installation
+
+Stack is a **package** that requires installation before use.
+
+### Install the Package
+
+```bash
+php dock package:install Stack --packages
+```
+
+This command will:
+
+- Publish the `stack.php` configuration file.
+- Run the migration for Stack tables.
+- Register the `StackServiceProvider`.
 
 ## Basic Usage
 
@@ -48,6 +64,7 @@ To submit data to a form, use the `submit` method. It returns a `Submission` mod
 
 ```php
 use Stack\Stack;
+use Exceptions\ValidationException;
 
 try {
     $submission = Stack::submit($form, [
@@ -57,7 +74,7 @@ try {
     ]);
 
     echo "Form submitted! Ref ID: " . $submission->refid;
-} catch (\Database\Exceptions\ValidationException $e) {
+} catch (ValidationException $e) {
     // Handle validation errors...
     print_r($e->getErrors());
 }
@@ -79,6 +96,7 @@ Access form-level analytics through the `Stack::analytics()` service.
 
 ```php
 $metrics = Stack::analytics()->getConversionMetrics($form);
+// Returns: ['views' => 100, 'submissions' => 10, 'conversion_rate' => 10.0]
 
 echo "Views: " . $metrics['views'];
 echo "Submissions: " . $metrics['submissions'];
@@ -93,5 +111,4 @@ Stack integrates gracefully with several Anchor packages:
 - **Media**: Handles file uploads by linking `media_id` to submission values (if installed).
 - **Link**: You can generate temporary, signed access links for private forms.
 
-> [!NOTE]
 > Stack uses **Defensive Integration**. If a package like `Audit` or `Media` is missing, Stack will continue to function without errors, skipping the extra logging or upload features.

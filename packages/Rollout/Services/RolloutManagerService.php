@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Rollout\Services;
 
 use App\Models\User;
-use App\Services\Auth\Interfaces\AuthServiceInterface;
+use Core\Contracts\AuthServiceInterface;
 use Core\Services\ConfigServiceInterface;
 use Rollout\Models\Feature;
 use Rollout\Services\Builders\FeatureBuilder;

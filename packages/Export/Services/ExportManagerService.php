@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Export\Services;
 
-use App\Services\Auth\Interfaces\AuthServiceInterface;
+use Core\Contracts\AuthServiceInterface;
 use Core\Services\ConfigServiceInterface;
 use Exception;
 use Export\Contracts\Exportable;

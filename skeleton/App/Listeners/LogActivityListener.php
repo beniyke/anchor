@@ -5,16 +5,12 @@ declare(strict_types=1);
 namespace App\Listeners;
 
 use Activity\Activity;
-use App\Services\Auth\Interfaces\AuthServiceInterface;
+use Core\Contracts\AuthServiceInterface;
 use Core\Events\KernelTerminateEvent;
 use Helpers\String\Str;
-use Throwable;
 
 class LogActivityListener
 {
-    /**
-     * @var AuthServiceInterface
-     */
     private AuthServiceInterface $auth;
 
     public function __construct(AuthServiceInterface $auth)
@@ -35,12 +31,9 @@ class LogActivityListener
         $action = $request->getRouteContext('action');
 
         $userId = null;
-        try {
-            if ($this->auth->isAuthenticated()) {
-                $userId = $this->auth->user()->id;
-            }
-        } catch (Throwable $e) {
-            // Ignore auth errors during logging
+
+        if ($this->auth->isAuthenticated()) {
+            $userId = $this->auth->user()->id;
         }
 
         if (!class_exists(Activity::class)) {
@@ -57,7 +50,6 @@ class LogActivityListener
             $domain ? " in {$domain}" : ''
         );
 
-        // We log immediately to ensure audit persistence
         Activity::description($description)
             ->user($userId)
             ->metadata(array_merge($meta, [

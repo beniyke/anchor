@@ -200,7 +200,7 @@ class DocsService
                 'Database' => ['database', 'query-builder', 'models', 'migrations', 'seeding'],
                 'Security' => ['authentication', 'csrf', 'encryption', 'firewall', 'request-validation'],
                 'Features' => ['mail', 'notify', 'defer', 'queues', 'package-management'],
-                'Packages' => ['notification', 'activity', 'bridge', 'workflow', 'watcher', 'tenancy', 'vault', 'slot', 'tokit', 'money', 'verify', 'wallet', 'pay', 'release', 'flow', 'wave', 'ghost', 'support', 'refer', 'export', 'import', 'media', 'geo', 'audit', 'rollout', 'permit', 'client', 'forge', 'ally', 'link', 'hub', 'scribe', 'proof', 'guide', 'pulse', 'blish', 'stack', 'scout', 'onboard', 'metric', 'shield', 'rank'],
+                'Packages' => ['notification', 'activity', 'bridge', 'workflow', 'watcher', 'tenancy', 'vault', 'slot', 'tokit', 'money', 'verify', 'wallet', 'pay', 'release', 'flow', 'wave', 'ghost', 'support', 'refer', 'export', 'import', 'media', 'geo', 'audit', 'rollout', 'permit', 'client', 'forge', 'ally', 'link', 'hub', 'scribe', 'proof', 'guide', 'pulse', 'blish', 'stack', 'scout', 'onboard', 'metric', 'shield', 'rank', 'academy'],
                 'Testing & Quality' => ['testing', 'code-quality', 'troubleshooting', 'debugger'],
                 'Console' => array_merge(['cli', 'dock-command']),
                 'Helpers' => array_merge(['functions', 'helpers'], $helperDocs),

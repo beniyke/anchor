@@ -1,6 +1,6 @@
 <!-- This file is auto-generated from docs/bridge.md -->
 
-# Bridge Authentication
+# Bridge
 
 Bridge provides a simple and robust way to issue API tokens for Single Page Applications (SPAs), mobile applications, and general third-party API clients.
 
@@ -8,9 +8,9 @@ Bridge provides a simple and robust way to issue API tokens for Single Page Appl
 
 Bridge provides **stateless, token-based API authentication** for applications that need to authenticate without session cookies. This is ideal for:
 
-1. **Cross-Domain SPAs**: When your frontend and backend are on different domains.
-2. **Mobile Applications**: iOS and Android apps requiring API access.
-3. **Third-Party Integrations**: External services accessing your API.
+- **Cross-Domain SPAs**: When your frontend and backend are on different domains.
+- **Mobile Applications**: iOS and Android apps requiring API access.
+- **Third-Party Integrations**: External services accessing your API.
 
 ### Authentication Strategies
 
@@ -35,7 +35,7 @@ php dock package:install bridge --packages
 This command will automatically:
 
 - Publish the `bridge.php` global configuration.
-- Publish and run migrations for `personal_access_token` and `api_key`.
+- Run the migration for Bridge tables.
 - Register the `BridgeServiceProvider` and the global `BridgeAuthMiddleware`.
 
 ## Personal Access Tokens
@@ -160,7 +160,7 @@ return [
 
 ## Security Best Practices
 
-1. **Keep Tokens Secret**: Treat API tokens like passwords. Never log them.
-2. **Use HTTPS**: Always serve your API over HTTPS to prevent token interception.
-3. **Use Scope/Abilities**: Limit tokens to only the permissions they need (Principle of Least Privilege).
-4. **Regular Pruning**: Keep your database clean by ensuring `prune.enabled` is `true`.
+- **Keep Tokens Secret**: Treat API tokens like passwords. Never log them.
+- **Use HTTPS**: Always serve your API over HTTPS to prevent token interception.
+- **Use Scope/Abilities**: Limit tokens to only the permissions they need (Principle of Least Privilege).
+- **Regular Pruning**: Keep your database clean by ensuring `prune.enabled` is `true`.

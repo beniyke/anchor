@@ -20,6 +20,6 @@ abstract class AcademyInAppNotification extends DatabaseNotification
 
     public function getUrl(): ?string
     {
-        return $this->payload->get('url');
+        return url($this->payload->get('url'));
     }
 }

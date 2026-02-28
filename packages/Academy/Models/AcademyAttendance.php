@@ -12,6 +12,7 @@ namespace Academy\Models;
 
 use Database\BaseModel;
 use Database\Relations\BelongsTo;
+use Database\Relations\MorphTo;
 use Database\Traits\HasRefid;
 
 class AcademyAttendance extends BaseModel
@@ -26,7 +27,8 @@ class AcademyAttendance extends BaseModel
 
     protected array $fillable = [
         'refid',
-        'live_session_id',
+        'attendable_type',
+        'attendable_id',
         'enrolment_id',
         'joined_at',
         'left_at',
@@ -36,16 +38,17 @@ class AcademyAttendance extends BaseModel
     protected array $casts = [
         'id' => 'integer',
         'refid' => 'string',
-        'live_session_id' => 'integer',
+        'attendable_type' => 'string',
+        'attendable_id' => 'integer',
         'enrolment_id' => 'integer',
         'joined_at' => 'datetime',
         'left_at' => 'datetime',
         'duration' => 'integer',
     ];
 
-    public function liveSession(): BelongsTo
+    public function attendable(): MorphTo
     {
-        return $this->belongsTo(AcademyLiveSession::class, 'live_session_id');
+        return $this->morphTo();
     }
 
     public function enrolment(): BelongsTo

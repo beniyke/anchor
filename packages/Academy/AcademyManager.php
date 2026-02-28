@@ -18,6 +18,7 @@ use Academy\Models\AcademyProgram;
 use Academy\Models\AcademySubmission;
 use Academy\Services\AcademyAnalyticsService;
 use Academy\Services\AssessmentService;
+use Academy\Services\AttendanceService;
 use Academy\Services\BadgeService;
 use Academy\Services\CertificateService;
 use Academy\Services\DiscussionService;
@@ -118,6 +119,11 @@ class AcademyManager
     public function ratings(): RatingService
     {
         return resolve(RatingService::class);
+    }
+
+    public function attendance(): AttendanceService
+    {
+        return resolve(AttendanceService::class);
     }
 
     public function enrol(int $userId, int|AcademyProgram $program, ?int $planId = null): AcademyEnrolment

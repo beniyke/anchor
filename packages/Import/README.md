@@ -226,6 +226,7 @@ Importing large files? Listen for progress events to update your UI.
 
 ```php
 use Import\Events\RowProcessed;
+use Helpers\Log;
 
 // In your EventServiceProvider
 public function handleRow(RowProcessed $event)

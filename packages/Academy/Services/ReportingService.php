@@ -13,13 +13,15 @@ class ReportingService
 {
     public function getTranscript(int $enrolmentId): array
     {
-        $enrolment = AcademyEnrolment::with(['program', 'submissions.grade', 'submissions.assessment'])->find($enrolmentId);
+        $enrolment = AcademyEnrolment::with(['user', 'program', 'submissions.grade', 'submissions.assessment'])->find($enrolmentId);
 
         if (!$enrolment) {
             return [];
         }
 
         return [
+            'learner_id' => $enrolment->user_id,
+            'learner_refid' => $enrolment->user->refid ?? null,
             'learner_name' => $enrolment->user->name ?? 'Student',
             'program_title' => $enrolment->program->title,
             'status' => $enrolment->status->value,

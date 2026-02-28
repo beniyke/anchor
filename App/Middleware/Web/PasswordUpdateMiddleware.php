@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Middleware\Web;
 
-use App\Services\Auth\Interfaces\AuthServiceInterface;
 use Closure;
+use Core\Contracts\AuthServiceInterface;
 use Core\Middleware\MiddlewareInterface;
 use Core\Services\ConfigServiceInterface;
 use Helpers\Http\Request;

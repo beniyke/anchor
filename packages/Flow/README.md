@@ -2,9 +2,7 @@
 
 # Flow
 
-#### Advanced Project Management
-
-**Flow** provides a robust, highly customizable Project Management engine for the Anchor Framework. It allows you to build Kanban boards, list-based workflows, and complex task hierarchies with ease.
+**Flow** provides a highly customizable Project Management engine for the Anchor Framework. It allows you to build Kanban boards, list-based workflows, and complex task hierarchies with ease.
 
 ## Features
 
@@ -28,7 +26,7 @@ php dock package:install Flow --packages
 This will automatically:
 
 - Publish the configuration.
-- Create the `flow_*` tables via migrations.
+- Run the migration for Flow tables.
 - Register the `FlowServiceProvider`.
 
 ### Configuration
@@ -394,17 +392,17 @@ $health = Flow::reports()->for($campaign)->completionRate();
 
 ### Reporting Service
 
-| Method                                 | Description                                               |
-| :------------------------------------- | :-------------------------------------------------------- |
-| `for(Project $p)`                      | Returns a `ReportingProxy` for fluent metrics.            |
-| `getProjectCompletionRate(Project $p)` | Returns percentage of tasks in 'done' columns.            |
-| `getBurndownData(Project $p)`          | Returns daily remaining task counts for the last 30 days. |
-| `getKanbanData(Project $p)`            | Returns board structure with columns and their tasks.     |
-| `getUserTaskStats(Project $p)`         | Returns per-user task counts (total, done, overdue).      |
-| `getTaskDistribution(Project $p)`      | Returns task counts grouped by column type.               |
-| `getBurndownChartData(Project $p)`     | Returns burndown data formatted for charts.               |
-| `getDistributionChartData(Project $p)` | Returns distribution data formatted for charts.           |
-| `getUserStatsChartData(Project $p)`    | Returns user stats formatted for charts.                  |
+| Method                                            | Description                                               |
+| :------------------------------------------------ | :-------------------------------------------------------- |
+| `for(Project $p)`                                 | Returns a `ReportingProxy` for fluent metrics.            |
+| `getProjectCompletionRate(Project $p)`            | Returns percentage of tasks in 'done' columns.            |
+| `getBurndownData(Project $p)`                     | Returns daily remaining task counts for the last 30 days. |
+| `getKanbanData(Project $p)`                       | Returns board structure with columns and their tasks.     |
+| `getUserTaskStats(Project $p)`                    | Returns per-user task counts (total, done, overdue).      |
+| `getTaskDistribution(Project $p, string $g)`      | Returns task counts grouped by column type.               |
+| `getBurndownChartData(Project $p)`                | Returns burndown data formatted for charts.               |
+| `getDistributionChartData(Project $p, string $g)` | Returns distribution data formatted for charts.           |
+| `getUserStatsChartData(Project $p)`               | Returns user stats formatted for charts.                  |
 
 ### RecurringTaskService
 
@@ -421,6 +419,32 @@ $health = Flow::reports()->for($campaign)->completionRate();
 | `make()`              | Returns a `ReminderBuilder` instance.  |
 | `create(array $data)` | Creates a reminder directly from data. |
 | `processReminders()`  | Processes and sends all due reminders. |
+ 
+## Automation
+ 
+Flow uses automated scheduling to process task recurrence and dispatch reminders. These tasks are automatically registered in the central scheduler:
+ 
+```php
+// packages/Flow/Schedules/FlowSchedule.php
+namespace Flow\Schedules;
+ 
+use Cron\Interfaces\Schedulable;
+use Cron\Schedule;
+ 
+class FlowSchedule implements Schedulable
+{
+    public function schedule(Schedule $schedule): void
+    {
+        $schedule->task()
+            ->signature('flow:recur')
+            ->hourly();
+ 
+        $schedule->task()
+            ->signature('flow:reminders')
+            ->everyMinute();
+    }
+}
+```
 
 ## Best Practices
 

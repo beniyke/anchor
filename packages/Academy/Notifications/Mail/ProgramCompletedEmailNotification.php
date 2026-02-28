@@ -19,7 +19,7 @@ class ProgramCompletedEmailNotification extends AcademyEmailNotification
             ->greeting("Goal Achieved!")
             ->greeting("Hello " . $this->payload->get('name') . ",")
             ->markdown("Well done! You have successfully completed **" . $this->payload->get('program_title') . "**. We are proud of your achievement.")
-            ->action("Rate this Program", url("/academy/programs/" . $this->payload->get('slug') . "/feedback"))
+            ->action("Rate this Program", url($this->payload->get('url')))
             ->render();
     }
 }

@@ -25,7 +25,7 @@ class SendAssessmentGradedListener
             'assessment_title' => $assessment->title,
             'score' => $submission->score,
             'is_passing' => $submission->score >= ($assessment->passing_score ?? 0),
-            'url' => config('academy.urls.submissions', '/academy/submissions') . "/{$submission->id}",
+            'url' => config('academy.urls.submissions', 'academy/submissions') . "/{$submission->id}",
         ]);
 
         Notify::email(AssessmentGradedEmailNotification::class, $payload);

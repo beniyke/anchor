@@ -21,7 +21,11 @@ class LoginController extends BaseController
             return $this->response->redirect($this->request->fullRoute());
         }
 
-        if (! $this->auth->login($this->request->validated())) {
+        $login = $this->auth->login($this->request->validated());
+
+        if (! $login->isSuccessful()) {
+            $this->flash->error($login->getMessage() ?? 'Invalid login credentials.');
+
             return $this->response->redirect($this->request->fullRoute());
         }
 

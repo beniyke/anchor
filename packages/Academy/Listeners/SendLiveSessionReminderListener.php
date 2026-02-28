@@ -16,8 +16,6 @@ class SendLiveSessionReminderListener
     public function handle(LiveSessionStartingEvent $event): void
     {
         $session = $event->session;
-
-        // Notify all active enrolments for this program
         $enrolments = AcademyEnrolment::where('program_id', $session->program_id)
             ->where('status', 'ACTIVE')
             ->get();
@@ -32,7 +30,7 @@ class SendLiveSessionReminderListener
                 'session_title' => $session->title,
                 'start_at' => $session->scheduled_at->format('M d, Y H:i'),
                 'join_url' => $session->join_url,
-                'url' => config('academy.urls.live_sessions', '/academy/live-sessions') . "/{$session->id}",
+                'url' => config('academy.urls.live_sessions', 'academy/live-sessions') . "/{$session->id}",
             ]);
 
             Notify::email(LiveSessionReminderEmailNotification::class, $payload);

@@ -11,16 +11,17 @@ declare(strict_types=1);
 namespace Academy\Listeners;
 
 use Academy\Events\EnrolmentCreatedEvent;
-use Academy\Notifications\InApp\EnrolmentConfirmationNotification;
-use Academy\Notifications\Mail\EnrolmentConfirmationMail;
+use Academy\Notifications\InApp\EnrolmentConfirmationInAppNotification;
+use Academy\Notifications\Mail\EnrolmentConfirmationEmailNotification;
 use Academy\Services\PaymentManagerService;
 use Helpers\Data\Data;
 use Notify\Notify;
 
 class SendEnrolmentNotificationListener
 {
-    public function __construct(protected PaymentManagerService $paymentManager)
-    {
+    public function __construct(
+        protected PaymentManagerService $paymentManager
+    ) {
     }
 
     public function handle(EnrolmentCreatedEvent $event): void
@@ -29,7 +30,6 @@ class SendEnrolmentNotificationListener
         $user = $enrolment->user;
         $program = $enrolment->program;
 
-        // Initialize instalments if needed
         $this->paymentManager->initializeInstalments($enrolment);
 
         $payload = Data::make([
@@ -37,12 +37,10 @@ class SendEnrolmentNotificationListener
             'name' => $user->name,
             'email' => $user->email,
             'program_title' => $program->title,
-            'url' => config('academy.urls.programs', '/academy/programs') . "/{$program->slug}",
+            'url' => config('academy.urls.programs', 'academy/programs') . "/{$program->slug}",
         ]);
 
-        // Send Email
-        Notify::email(EnrolmentConfirmationMail::class, $payload);
-
-        Notify::inapp(EnrolmentConfirmationNotification::class, $payload);
+        Notify::email(EnrolmentConfirmationEmailNotification::class, $payload);
+        Notify::inapp(EnrolmentConfirmationInAppNotification::class, $payload);
     }
 }

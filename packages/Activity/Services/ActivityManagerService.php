@@ -144,20 +144,6 @@ class ActivityManagerService
 
     public function log(): bool
     {
-        static $hasTable = null;
-
-        if ($hasTable === null) {
-            try {
-                $hasTable = DB::connection()->tableExists(Activity::TABLE);
-            } catch (Throwable $e) {
-                $hasTable = false;
-            }
-        }
-
-        if (! $hasTable) {
-            return false;
-        }
-
         $description = $this->interpolate($this->description, $this->data);
 
         // Auto-capture some metadata if available
@@ -179,14 +165,24 @@ class ActivityManagerService
         );
 
         if ($this->deferred && class_exists(Defer::class)) {
-            Defer::push($logAction);
+            Defer::push(function () use ($logAction) {
+                try {
+                    $logAction();
+                } catch (Throwable $e) {
+                    // Fail gracefully if table doesn't exist or other DB error occurs
+                }
+            });
 
             return true;
         }
 
-        $logAction();
+        try {
+            $logAction();
 
-        return true;
+            return true;
+        } catch (Throwable $e) {
+            return false;
+        }
     }
 
     protected function captureContext(): void

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 /**
+ * Anchor Framework
+ *
  * This class implements middleware for API authentication. It extends
  * the base API authentication middleware to validate incoming requests
  * by checking the provided token. If the token is invalid, it terminates
@@ -13,8 +15,8 @@ declare(strict_types=1);
 
 namespace App\Middleware\Api;
 
-use App\Services\Auth\Interfaces\AuthServiceInterface;
 use Closure;
+use Core\Contracts\AuthServiceInterface;
 use Core\Middleware\MiddlewareInterface;
 use Helpers\Format\FormatCollection;
 use Helpers\Http\Request;

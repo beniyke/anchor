@@ -19,14 +19,15 @@ class CreateAcademyAttendanceTable extends BaseMigration
         Schema::createIfNotExists('academy_attendance', function (SchemaBuilder $table) {
             $table->id();
             $table->string('refid', 20)->unique()->nullable();
-            $table->unsignedBigInteger('live_session_id')->index();
+            $table->string('attendable_type')->index();
+            $table->unsignedBigInteger('attendable_id')->index();
             $table->unsignedBigInteger('enrolment_id')->index();
             $table->dateTime('joined_at')->nullable();
             $table->dateTime('left_at')->nullable();
             $table->integer('duration')->default(0); // in minutes
             $table->dateTimestamps();
 
-            $table->unique(['live_session_id', 'enrolment_id']);
+            $table->unique(['attendable_type', 'attendable_id', 'enrolment_id'], 'academy_attendance_unique');
         });
     }
 

@@ -16,9 +16,6 @@ use Academy\Models\AcademyProgramBadge;
 
 class BadgeService
 {
-    /**
-     * Award a badge to a learner.
-     */
     public function award(int $userId, int $badgeId, ?int $programId = null): AcademyBadgeAward
     {
         return AcademyBadgeAward::updateOrCreate(

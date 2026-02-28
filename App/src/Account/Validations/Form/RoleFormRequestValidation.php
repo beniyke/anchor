@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Account\Validations\Form;
 
 use App\Account\Requests\RoleRequest;
-use App\Core\BaseRequestValidation;
+use Core\BaseRequestValidation;
 use Helpers\String\StrCollection;
 
 class RoleFormRequestValidation extends BaseRequestValidation

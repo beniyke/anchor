@@ -2,8 +2,6 @@
 
 # Forge
 
-#### Software License Forging Engine
-
 **Forge** is a package for generating, activating, and verifying software licenses allowing you to transform products into unique, secure, and verifiable cryptographic keys for distribution to your clients.
 
 ## Features
@@ -27,7 +25,7 @@ php dock package:install Forge --packages
 
 This command will automatically:
 
-- Create necessary database tables `forge_*`.
+- Run the migration for Forge tables.
 - Register the `ForgeServiceProvider`.
 
 ## Architecture & Lifecycle

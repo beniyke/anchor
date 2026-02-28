@@ -27,9 +27,6 @@ use Wave\Wave;
 
 class EnrolmentManagerService
 {
-    /**
-     * Enrol a user in a program.
-     */
     public function enrol(int $userId, int|AcademyProgram $program, ?int $paymentPlanId = null, ?string $referralCode = null): AcademyEnrolment
     {
         $program = is_object($program) ? $program : AcademyProgram::find($program);
@@ -87,9 +84,6 @@ class EnrolmentManagerService
         });
     }
 
-    /**
-     * Bulk enrol users in a program.
-     */
     public function bulkEnrol(array $userIds, int|AcademyProgram $program, ?int $paymentPlanId = null): void
     {
         DB::transaction(function () use ($userIds, $program, $paymentPlanId) {
@@ -112,9 +106,6 @@ class EnrolmentManagerService
             ->exists();
     }
 
-    /**
-     * Bulk issue credentials for completed programs.
-     */
     public function bulkIssueCredentials(?int $programId = null): int
     {
         $query = AcademyEnrolment::where('status', EnrolmentStatus::COMPLETED)
@@ -135,9 +126,6 @@ class EnrolmentManagerService
         return $count;
     }
 
-    /**
-     * Prune expired enrolments.
-     */
     public function pruneExpiredEnrolments(): int
     {
         return (int) AcademyEnrolment::where('expires_at', '<', DateTimeHelper::now())
@@ -145,18 +133,12 @@ class EnrolmentManagerService
             ->delete();
     }
 
-    /**
-     * Prune expired waitlists.
-     */
     public function pruneExpiredWaitlists(): int
     {
         return (int) AcademyWaitlist::where('expires_at', '<', DateTimeHelper::now())
             ->delete();
     }
 
-    /**
-     * Extend an enrolment duration (in days).
-     */
     public function extend(AcademyEnrolment $enrolment, int $days): bool
     {
         $currentExpiry = $enrolment->expires_at ?: DateTimeHelper::now();

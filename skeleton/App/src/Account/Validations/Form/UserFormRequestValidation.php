@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Account\Validations\Form;
 
 use App\Account\Requests\UserRequest;
-use App\Core\BaseRequestValidation;
 use App\Enums\UserStatus;
+use Core\BaseRequestValidation;
 use Helpers\String\StrCollection;
 use Permit\Models\Role;
 

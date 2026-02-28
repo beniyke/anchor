@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Auth\Validations\Form;
 
 use App\Auth\Requests\LoginRequest;
-use App\Core\BaseRequestValidation;
+use Core\BaseRequestValidation;
 
 class LoginFormRequestValidation extends BaseRequestValidation
 {

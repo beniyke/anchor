@@ -23,7 +23,7 @@ class SendInstalmentReminderListener
             'email' => $user->email,
             'amount_formatted' => money($instalment->amount),
             'due_date' => $instalment->due_at->format('M d, Y'),
-            'url' => config('academy.urls.payments', '/profile/payments'),
+            'url' => config('academy.urls.payments', 'profile/payments'),
         ]);
 
         Notify::email(InstalmentOverdueEmailNotification::class, $payload);

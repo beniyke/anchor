@@ -47,7 +47,6 @@ class DiscussionService
 
                     $discussion->update(['metadata' => array_merge($discussion->metadata ?? [], ['hub_thread_id' => $thread->id])]);
                 } else {
-                    // Reply: Post a Hub message
                     $parent = AcademyDiscussion::find($data['parent_id']);
                     $threadId = $parent->metadata['hub_thread_id'] ?? null;
 

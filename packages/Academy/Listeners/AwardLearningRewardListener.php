@@ -25,7 +25,6 @@ class AwardLearningRewardListener
         $amount = $this->getRewardAmount($event);
 
         if ($user && $amount > 0) {
-            // Find wallet by owner to be safe (User macro might not be active or loaded yet)
             $wallet = Wallet::findByOwner($user->id, User::class);
 
             if ($wallet) {
@@ -48,10 +47,10 @@ class AwardLearningRewardListener
         }
 
         if (isset($event->enrolment)) {
-            // Ensure relation is loaded if possible, otherwise find by ID
             if ($event->enrolment->user) {
                 return $event->enrolment->user;
             }
+
             if (isset($event->enrolment->user_id)) {
                 return User::find($event->enrolment->user_id);
             }

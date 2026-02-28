@@ -7,16 +7,11 @@ declare(strict_types=1);
 
 return [
     'web' => [
-        Core\Middleware\SessionMiddleware::class,
-        Security\Firewall\Middleware\FirewallMiddleware::class,
-        Core\Middleware\SmartValidationMiddleware::class,
         App\Middleware\Web\RedirectIfAuthenticatedMiddleware::class,
         App\Middleware\Web\WebAuthMiddleware::class,
-        App\Middleware\Web\PasswordUpdateMiddleware::class
+        App\Middleware\Web\PasswordUpdateMiddleware::class,
     ],
     'api' => [
-        Security\Firewall\Middleware\FirewallMiddleware::class,
-        Core\Middleware\SmartValidationMiddleware::class,
         App\Middleware\Api\ApiAuthMiddleware::class
     ]
 ];

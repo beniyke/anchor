@@ -15,8 +15,9 @@ use Academy\Services\CertificateService;
 
 class IssueCertificateListener
 {
-    public function __construct(protected CertificateService $certificateService)
-    {
+    public function __construct(
+        protected CertificateService $certificateService
+    ) {
     }
 
     public function handle(ProgramCompletedEvent $event): void

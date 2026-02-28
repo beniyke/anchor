@@ -16,15 +16,16 @@ namespace App\Core;
 use App\Core\Data\ViewData;
 use App\Core\Traits\ResponseFormatterTrait;
 use App\Core\Traits\ViewHandlerTrait;
-use App\Services\Auth\Interfaces\AuthServiceInterface;
 use App\Views\Models\LayoutViewModel;
 use App\Views\Models\UserViewModel;
+use Core\Contracts\AuthServiceInterface;
+use Core\Controller;
 use Core\Ioc\ContainerInterface;
 use Helpers\Http\Flash;
 use Helpers\Http\Request;
 use Helpers\Http\Response;
 
-abstract class BaseController
+abstract class BaseController extends Controller
 {
     use ResponseFormatterTrait;
     use ViewHandlerTrait;

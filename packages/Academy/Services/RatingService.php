@@ -9,9 +9,6 @@ use Academy\Models\AcademyRating;
 
 class RatingService
 {
-    /**
-     * Submit a rating for a program.
-     */
     public function submit(int $userId, int $programId, int $rating, ?string $review = null): AcademyRating
     {
         if ($rating < 1 || $rating > 5) {

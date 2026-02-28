@@ -17,7 +17,7 @@ class CreateProofTestimonialTable extends BaseMigration
         $this->schema()->createIfNotExists('proof_testimonial', function (SchemaBuilder $table) {
             $table->id();
             $table->unsignedBigInteger('proof_source_id');
-            $table->text('comment');
+            $table->text('content');
             $table->integer('rating')->nullable();
             $table->string('status')->default('pending'); // pending, approved, rejected
             $table->string('video_url')->nullable();

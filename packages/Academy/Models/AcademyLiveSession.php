@@ -14,7 +14,7 @@ use Academy\Enums\SessionStatus;
 use Academy\Enums\VideoProvider;
 use Database\BaseModel;
 use Database\Relations\BelongsTo;
-use Database\Relations\HasMany;
+use Database\Relations\MorphMany;
 use Database\Traits\HasRefid;
 
 class AcademyLiveSession extends BaseModel
@@ -55,8 +55,8 @@ class AcademyLiveSession extends BaseModel
         return $this->belongsTo(AcademyLesson::class, 'lesson_id');
     }
 
-    public function attendances(): HasMany
+    public function attendances(): MorphMany
     {
-        return $this->hasMany(AcademyAttendance::class, 'live_session_id');
+        return $this->morphMany(AcademyAttendance::class, 'attendable');
     }
 }

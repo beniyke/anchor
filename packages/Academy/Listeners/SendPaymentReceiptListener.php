@@ -25,7 +25,7 @@ class SendPaymentReceiptListener
             'amount_formatted' => money($event->amount),
             'reference' => 'ACAD-' . $enrolment->id . '-' . time(),
             'date' => date('M d, Y'),
-            'url' => config('academy.urls.payments', '/profile/payments'),
+            'url' => config('academy.urls.payments', 'profile/payments'),
         ]);
 
         Notify::email(PaymentReceiptEmailNotification::class, $payload);

@@ -13,7 +13,6 @@ namespace Academy\Services;
 use Academy\Enums\SessionStatus;
 use Academy\Models\AcademyAttendance;
 use Academy\Models\AcademyLiveSession;
-use Helpers\DateTimeHelper;
 
 class LiveSessionService
 {
@@ -27,36 +26,17 @@ class LiveSessionService
         return $session->update(['status' => $status]);
     }
 
-    /**
-     * Record attendance.
-     */
     public function recordAttendance(int $sessionId, int $enrolmentId): AcademyAttendance
     {
-        return AcademyAttendance::updateOrCreate(
-            ['live_session_id' => $sessionId, 'enrolment_id' => $enrolmentId],
-            ['joined_at' => DateTimeHelper::now()]
-        );
+        $session = AcademyLiveSession::find($sessionId);
+
+        return (new AttendanceService())->record($session, $enrolmentId);
     }
 
-    /**
-     * Update attendance leave time.
-     */
     public function recordLeave(int $sessionId, int $enrolmentId): bool
     {
-        $attendance = AcademyAttendance::where('live_session_id', $sessionId)
-            ->where('enrolment_id', $enrolmentId)
-            ->first();
+        $session = AcademyLiveSession::find($sessionId);
 
-        if ($attendance) {
-            $leftAt = DateTimeHelper::now();
-            $duration = (int) $leftAt->diffInMinutes($attendance->joined_at);
-
-            return $attendance->update([
-                'left_at' => $leftAt,
-                'duration' => $duration,
-            ]);
-        }
-
-        return false;
+        return (new AttendanceService())->recordLeave($session, $enrolmentId);
     }
 }

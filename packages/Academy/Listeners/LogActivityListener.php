@@ -11,7 +11,10 @@ class LogActivityListener
 {
     public function handle(object $event): void
     {
-        // Generic activity logging based on event type
+        if (!class_exists(Activity::class)) {
+            return;
+        }
+
         $parts = explode('\\', get_class($event));
         $name = end($parts);
         $snakeName = Str::snake($name);

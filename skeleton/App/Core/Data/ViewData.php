@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Core\Data;
 
-use App\Services\Auth\Interfaces\AuthServiceInterface;
 use App\Services\MenuService;
 use App\Views\Models\LayoutViewModel;
 use App\Views\Models\MenuViewModel;
 use App\Views\Models\UserViewModel;
+use Core\Contracts\AuthServiceInterface;
 use Helpers\Http\Request;
 
 class ViewData

@@ -23,9 +23,6 @@ use RuntimeException;
 
 class AssessmentService
 {
-    /**
-     * Start an assessment attempt.
-     */
     public function startAttempt(int $assessmentId, int $enrolmentId): AcademySubmission
     {
         $assessment = AcademyAssessment::find($assessmentId);
@@ -34,7 +31,6 @@ class AssessmentService
             throw new RuntimeException("Assessment not found.");
         }
 
-        // Check if attempts are allowed
         $currentAttempts = AcademySubmission::where('assessment_id', $assessmentId)
             ->where('enrolment_id', $enrolmentId)
             ->count();
@@ -67,9 +63,6 @@ class AssessmentService
         ]);
     }
 
-    /**
-     * Bulk add questions and choices to an assessment optimally.
-     */
     public function bulkAddQuestions(int $assessmentId, array $questions): void
     {
         DB::transaction(function () use ($assessmentId, $questions) {
@@ -104,14 +97,10 @@ class AssessmentService
                 'submitted_at' => DateTimeHelper::now(),
             ]);
 
-            // Simple auto-grading for MCQs
             $this->autoGrade($submission);
         });
     }
 
-    /**
-     * Simple auto-grading logic.
-     */
     public function autoGrade(AcademySubmission $submission): void
     {
         $assessment = $submission->assessment;
@@ -136,7 +125,6 @@ class AssessmentService
             'graded_at' => DateTimeHelper::now(),
         ]);
 
-        // Check for late submission and apply penalty if necessary
         if ($this->isLate($submission)) {
             $this->applyLatePenalty($submission, $submission->grade);
         }
@@ -153,9 +141,6 @@ class AssessmentService
         return $submission->submitted_at > $deadline;
     }
 
-    /**
-     * Apply late penalty to a grade.
-     */
     public function applyLatePenalty(AcademySubmission $submission, AcademyGrade $grade): void
     {
         $policy = $submission->assessment->late_policy;
@@ -173,9 +158,6 @@ class AssessmentService
         ]);
     }
 
-    /**
-     * Grant an extension for a submission.
-     */
     public function grantExtension(AcademySubmission $submission, string $until): bool
     {
         return $submission->update([
@@ -203,7 +185,6 @@ class AssessmentService
                 ]
             );
 
-            // Apply penalty if late, even for manual grading
             if ($this->isLate($submission)) {
                 $this->applyLatePenalty($submission, $grade);
             }
@@ -219,13 +200,11 @@ class AssessmentService
             return false;
         }
 
-        // Find program ID via assessment
         $programId = DB::table('academy_assessment')
             ->where('id', $submission->assessment_id)
             ->value('program_id');
 
         if (!$programId) {
-            // Check if assessment is attached to a lesson which is attached to a module
             $lessonId = DB::table('academy_assessment')->where('id', $submission->assessment_id)->value('lesson_id');
             if ($lessonId) {
                 $moduleId = DB::table('academy_lesson')->where('id', $lessonId)->value('module_id');
@@ -242,18 +221,19 @@ class AssessmentService
     public function canTake(int $userId, int $assessmentId): bool
     {
         $assessment = AcademyAssessment::find($assessmentId);
+
         if (!$assessment) {
             return false;
         }
 
-        // Assessment can be attached to Lesson or Module
         $lessonId = $assessment->lesson_id;
+
         if ($lessonId) {
             return resolve(ProgramManagerService::class)->canAccess($userId, (int) $lessonId);
         }
 
-        // If Module level
         $moduleId = $assessment->module_id;
+
         if ($moduleId) {
             $programId = DB::table('academy_module')->where('id', $moduleId)->value('program_id');
 

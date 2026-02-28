@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Middleware\Web;
 
-use App\Services\Auth\Interfaces\AuthServiceInterface;
 use Closure;
+use Core\Contracts\AuthServiceInterface;
 use Core\Middleware\MiddlewareInterface;
 use Core\Services\ConfigServiceInterface;
 use Helpers\Http\Request;
@@ -45,7 +45,8 @@ class WebAuthMiddleware implements MiddlewareInterface
             $loginRoute = $request->getRouteContext('login_route');
 
             if (! $loginRoute && ! empty($guards)) {
-                $loginRoute = $this->config->get("auth.guards.{$guards[0]}.login_route");
+                $fallbackGuard = $activeGuard ?? $guards[0] ?? 'web';
+                $loginRoute = $this->config->get("auth.guards.{$fallbackGuard}.route.login");
             }
 
             $loginRoute = $loginRoute ?? 'login';
@@ -56,8 +57,8 @@ class WebAuthMiddleware implements MiddlewareInterface
         $request->setAuthenticatedUser($authenticatedUser);
         $request->setRouteContext('auth_guard', $activeGuard);
 
-        if (isset($authenticatedUser->id)) {
-            $request->setHeader('X-Account-ID', (string) $authenticatedUser->id);
+        if ($authenticatedUser->getAuthId()) {
+            $request->setHeader('X-Account-ID', (string) $authenticatedUser->getAuthId());
         }
 
         return $next($request, $response);

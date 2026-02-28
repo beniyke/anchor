@@ -1,6 +1,6 @@
 <!-- This file is auto-generated from docs/scribe.md -->
 
-# Scribe (Blog)
+# Scribe
 
 Scribe is a professional blogging and content management package for the Anchor Framework. It provides a robust foundation for building feature-rich blogs with categories, tags, comments, and built-in SEO controls.
 
@@ -12,6 +12,22 @@ Scribe is a professional blogging and content management package for the Anchor 
 - **Publishing Workflows**: Drafts, Scheduled, and Published statuses.
 - **Analytics**: Track post views and engagement trends.
 - **Defensive Integration**: Gracefully works with or without optional packages like `Audit` and `Media`.
+
+## Installation
+
+Scribe is a **package** that requires installation before use.
+
+### Install the Package
+
+```bash
+php dock package:install Scribe --packages
+```
+
+This command will:
+
+- Publish the `scribe.php` configuration file.
+- Run the migration for Scribe tables.
+- Register the `ScribeServiceProvider`.
 
 ## Basic Usage
 
@@ -36,6 +52,16 @@ $post = Scribe::post()
     ->create();
 ```
 
+### Fetching Posts
+
+```php
+// Find by slug
+$post = Scribe::findPost('the-future-of-agentic-coding');
+
+// Find by refid
+$post = Scribe::findPostByRefId('pst_abc123');
+```
+
 ### Scheduling a Post
 
 You can schedule posts for future publication using the `schedule` method.
@@ -52,51 +78,80 @@ $post = Scribe::post()
     ->create();
 ```
 
-### Handling Analytics
+## Category Management
 
-Scribe tracks post views automatically if you use the facade helper.
+Scribe supports hierarchical categories. Use the `CategoryBuilder` for fluent creation.
 
 ```php
 use Scribe\Scribe;
 
-Scribe::recordView($post, $userId, $sessionId);
+$category = Scribe::category()
+    ->name('Technology')
+    ->description('Latest in tech.')
+    ->create();
+
+// Create a sub-category
+$subCategory = Scribe::category()
+    ->name('AI')
+    ->parent($category)
+    ->create();
 ```
 
-Access trends via the analytics service:
+### Fetching Categories
 
 ```php
-$topPosts = Scribe::analytics()->getTopPosts(5);
+// Find by slug
+$category = Scribe::findCategory('technology');
+
+// Find by refid
+$category = Scribe::findCategoryByRefId('cat_xyz789');
 ```
 
-## Taxonomy Management
+## Advanced Usage
 
-Scribe supports both hierarchical categories and tags.
+### Handling Comments
 
-### Categories
-
-Categories can be nested to create complex content structures.
+Scribe includes a simple comment system that can be moderated.
 
 ```php
-// Coming soon: CategoryBuilder API
+use Scribe\Scribe;
+
+$comment = Scribe::addComment($post, [
+    'content' => 'Great article!'
+], userId: 1);
 ```
 
-### Tags
+### SEO Metadata Generation
 
-Tags are flat taxonomies used for broad cross-referencing of posts.
-
-## SEO Metadata
-
-Every post includes a `seo_meta` JSON field. If not manually provided, Scribe can generate defaults based on the title and excerpt.
+If you don't manually set SEO meta, Scribe can generate it for you.
 
 ```php
+use Scribe\Scribe;
+
 $meta = Scribe::generateSeoMeta($post);
+```
+
+### Analytics Trends
+
+Track engagement over time for specific posts.
+
+```php
+use Scribe\Scribe;
+
+// Record a view
+Scribe::recordView($post, $userId, $sessionId);
+
+// Get view counts for the last 30 days
+// Returns: [['date' => '2026-01-01', 'count' => 10], ...]
+$trends = Scribe::analytics()->getPostTrends($post, days: 30);
+
+// Get popular posts
+// Returns: [[Post Model], [Post Model], ...]
+$topPosts = Scribe::analytics()->getTopPosts(limit: 5);
 ```
 
 ## Integration
 
-- **Media**: Use the `Media` facade to handle featured images and post assets.
+- **Media**: Use the `Media` facade to handle featured images and post assets via `attachMedia()`.
 - **Audit**: Automatically logs publishing and scheduling events if installed.
 - **Link**: Generate signed URLs for private or early-access post previews.
-
-> [!NOTE]
-> Scribe maintains strict **Architecture Isolation**. It never imports models from other packages, ensuring a modular and stable foundation.

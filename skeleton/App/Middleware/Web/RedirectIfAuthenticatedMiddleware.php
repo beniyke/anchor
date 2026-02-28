@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Middleware\Web;
 
-use App\Services\Auth\Interfaces\AuthServiceInterface;
 use Closure;
+use Core\Contracts\AuthServiceInterface;
 use Core\Middleware\MiddlewareInterface;
+use Core\Services\ConfigServiceInterface;
 use Helpers\Http\Request;
 use Helpers\Http\Response;
 
@@ -14,6 +15,7 @@ class RedirectIfAuthenticatedMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly AuthServiceInterface $auth,
+        private readonly ConfigServiceInterface $config
     ) {
     }
 
@@ -27,7 +29,9 @@ class RedirectIfAuthenticatedMiddleware implements MiddlewareInterface
 
         foreach ($guards as $guard) {
             if ($this->auth->viaGuard($guard)->isAuthenticated()) {
-                return $response->redirect($request->fullRouteByName('home'));
+                $homeRoute = $this->config->get("auth.guards.{$guard}.route.home");
+
+                return $response->redirect($request->baseUrl($homeRoute));
             }
         }
 

@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-use Helpers\Data\DTO;
+use Core\Request;
 
-abstract class BaseRequest extends DTO
+abstract class BaseRequest extends Request
 {
 }

@@ -20,9 +20,6 @@ use Helpers\DateTimeHelper;
 
 class ProgressTrackingService
 {
-    /**
-     * Mark a lesson as completed for an enrolment.
-     */
     public function completeLesson(int $enrolmentId, int $lessonId, int $timeSpent = 0): AcademyProgress
     {
         return DB::transaction(function () use ($enrolmentId, $lessonId, $timeSpent) {

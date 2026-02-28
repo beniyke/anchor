@@ -116,8 +116,6 @@ class PaymentManagerService
      */
     public function syncExternalPayments(): int
     {
-        // This would typically involve polling the Pay package or external gateways
-        // For now, we process all 'confirmed' but 'pending' instalments
         $instalments = AcademyInstalment::where('status', PaymentStatus::PENDING)
             ->whereNotNull('payment_reference')
             ->get();

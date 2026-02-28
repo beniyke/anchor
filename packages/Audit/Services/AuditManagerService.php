@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Audit\Services;
 
 use App\Models\User;
-use App\Services\Auth\Interfaces\AuthServiceInterface;
 use Audit\Models\AuditLog;
 use Audit\Services\Builders\LogBuilder;
+use Core\Contracts\AuthServiceInterface;
 use Core\Services\ConfigServiceInterface;
 use Database\BaseModel;
 use Database\Collections\ModelCollection;
@@ -68,17 +68,11 @@ class AuditManagerService
             $logData['checksum'] = $this->generateChecksum($logData);
         }
 
-        static $hasTable = null;
-
-        if ($hasTable === null) {
-            try {
-                $hasTable = DB::connection()->tableExists(AuditLog::TABLE);
-            } catch (Throwable $e) {
-                $hasTable = false;
+        try {
+            if (!DB::connection()->tableExists(AuditLog::TABLE)) {
+                return new AuditLog();
             }
-        }
-
-        if (!$hasTable) {
+        } catch (Throwable $e) {
             return new AuditLog();
         }
 

@@ -14,6 +14,7 @@ namespace Academy;
 
 use Academy\Services\AcademyAnalyticsService;
 use Academy\Services\AssessmentService;
+use Academy\Services\AttendanceService;
 use Academy\Services\BadgeService;
 use Academy\Services\CertificateService;
 use Academy\Services\DiscussionService;
@@ -23,6 +24,8 @@ use Academy\Services\LiveSessionService;
 use Academy\Services\PaymentManagerService;
 use Academy\Services\ProgramManagerService;
 use Academy\Services\ProgressTrackingService;
+use Academy\Services\RatingService;
+use Academy\Services\ReportingService;
 use Core\Services\ConfigServiceInterface;
 use RuntimeException;
 
@@ -42,11 +45,17 @@ use RuntimeException;
  * @method static LandingPageService      landingPages()
  * @method static AcademyAnalyticsService analytics()
  * @method static ReportingService        reports()
- * @method static Services\RatingService  ratings()
+ * @method static RatingService           ratings()
+ * @method static AttendanceService       attendance()
+ * @method static string                  getDefaultCurrency()
+ * @method static mixed                   getConfig(?string $key = null, mixed $default = null)
  * @method static array                   searchInstructors(string $query)
  * @method static array                   searchLearners(string $query)
- * @method static Models\AcademyEnrolment enrol(object $user, Models\AcademyProgram $program, ?Models\AcademyPaymentPlan $plan = null)
- * @method static int|null                gradeQuiz(Models\AcademySubmission $submission)
+ * @method static Models\AcademyEnrolment enrol(int $userId, int|Models\AcademyProgram $program, ?int $planId = null)
+ * @method static void                    gradeQuiz(Models\AcademySubmission $submission)
+ * @method static array                   getProgramDetails(int|string $id)
+ * @method static array                   getLessonDetails(int|string $id)
+ * @method static array                   getEnrolmentDetails(int|string $id)
  */
 class Academy
 {

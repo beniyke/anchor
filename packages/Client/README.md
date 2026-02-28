@@ -25,7 +25,7 @@ php dock package:install Client --packages
 
 This will automatically:
 
-- Run database migrations for the `client` table.
+- Run the migration for Client tables.
 - Register the `ClientServiceProvider`.
 - Publish the configuration file.
 
@@ -227,9 +227,9 @@ While the Client package focuses on current state, integrations allow you to rec
 
 **The Workflow:**
 
-1.  **Creation**: Omit the `reseller()` call.
-2.  **Payment**: Use **Wave** or **Pay** directly for the invoice (bypassing the Ally credit system).
-3.  **Fulfillment**: Mint the license via `Forge` once payment is confirmed.
+- **Creation**: Omit the `reseller()` call.
+- **Payment**: Use **Wave** or **Pay** directly for the invoice (bypassing the Ally credit system).
+- **Fulfillment**: Mint the license via `Forge` once payment is confirmed.
 
 ```php
 use Client\Client;

@@ -74,31 +74,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Integrations
-    |--------------------------------------------------------------------------
-    |
-    | Soft-integration settings for other Anchor packages.
-    |
-    */
-    'integrations' => [
-        'pay' => true,
-        'wallet' => true,
-        'wave' => true,
-        'permit' => true,
-        'verify' => true,
-        'media' => true,
-        'notification' => true,
-        'hub' => false, // Set to true to use Hub for discussions
-        'rank' => true,
-        'refer' => true,
-        'link' => true,
-        'activity' => true,
-        'audit' => true,
-        'blish' => true,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | URLs
     |--------------------------------------------------------------------------
     |
@@ -106,11 +81,12 @@ return [
     |
     */
     'urls' => [
-        'payments' => '/profile/payments',
-        'achievements' => '/profile/achievements',
-        'submissions' => '/academy/submissions',
-        'live_sessions' => '/academy/live-sessions',
-        'programs' => '/academy/programs',
+        'payments' => 'profile/payments',
+        'achievements' => 'profile/achievements',
+        'submissions' => 'academy/submissions',
+        'live_sessions' => 'academy/live-sessions',
+        'programs' => 'academy/programs',
+        'certificates' => 'academy/certificates',
     ],
     /*
     |--------------------------------------------------------------------------

@@ -1,12 +1,28 @@
 <!-- This file is auto-generated from docs/proof.md -->
 
-# Proof Package
+# Proof
 
-The **Proof** package handles Testimonials and Case Studies, providing a robust framework for social proof collection, management, and display.
+The **Proof** package provides a comprehensive structure for managing social proof, including testimonials and case studies, to build trust and credibility.
 
 ## Installation
 
-The package is pre-installed in the Anchor Framework. Configuration is available in `Config/proof.php`.
+Proof is a **package** that requires module installation.
+
+### Install the Package
+
+```bash
+php dock package:install Proof --packages
+```
+
+This command will:
+
+- Publish the `proof.php` configuration file.
+- Run the migration for Proof tables.
+- Register the `ProofServiceProvider`.
+
+### Configuration
+
+Configuration file: `App/Config/proof.php`
 
 ## Core Concepts
 
@@ -106,18 +122,60 @@ Attach photos or videos from the Media package.
 Proof::attachMedia($testimonial, $mediaId, 'photo');
 ```
 
-## Configuration
+## Advanced Usage
 
-Available in `packages/Proof/Config/proof.php`:
+### Approval Workflow
 
-- `form_integration`: Enable/disable automatic form conversion.
-- `approval.required`: Whether testimonials need approval before display.
-- `request.expiry_days`: Duration for secure collection links.
+Proof includes a built-in state machine for testimonial approvals, integrated with the **Workflow** package.
 
-## Analytics
+```php
+use Proof\Proof;
 
-Track views and engagement:
+// Start the approval process
+Proof::startApprovalWorkflow($testimonial);
+
+// Signals (typically from an admin dashboard)
+Proof::approve($testimonial->id);
+Proof::reject($testimonial->id);
+```
+
+### Stack Submission Mapping
+
+Map form fields to testimonial properties for automatic conversion.
+
+```php
+Proof::fromSubmission($submission, [
+    'name' => 'customer_name',
+    'email' => 'customer_email',
+    'company' => 'business_name',
+    'content' => 'feedback_message',
+    'rating' => 'stars',
+]);
+```
+
+## Analytics & Monitoring
+
+Track social proof engagement.
+
+### Recording Interactions
 
 ```php
 Proof::analytics()->recordView($testimonial, ['ip' => request()->ip()]);
 ```
+
+### Metrics Data Structure
+
+The `Proof::analytics()->getMetrics()` method returns an array of engagement data.
+
+| Metric   | Description                                       |
+| :------- | :------------------------------------------------ |
+| `views`  | Total number of times the proof was displayed.    |
+| `clicks` | Number of clicks on "Learn More" or source links. |
+
+## Configuration
+
+Available in `App/Config/proof.php`:
+
+- `form_integration`: Enable/disable automatic form conversion.
+- `approval.required`: Whether testimonials need approval before display.
+- `request.expiry_days`: Duration for secure collection links.

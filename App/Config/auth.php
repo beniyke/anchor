@@ -36,13 +36,19 @@ return [
         'web' => [
             'driver' => 'session',
             'source' => 'user',
-            'login_route' => 'login',
+            'route' => [
+                'login' => 'login',
+                'home' => 'account/home'
+            ],
         ],
 
         'admin' => [
             'driver' => 'session',
             'source' => 'user', // You can change this to 'admin' if you have a separate table
-            'login_route' => 'admin.login',
+            'route' => [
+                'login' => 'admin/login',
+                'home' => 'admin/home'
+            ],
         ],
 
         'api' => [

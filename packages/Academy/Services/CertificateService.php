@@ -25,6 +25,12 @@ class CertificateService
      */
     public function issue(AcademyEnrolment $enrolment): AcademyCertificate
     {
+        $existing = AcademyCertificate::where('enrolment_id', $enrolment->id)->first();
+
+        if ($existing) {
+            return $existing;
+        }
+
         // Generation logic would go here (PDF generation)
         $certificateNumber = $this->generateNumber($enrolment);
 
@@ -48,10 +54,10 @@ class CertificateService
             return $link->signedUrl();
         }
 
-        return url('academy/certificates/' . $certificate->certificate_number);
+        return url(config('academy.urls.certificates') . '/' . $certificate->certificate_number);
     }
 
-    public function revoke(AcademyCertificate $certificate, string $otp = null): bool
+    public function revoke(AcademyCertificate $certificate, ?string $otp = null): bool
     {
         if (config('academy.integrations.verify', true) && class_exists(Verify::class)) {
             $user = $certificate->enrolment->user;

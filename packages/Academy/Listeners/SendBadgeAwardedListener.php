@@ -22,7 +22,7 @@ class SendBadgeAwardedListener
             'name' => $user->name,
             'email' => $user->email,
             'badge_name' => $award->badge->name,
-            'url' => config('academy.urls.achievements', '/profile/achievements'),
+            'url' => config('academy.urls.achievements', 'profile/achievements'),
         ]);
 
         Notify::email(BadgeAwardedEmailNotification::class, $payload);

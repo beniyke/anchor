@@ -24,7 +24,7 @@ php dock package:install Refer --packages
 
 This will automatically:
 
-- Run database migrations for `refer_*` tables.
+- Run the migration for Refer tables.
 - Register the `ReferServiceProvider`.
 - Publish the configuration file.
 
@@ -117,7 +117,7 @@ $stats = $user->getReferralStats();
 
 ## Use Cases
 
-#### SaaS Affiliate Program
+### SaaS Affiliate Program
 
 Promote your SaaS by rewarding existing users with $20.00 credit for every friend who subscribes to a paid plan.
 
@@ -152,7 +152,7 @@ class RegisterUserAction extends BaseAction
 }
 ```
 
-#### Subscription Reward
+### Subscription Reward
 
 For SaaS, you might reward the referrer only after the referee's first successful payment:
 
@@ -172,7 +172,7 @@ public function handleSuccessfulPayment(User $user)
 }
 ```
 
-#### Sample Data (JSON)
+### Sample Data (JSON)
 
 The `referrals` table state:
 
@@ -289,8 +289,6 @@ $leaderboard = $analytics->getTopReferrers(5);
  */
 ```
 
-```
-
 ## Service API Reference
 
 ### Refer (Facade)
@@ -305,11 +303,11 @@ $leaderboard = $analytics->getTopReferrers(5);
 
 ### Analytics (Facade)
 
-| Method                | Description                               |
-| :-------------------- | :---------------------------------------- |
-| `getSuccessMetrics()` | Overall conversion and reward statistics. |
-| `getDailyVolume($d)`  | Track daily referral growth trends.       |
-| `getTopReferrers($l)` | Leaderboard of most successful referrers. |
+| Method              | Description                               |
+| :------------------ | :---------------------------------------- |
+| `getOverview()`     | Overall conversion and reward statistics. |
+| `getDailyTrends($d)`| Track daily referral growth trends.       |
+| `getTopReferrers($l)`| Leaderboard of most successful referrers. |
 
 ## Console Commands
 
@@ -332,4 +330,3 @@ $leaderboard = $analytics->getTopReferrers(5);
 - **Purchase Requirements**: For high-value rewards, always set `require_purchase` to `true` to prevent fake account signup loops.
 - **Manual Audits**: Use `refer:stats` regularly to spot suspicious referral patterns (e.g., many referrals from a single IP).
 - **Wallet Integrity**: Referral rewards are credited via the `Wallet` package, ensuring atomic transactions and audit logs.
-```

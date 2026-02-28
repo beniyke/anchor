@@ -29,16 +29,6 @@ readonly class LoginViewModel
         return ! $this->service->isFirstUserSetup();
     }
 
-    public function getErrorClass(string $field): string
-    {
-        return $this->flash->hasInputError($field) ? 'is-invalid' : '';
-    }
-
-    public function hasError(string $field): bool
-    {
-        return $this->flash->hasInputError($field);
-    }
-
     public function getFormActionUrl(): string
     {
         return url(route('attempt'));

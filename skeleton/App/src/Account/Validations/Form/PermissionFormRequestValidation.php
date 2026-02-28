@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Account\Validations\Form;
 
 use App\Account\Requests\PermissionRequest;
-use App\Core\BaseRequestValidation;
+use Core\BaseRequestValidation;
 
 class PermissionFormRequestValidation extends BaseRequestValidation
 {

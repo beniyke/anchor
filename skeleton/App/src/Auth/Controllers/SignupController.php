@@ -36,7 +36,7 @@ class SignupController extends BaseController
             return $this->response->redirect($this->request->fullRoute());
         }
 
-        $this->flash->success('Signup successful. An activation link has been sent to your mail box.');
+        $this->flash->success('Signup successful. Login to your account.');
 
         return $this->response->redirect($this->request->fullRouteByName('login'));
     }

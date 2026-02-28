@@ -12,11 +12,10 @@
 
     <div class="mb-3">
         <?= component('label')->content('Password')->attributes(['class' => 'form-label fw-bold'])->render()?>
-
-        <div class="input-group input-group-flat <?= $login_view_model->getErrorClass('password')?>">
+        <div class="input-group input-group-flat">
             <?= component('input')->attributes(['type' => 'password', 'class' => 'form-control form-control-lg', 'autocomplete' => 'off', 'required' => true, 'placeholder' => 'Enter your password', 'id' => 'password', 'name' => 'password'])->render()?>
 
-            <span class="input-group-text <?= $login_view_model->hasError('password') ? 'border-danger' : ''?>">
+            <span class="input-group-text">
                 <?= component('link')->content('<i class="align-middle text-muted" data-feather="eye"></i>')->attributes(['class' => 'link-secondary show-p', 'data-field' => '#password', 'data-bs-toggle' => 'tooltip', 'aria-label' => 'Show password', 'data-bs-original-title' => 'Show password'])->render()?>
             </span>
         </div>
